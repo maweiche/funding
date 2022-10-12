@@ -90,7 +90,6 @@ const Header = () => {
                 {active === "Explained" ? <Link href="/explained"><AB>Example</AB></Link> : <Link href="/explained"><A>Example</A></Link>}
             </NavItem>
         </MenuBox>
-
         </HeadBox>
         </Container></>
 }
