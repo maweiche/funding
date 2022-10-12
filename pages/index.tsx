@@ -1,61 +1,121 @@
-import styles from '../styles/Home.module.css'
 
-export default function Home() {
+import type { NextPage } from 'next'
+import Head from 'next/head'
+import Image from 'next/image'
+import styled from 'styled-components'
+import { useRouter } from 'next/router'
+import Eye7 from '../public/Eye7.png'
+import { useEffect} from 'react'
+import Script from 'next/script'
+
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import { signIn } from 'next-auth/react';
+import { useAccount, useConnect, useSignMessage, useDisconnect } from 'wagmi';
+import axios from 'axios';
+
+import Header from '../sections/Header'
+import Footer from '../sections/Footer'
+import Title from '../components/typography/Title'
+import Subtitle from '../components/typography/Subtitle'
+import Button from '../components/buttons/Button'
+
+
+
+const Container = styled.div`
+  margin-top: 1%;
+`;
+
+const EyeSevenBox = styled.div`
+    text-align: center;
+    position: relative;
+`
+
+
+
+const Home: NextPage = () => {
+  useEffect(() => {
+    window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+  }, []);
+
+
+  // Web3 Auth handling
+  const { connectAsync } = useConnect();
+  const { disconnectAsync } = useDisconnect();
+  const { isConnected } = useAccount();
+  const { signMessageAsync } = useSignMessage();
+  const { push } = useRouter();
+
+
+  const handleAuth = async () => {
+    if (isConnected) {
+        await disconnectAsync();
+    }
+
+    const { account, chain } = await connectAsync({ connector: new MetaMaskConnector() });
+
+    const userData = { address: account, chain: chain.id, network: 'evm' };
+    console.log(userData)
+
+    const { data } = await axios.post('/api/auth/request-message', userData, {
+        headers: {
+            'content-type': 'application/json',
+        },
+    });
+
+    const message = data.message;
+
+    const signature = await signMessageAsync({ message });
+
+    // redirect user after success authentication to '/dashboard' page
+    // @ts-ignore
+    const { url } = await signIn('credentials', { message, signature, redirect: false, callbackUrl: '/user' });
+    /**
+     * instead of using signIn(..., redirect: "/dashboard")
+     * we get the url from callback and push it to the router to avoid page refreshing
+     */
+    push(url);
+};
+
   return (
-    <div className={styles.container}>
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+    
+    <Container>
+      <Head>
+        <title>Eyeseek Fund</title>
+        <meta name="title" content="Blockchain crowdfunding application powered by Moralis" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Header/>
+      <Title text='Components/Typography/Title'/>
+      <Subtitle text='Components/Typography/Subtitle'/>
+      <Button text={'Components/buttons/button'}/>
+      <EyeSevenBox><Image
+            src={Eye7}
+            alt="Eye7"
+            width={'600%'}
+            height={'70%'}
+            />
+            </EyeSevenBox>
+      <Footer/>
+      {/* <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-TKH8YE4L07"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){window.dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-TKH8YE4L07');
+        `}
+      </Script> */}
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+     
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+            
+    </Container>
   )
 }
+
+export default Home
