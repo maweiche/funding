@@ -39,3 +39,5 @@ workbox*
 sw*.js
 pnpm-lock.yaml
 yarn.lock
+.map
+sw.js.map
