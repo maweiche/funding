@@ -1,100 +1,178 @@
-import {useState} from 'react'
-import styled from 'styled-components'
-import Image from 'next/image'
-import Logo from '../public/Logo.png'
-import Link from 'next/link'
+import { useState } from "react"
+import { useConnect, useAccount, useDisconnect } from "wagmi"
 
-const Container = styled.div`
-    padding-left: 4%;
-   // background: linear-gradient(180deg, rgba(22, 0, 0, 0.3) 50%, rgba(22, 0, 0, 0) 100%);
-`
+import Link from "next/link"
+import Image from "next/image"
+import Logo from "../public/Logo.png"
+import styled from "styled-components"
 
 const NavItem = styled.div`
-    display: flex;
-    font-size: 1.6em;
-    font-family: 'Gemunu Libre', sans-serif;
-    font-style: normal;
-    align-items: center;
-    letter-spacing: 1px;
-   @media (max-width: 768px) {
-     font-size: 1em;
-     flex-wrap: wrap;
-    }
+  display: flex;
+  font-size: 1.6em;
+  font-family: "Gemunu Libre", sans-serif;
+  font-style: normal;
+  align-items: center;
+  letter-spacing: 1px;
+
+  @media (max-width: 768px) {
+    font-size: 1em;
+    flex-wrap: wrap;
+  }
 `
 
 const HeadBox = styled.div`
-    display: flex;
-    flex-direction: row;
-    background: transparent;
-    padding: 2%;
-    color: #B0F6FF;
-    @media (max-width: 768px) {
-    
-        justify-content: center;
-   }
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  color: #b0f6ff;
+  padding: 10px 50px;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
 `
 
 const ImageBox = styled.div`
-    display: block;
-    @media (max-width: 768px) {
-    
-     font-size: 0.8em;
-     flex-wrap: wrap;
-     padding-right: 10%;
-     right: 0;
-    }
-    &:hover{
-        cursor: pointer;
-    }
+  display: block;
+  @media (max-width: 768px) {
+    font-size: 0.8em;
+    flex-wrap: wrap;
+    padding-right: 10%;
+    right: 0;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
 `
 
 const MenuBox = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 5%;
-    width: 100%;
-    padding-left: 15%;
-    @media (max-width: 768px) {
-     padding: 0;
-     flex-wrap: wrap;
-     display: none;
-    }
+  display: flex;
+  flex-direction: row;
+  gap: 100px;
+
+  @media (max-width: 960px) {
+    padding: 0;
+    flex-wrap: wrap;
+    display: none;
+  }
+`
+
+const ConnectBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
 `
 
 const A = styled.div`
-    &:hover{
-     opacity: 0.8;
-     cursor: pointer;
-   }
+  &:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
 `
 
 const AB = styled(A)`
-    font-weight: bold;
+  font-weight: bold;
 `
 
+const IconFrame = styled.div`
+  display: flex;
+  align-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid white;
+  padding: 4px;
+  border-radius: 5px;
+`
 
+const ConnectBtn = styled.div`
+  background-color: #628e90;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 18px;
+  color: #b0f6ff;
+  font-family: "Gemunu Libre", sans-serif;
+  font-style: normal;
+  cursor: pointer;
+`
 
 const Header = () => {
-    const [active, setActive] = useState("Home")
+  const { isConnected } = useAccount()
+  const { disconnect } = useDisconnect()
+  const { connect, connectors } = useConnect()
+  const [active, setActive] = useState("Home")
+  const header = [
+    { title: "Discover", url: "" },
+    { title: "Start a project", url: "" },
+    { title: "FAQ", url: "" },
+    { title: "My projects", url: "" },
+  ]
 
-    return <><Container>
-        <HeadBox>
-        <ImageBox>  <NavItem onClick={()=>{setActive("Home")}}><Link href="/"><A><Image
-            src={Logo}
-            alt="Logo"
-            width={'110%'}
-            height={'50%'}
-            /></A></Link></NavItem> </ImageBox>
-         <MenuBox>
-            <NavItem onClick={()=>{setActive("Explained")}}>
-                {active === "Explained" ? <Link href="/explained"><AB>Example</AB></Link> : <Link href="/explained"><A>Example</A></Link>}
-            </NavItem>
+  return (
+    <>
+      <HeadBox>
+        <ImageBox>
+          <NavItem
+            onClick={() => {
+              setActive("Home")
+            }}
+          >
+            <Link href="/">
+              <A>
+                <Image src={Logo} alt="Logo" width={"110%"} height={"50%"} />
+              </A>
+            </Link>
+          </NavItem>
+        </ImageBox>
+
+        <MenuBox>
+          {header.map((h) => {
+            const { title, url } = h
+
+            return (
+              <NavItem
+                onClick={() => {
+                  setActive(title)
+                }}
+              >
+                {active === title ? (
+                  <Link href={url}>
+                    <AB>{title}</AB>
+                  </Link>
+                ) : (
+                  <Link href={url}>
+                    <A>{title}</A>
+                  </Link>
+                )}
+              </NavItem>
+            )
+          })}
         </MenuBox>
-        </HeadBox>
-        </Container></>
+
+        <ConnectBox>
+          {connectors.map((connector) => (
+            <ConnectBtn disabled={!connector.ready} key={connector.id} onClick={() => (isConnected ? disconnect() : connect({ connector }))}>
+              {isConnected ? "Disconnect" : connector.name}
+              {!connector.ready && " (unsupported)"}
+            </ConnectBtn>
+          ))}
+
+          <IconFrame>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
+              />
+            </svg>
+          </IconFrame>
+        </ConnectBox>
+      </HeadBox>
+    </>
+  )
 }
-
-
-
 
 export default Header
