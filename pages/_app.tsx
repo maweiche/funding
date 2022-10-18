@@ -3,6 +3,7 @@ import "../styles/globals.css"
 
 //Web3 auth
 import { Chain, createClient, configureChains, WagmiConfig } from "wagmi"
+import { AppProvider } from "../sections/utils/appContext"
 import { alchemyProvider } from "wagmi/providers/alchemy"
 import { publicProvider } from "wagmi/providers/public"
 import { SessionProvider } from "next-auth/react"
@@ -54,7 +55,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             <link rel="apple-touch-icon" href="/apple-icon.png"></link>
             <meta name="theme-color" content="#317EFB" />
           </Head>
-          <Component {...pageProps} />
+
+          <AppProvider>
+            <Component {...pageProps} />
+          </AppProvider>
         </SessionProvider>
       </WagmiConfig>
     </>
