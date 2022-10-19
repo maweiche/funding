@@ -6,6 +6,7 @@ import { useRouter } from "next/router"
 import Eye7 from "../public/Eye7.png"
 import { useEffect } from "react"
 import Script from "next/script"
+import Link from 'next/link'
 
 import { MetaMaskConnector } from "wagmi/connectors/metaMask"
 import { signIn } from "next-auth/react"
@@ -25,6 +26,13 @@ const Container = styled.div`
 const EyeSevenBox = styled.div`
   text-align: center;
   position: relative;
+`
+const A = styled.a`
+  &:hover{
+    opacity: 0.7;
+    color: blue;
+    cursor: pointer;
+  }
 `
 
 const Home: NextPage = () => {
@@ -80,6 +88,13 @@ const Home: NextPage = () => {
       <Title text="Components/Typography/Title" />
       <Subtitle text="Components/Typography/Subtitle" />
       <Button text={"Components/buttons/button"} />
+      <div>
+        <br></br>
+      <Link href="/project/abc">
+          <A>pages/project/[pid].js</A>
+        </Link>
+        <div>This link will be userful for features "My projects", "Latest projects", "Stats" ,etc.</div>
+        </div>
       <EyeSevenBox>
         <Image src={Eye7} alt="Eye7" width={"600%"} height={"70%"} />
       </EyeSevenBox>
