@@ -1,4 +1,33 @@
+import { useState } from "react"
+import Select from "react-select"
+import styled from "styled-components"
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  width: 50vw;
+  gap: 20px;
+`
+
+const SiteContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`
+
+const NextButton = styled.div`
+  background-color: #3c4048;
+  padding: 10px 20px;
+  border-radius: 5px;
+`
+
 const Category = () => {
+  const [data, setData] = useState({ category: "", subcategory: "" })
+
   const categories = {
     Technology: ["Gadgets", "Robots", "Wearables", "Other"],
     Games: ["Mobile", "Board", "Video", "Hardware", "Other"],
@@ -8,22 +37,18 @@ const Category = () => {
     "Open-source": ["AI", "Big Data", "Cloud", "Cybersecurity", "IoT", "Machine Learning", "Dev tools", "Other"],
   }
 
-  return (
-    <div>
-      <select name="category" onChange={(e) => console.log(e.target.value)}>
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-        <option value="pantone">Pantone</option>
-        <option value="blueberry_dark">Blueberry Dark</option>
-      </select>
+  const category = Object.keys(categories).map((cat) => ({ label: cat, value: cat }))
+  const subcategory = categories[data.category] && categories[data.category].map((cat) => ({ label: cat, value: cat }))
 
-      <select name="subcategory" onChange={(e) => console.log(e.target.value)}>
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-        <option value="pantone">Pantone</option>
-        <option value="blueberry_dark">Blueberry Dark</option>
-      </select>
-    </div>
+  return (
+    <SiteContainer>
+      <Container>
+        <Select className="select-category" placeholder="Select Category" options={category} onChange={(e) => setData((prev) => ({ ...prev, category: e.value }))} />
+        <Select className="select-category" placeholder="Select SubCategory" options={subcategory} onChange={(e) => setData((prev) => ({ ...prev, subcategory: e.value }))} />
+      </Container>
+
+      <NextButton>Next</NextButton>
+    </SiteContainer>
   )
 }
 
