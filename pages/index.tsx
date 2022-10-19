@@ -13,7 +13,6 @@ import { signIn } from "next-auth/react"
 import { useAccount, useConnect, useSignMessage, useDisconnect } from "wagmi"
 import axios from "axios"
 
-import Header from "../sections/Header"
 import Footer from "../sections/Footer"
 import Title from "../components/typography/Title"
 import Subtitle from "../components/typography/Subtitle"
@@ -84,7 +83,7 @@ const Home: NextPage = () => {
         <meta name="title" content="Blockchain crowdfunding application powered by Moralis" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header />
+
       <Title text="Components/Typography/Title" />
       <Subtitle text="Components/Typography/Subtitle" />
       <Button text={"Components/buttons/button"} />

@@ -106,7 +106,7 @@ const Header = () => {
   const [active, setActive] = useState("Home")
   const header = [
     { title: "Discover", url: "" },
-    { title: "Start a project", url: "" },
+    { title: "Start a project", url: "/startproject" },
     { title: "FAQ", url: "" },
     { title: "My projects", url: "" },
   ]
@@ -129,11 +129,12 @@ const Header = () => {
         </ImageBox>
 
         <MenuBox>
-          {header.map((h) => {
+          {header.map((h, index) => {
             const { title, url } = h
 
             return (
               <NavItem
+                key={index}
                 onClick={() => {
                   setActive(title)
                 }}

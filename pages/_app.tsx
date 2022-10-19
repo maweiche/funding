@@ -1,4 +1,5 @@
 import Head from "next/head"
+import Header from "../sections/Header"
 import "../styles/globals.css"
 
 //Web3 auth
@@ -57,6 +58,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           </Head>
 
           <AppProvider>
+            <Header />
             <Component {...pageProps} />
           </AppProvider>
         </SessionProvider>
