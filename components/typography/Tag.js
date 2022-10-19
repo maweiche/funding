@@ -15,8 +15,8 @@ const Text = styled.div`
   font-family: "Roboto Flex";
   font-style: normal;
   font-weight: 300;
-  font-size: 0.8em;
-  letter-spacing: 0.3px;
+  font-size: 0.9em;
+  letter-spacing: 0.5px;
   color: white;
 `
 

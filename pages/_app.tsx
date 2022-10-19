@@ -7,6 +7,7 @@ import { AppProvider } from "../sections/utils/appContext"
 import { alchemyProvider } from "wagmi/providers/alchemy"
 import { publicProvider } from "wagmi/providers/public"
 import { SessionProvider } from "next-auth/react"
+import { MoralisProvider } from "react-moralis";
 
 const mumbai: Chain = {
   id: 80_001,
@@ -40,6 +41,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <WagmiConfig client={client}>
+      <MoralisProvider appId="4PdSQUwrX1404TxN641gEwmXZqZFpv8CzBIc4FLN" serverUrl="https://aa6nfdqx573p.usemoralis.com:2053/server">
         <SessionProvider session={pageProps.session} refetchInterval={10000}>
           <Head>
             <meta charSet="utf-8" />
@@ -60,6 +62,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </AppProvider>
         </SessionProvider>
+        </MoralisProvider>,
       </WagmiConfig>
     </>
   )
