@@ -1,5 +1,7 @@
 import { useState } from "react"
-import { useConnect, useAccount, useDisconnect } from "wagmi"
+import { useConnect, useAccount, useDisconnect,useSignMessage } from "wagmi"
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import axios from 'axios';
 
 import Link from "next/link"
 import Image from "next/image"
@@ -101,15 +103,45 @@ const ConnectBtn = styled.div`
 
 const Header = () => {
   const { isConnected } = useAccount()
-  const { disconnect } = useDisconnect()
-  const { connect, connectors } = useConnect()
+  const { disconnect, disconnectAsync } = useDisconnect()
+  const { connect, connectors, connectAsync  } = useConnect()
   const [active, setActive] = useState("Home")
   const header = [
     { title: "Discover", url: "" },
     { title: "Start a project", url: "" },
     { title: "FAQ", url: "" },
-    { title: "My projects", url: "" },
+    { title: "My projects", url: "/my" },
   ]
+
+  const { signMessageAsync } = useSignMessage()
+
+  // TBD we'll need to replace basic Wagmi auth with next/auth to 
+
+
+  const handleAuth = async () => {
+    //disconnects the web3 provider if it's already active
+    if (isConnected) {
+      await disconnectAsync();
+    }
+    // enabling the web3 provider metamask
+    const { account, chain } = await connectAsync({ connector: new MetaMaskConnector() });
+
+    const userData = { address: account, chain: chain.id, network: 'evm' };
+    // making a post request to our 'request-message' endpoint
+    try{
+      const { data } = await axios.post('/api/auth/request-message', userData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const message = data.message;
+      const signature = await signMessageAsync({ message });
+  
+      console.log(signature)
+    } catch(error){
+      console.log(error)
+    }
+  };
 
   return (
     <>
@@ -159,6 +191,7 @@ const Header = () => {
               {!connector.ready && " (unsupported)"}
             </ConnectBtn>
           ))}
+           <button onClick={() => handleAuth()}>Moralis Auth</button>
 
           <IconFrame>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
