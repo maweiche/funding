@@ -18,6 +18,7 @@ import Footer from "../sections/Footer"
 import Title from "../components/typography/Title"
 import Subtitle from "../components/typography/Subtitle"
 import Button from "../components/buttons/Button"
+import { HottestProjects, TopChainReactions } from "../components/statsTable/statsTable"
 
 const Container = styled.div`
   margin-top: 1%;
@@ -98,6 +99,11 @@ const Home: NextPage = () => {
       <EyeSevenBox>
         <Image src={Eye7} alt="Eye7" width={"600%"} height={"70%"} />
       </EyeSevenBox>
+      
+      <HottestProjects />
+
+      <TopChainReactions />
+
       <Footer />
       {/* <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-TKH8YE4L07"
