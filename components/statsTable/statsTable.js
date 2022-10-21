@@ -1,4 +1,48 @@
 import styled from "styled-components"
+import { 
+    getLatestBlockHeight, 
+    getChangesInTokenHolders,
+    getTokenTransfers
+} from "../../pages/api/covalent"
+import { useEffect, useState } from "react"
+import { getContractAddress } from "ethers/lib/utils"
+
+const StatsTable = () => {
+    const [latestBlockHeight, setLatestBlockHeight] = useState(0)
+    const [previousBlockHeight, setPreviousBlockHeight] = useState(0) //based on 24 hour average
+    const [changesInTokenHolders, setChangesInTokenHolders] = useState(0)
+    const [tokenTransfers, setTokenTransfers] = useState(0)
+
+    useEffect(() => {
+        // getLatestBlockHeight of chainId 1 (mainnet)
+        const getData = async () => {
+            const latestBlockHeight = await getLatestBlockHeight(1)
+            console.log('latest blockheight',latestBlockHeight)
+            setLatestBlockHeight(latestBlockHeight)
+            setPreviousBlockHeight(latestBlockHeight - 7155) // 24 hours average
+        }
+        getData();
+        // getChangesInTokenHolders().then((res) => {
+        //     setChangesInTokenHolders(res.data.data.items[0].changes)
+        // })
+        // getTokenTransfers().then((res) => {
+        //     setTokenTransfers(res.data.data.items[0].transfers)
+        // })
+    }, [])
+
+    return (
+        <div>
+            <div>
+                <div>Latest Block Height</div>
+                <div>{latestBlockHeight}</div>
+                <div>24 hr. prior Block Height</div>
+                <div>{previousBlockHeight}</div>
+            </div>
+        </div>
+    )
+}
+
+export default StatsTable
 
 const Container = styled.div`
   padding-bottom: 2%;
@@ -87,7 +131,6 @@ const TopChainReactionsData = [
         }
     }
 ]
-
 
 export const HottestProjects = () => {
 
