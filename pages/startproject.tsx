@@ -1,6 +1,7 @@
-import { ElementType, useState } from "react";
+import { useState } from "react";
 import Stepper from "../components/form/Stepper";
 import Category from "../sections/start_project/Category";
+import TellStory from "../sections/start_project/TellStory";
 
 interface ItemProps {
   step: Number;
@@ -18,6 +19,9 @@ const StartProject = () => {
     switch (props.step) {
       case 0:
         return <Category setStep={setStep} />;
+
+      case 1:
+        return <TellStory setStep={setStep} />;
     }
 
     return null;

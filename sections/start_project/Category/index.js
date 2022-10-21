@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useApp } from "../utils/appContext";
+import { useEffect } from "react";
+import { useApp } from "../../utils/appContext";
 import { MainContainer, SiteContainer, Container, ButtonContainer, NextButton } from "./StyleWrapper";
 
 import Select from "react-select";
@@ -37,14 +37,13 @@ const Category = ({ setStep }) => {
         <Container>
           <Select
             className="select-category"
-            defaultValue={{ label: category, value: category }}
-            placeholder="Select Category"
+            defaultValue={{ label: category || "Select Category", value: category }}
             options={categoryKey}
             onChange={handleCategory}
           />
           <Select
             className="select-category"
-            defaultValue={{ label: subcategory, value: subcategory }}
+            defaultValue={{ label: subcategory || "Select Subcategory", value: subcategory }}
             placeholder="Select SubCategory"
             options={subcategoryKey}
             onChange={handleSubCategory}
