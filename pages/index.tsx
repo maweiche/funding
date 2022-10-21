@@ -2,21 +2,14 @@ import type { NextPage } from "next"
 import Head from "next/head"
 import Image from "next/image"
 import styled from "styled-components"
-import { useRouter } from "next/router"
 import Eye7 from "../public/Eye7.png"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Script from "next/script"
-import Link from "next/link"
-
-import { MetaMaskConnector } from "wagmi/connectors/metaMask"
-import { signIn } from "next-auth/react"
-import { useAccount, useConnect, useSignMessage, useDisconnect } from "wagmi"
 import axios from "axios"
 
 import Footer from "../sections/Footer"
-import Title from "../components/typography/Title"
-import Subtitle from "../components/typography/Subtitle"
-import Button from "../components/buttons/Button"
+import Features from "../sections/Landing/Features"
+import LatestProjects from "../sections/Landing/LatestProjects"
 
 const Container = styled.div`
   margin-top: 1%;
@@ -26,55 +19,31 @@ const EyeSevenBox = styled.div`
   text-align: center;
   position: relative;
 `
-const A = styled.a`
-  &:hover {
-    opacity: 0.7;
-    color: blue;
-    cursor: pointer;
-  }
-`
 
 const Home: NextPage = () => {
+  const [projects,setProjects] = useState([])
+
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
+    getProjects()
   }, [])
 
-  // Web3 Auth handling
-  const { connectAsync } = useConnect()
-  const { disconnectAsync } = useDisconnect()
-  const { isConnected } = useAccount()
-  const { signMessageAsync } = useSignMessage()
-  const { push } = useRouter()
-
-  const handleAuth = async () => {
-    if (isConnected) {
-      await disconnectAsync()
-    }
-
-    const { account, chain } = await connectAsync({ connector: new MetaMaskConnector() })
-
-    const userData = { address: account, chain: chain.id, network: "evm" }
-    console.log(userData)
-
-    const { data } = await axios.post("/api/auth/request-message", userData, {
+  // How to query categories https://aa6nfdqx573p.usemoralis.com:2053/server/classes/ProjectTest?where={%22category%22:"some category"}
+  // Similar way possible to filter max if needed
+  const getProjects = async () => {
+      const config = {
       headers: {
-        "content-type": "application/json",
-      },
-    })
-
-    const message = data.message
-
-    const signature = await signMessageAsync({ message })
-
-    // redirect user after success authentication to '/dashboard' page
-    // @ts-ignore
-    const { url } = await signIn("credentials", { message, signature, redirect: false, callbackUrl: "/user" })
-    /**
-     * instead of using signIn(..., redirect: "/dashboard")
-     * we get the url from callback and push it to the router to avoid page refreshing
-     */
-    push(url)
+        "X-Parse-Application-Id": "4PdSQUwrX1404TxN641gEwmXZqZFpv8CzBIc4FLN"
+      }
+    }
+    try{
+      const res = await axios.get("https://aa6nfdqx573p.usemoralis.com:2053/server/classes/ProjectTest?", config)
+      setProjects(res.data.results)
+    } catch (error){
+      console.log(error)
+    }
   }
+
 
   return (
     <Container>
@@ -83,17 +52,9 @@ const Home: NextPage = () => {
         <meta name="title" content="Blockchain crowdfunding application powered by Moralis" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Title text="Components/Typography/Title" />
-      <Subtitle text="Components/Typography/Subtitle" />
-      <Button text={"Components/buttons/button"} />
-      <div>
-        <br></br>
-        <Link href="/project/abc">
-          <A>pages/project/[pid].js</A>
-        </Link>
-        <div>This link will be userful for features "My projects", "Latest projects", "Stats" ,etc.</div>
-      </div>
+      <Header />
+      <Features/>
+      <LatestProjects data={projects}/>
       <EyeSevenBox>
         <Image src={Eye7} alt="Eye7" width={"600%"} height={"70%"} />
       </EyeSevenBox>
