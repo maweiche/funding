@@ -1,32 +1,10 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { MainContainer, SiteContainer, Container, ButtonContainer, NextButton } from "./StyleWrapper"
+
 import Select from "react-select"
-import styled from "styled-components"
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin-top: 2%;
-  margin-bottom: 2%;
-  width: 50vw;
-  gap: 20px;
-`
-
-const SiteContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`
-
-const NextButton = styled.div`
-  background-color: #3c4048;
-  padding: 10px 20px;
-  border-radius: 5px;
-`
 
 const Category = () => {
-  const [data, setData] = useState({ category: "", subcategory: "" })
+  const [data, setData] = useState({ category: "", subcategory: "", isNext: false })
 
   const categories = {
     Technology: ["Gadgets", "Robots", "Wearables", "Other"],
@@ -37,18 +15,33 @@ const Category = () => {
     "Open-source": ["AI", "Big Data", "Cloud", "Cybersecurity", "IoT", "Machine Learning", "Dev tools", "Other"],
   }
 
+  useEffect(() => {
+    console.log(data)
+    setData((prev) => ({ ...prev, isNext: data.category && data.subcategory }))
+  }, [])
+
   const category = Object.keys(categories).map((cat) => ({ label: cat, value: cat }))
   const subcategory = categories[data.category] && categories[data.category].map((cat) => ({ label: cat, value: cat }))
 
-  return (
-    <SiteContainer>
-      <Container>
-        <Select className="select-category" placeholder="Select Category" options={category} onChange={(e) => setData((prev) => ({ ...prev, category: e.value }))} />
-        <Select className="select-category" placeholder="Select SubCategory" options={subcategory} onChange={(e) => setData((prev) => ({ ...prev, subcategory: e.value }))} />
-      </Container>
+  const handleClick = () => setData((prev) => ({ ...prev, isNext: false }))
+  const handleCategory = (e) => setData((prev) => ({ ...prev, category: e.value }))
+  const handleSubCategory = (e) => setData((prev) => ({ ...prev, subcategory: e.value, isNext: true }))
 
-      <NextButton>Next</NextButton>
-    </SiteContainer>
+  return (
+    <MainContainer>
+      <SiteContainer>
+        <Container>
+          <Select className="select-category" placeholder="Select Category" options={category} onChange={handleCategory} />
+          <Select className="select-category" placeholder="Select SubCategory" options={subcategory} onChange={handleSubCategory} />
+        </Container>
+
+        {data.isNext && (
+          <ButtonContainer>
+            <NextButton onClick={handleClick}>Next</NextButton>
+          </ButtonContainer>
+        )}
+      </SiteContainer>
+    </MainContainer>
   )
 }
 
