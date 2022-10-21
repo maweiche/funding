@@ -93,8 +93,8 @@ const Stepper = ({ handleStep, steps, step }) => {
         }
 
         return (
-          <StepContainer>
-            <StepContent key={index}>
+          <StepContainer key={index}>
+            <StepContent>
               <Step s={index} />
               <p>{st}</p>
             </StepContent>

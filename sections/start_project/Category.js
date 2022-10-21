@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react"
-import { MainContainer, SiteContainer, Container, ButtonContainer, NextButton } from "./StyleWrapper"
+import { useEffect, useState } from "react";
+import { useApp } from "../utils/appContext";
+import { MainContainer, SiteContainer, Container, ButtonContainer, NextButton } from "./StyleWrapper";
 
-import Select from "react-select"
+import Select from "react-select";
 
-const Category = () => {
-  const [data, setData] = useState({ category: "", subcategory: "", isNext: false })
+const Category = ({ setStep }) => {
+  const { appState, setAppState } = useApp();
+  const { category, subcategory, isNext } = { ...appState };
 
   const categories = {
     Technology: ["Gadgets", "Robots", "Wearables", "Other"],
@@ -13,36 +15,50 @@ const Category = () => {
     Web3: ["Defi", "DAO", "Gamefi", "NFT", "Social-fi", "Infrastrucute", "Dev tooling", "Other"],
     Science: ["Biology", "Ecologogy", "Psychology", "Chemistry", "Physics", "Engineering", "Medicine", "Neuroscience", "Other"],
     "Open-source": ["AI", "Big Data", "Cloud", "Cybersecurity", "IoT", "Machine Learning", "Dev tools", "Other"],
-  }
+  };
 
   useEffect(() => {
-    console.log(data)
-    setData((prev) => ({ ...prev, isNext: data.category && data.subcategory }))
-  }, [])
+    setAppState((prev) => ({ ...prev, isNext: subcategory !== undefined }));
+  }, []);
 
-  const category = Object.keys(categories).map((cat) => ({ label: cat, value: cat }))
-  const subcategory = categories[data.category] && categories[data.category].map((cat) => ({ label: cat, value: cat }))
+  const categoryKey = Object.keys(categories).map((cat) => ({ label: cat, value: cat }));
+  const subcategoryKey = categories[category] && categories[category].map((cat) => ({ label: cat, value: cat }));
 
-  const handleClick = () => setData((prev) => ({ ...prev, isNext: false }))
-  const handleCategory = (e) => setData((prev) => ({ ...prev, category: e.value }))
-  const handleSubCategory = (e) => setData((prev) => ({ ...prev, subcategory: e.value, isNext: true }))
+  const handleClick = () => {
+    setStep((prev) => (prev += 1));
+    setAppState((prev) => ({ ...prev, isNext: false }));
+  };
+  const handleCategory = (e) => setAppState((prev) => ({ ...prev, category: e.value }));
+  const handleSubCategory = (e) => setAppState((prev) => ({ ...prev, subcategory: e.value, isNext: true }));
 
   return (
     <MainContainer>
       <SiteContainer>
         <Container>
-          <Select className="select-category" placeholder="Select Category" options={category} onChange={handleCategory} />
-          <Select className="select-category" placeholder="Select SubCategory" options={subcategory} onChange={handleSubCategory} />
+          <Select
+            className="select-category"
+            defaultValue={{ label: category, value: category }}
+            placeholder="Select Category"
+            options={categoryKey}
+            onChange={handleCategory}
+          />
+          <Select
+            className="select-category"
+            defaultValue={{ label: subcategory, value: subcategory }}
+            placeholder="Select SubCategory"
+            options={subcategoryKey}
+            onChange={handleSubCategory}
+          />
         </Container>
 
-        {data.isNext && (
+        {isNext && (
           <ButtonContainer>
             <NextButton onClick={handleClick}>Next</NextButton>
           </ButtonContainer>
         )}
       </SiteContainer>
     </MainContainer>
-  )
-}
+  );
+};
 
-export default Category
+export default Category;
