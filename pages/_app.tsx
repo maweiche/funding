@@ -27,13 +27,19 @@ const mumbai: Chain = {
 }
 
 
-const { provider, webSocketProvider } = configureChains([mumbai], [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY }), publicProvider()])
+const { provider, webSocketProvider, chains } = configureChains([mumbai], [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY }), publicProvider()])
+
+const { connectors } = getDefaultWallets({
+  appName: 'My RainbowKit App',
+  chains,
+});
 
 
 const client = createClient({
   provider,
   webSocketProvider,
-  autoConnect: true
+  autoConnect: true,
+  connectors
 })
 
 type AppProps = {
@@ -45,8 +51,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <WagmiConfig client={client}>
-        <MoralisProvider appId="4PdSQUwrX1404TxN641gEwmXZqZFpv8CzBIc4FLN" serverUrl="https://aa6nfdqx573p.usemoralis.com:2053/server">
+        <MoralisProvider appId='M7wQiYLcbda4yH7hVX2W5ksbJo4xS74oNVKGZk0C' serverUrl='https://wgdujpk9pprx.grandmoralis.com:2053/server' >
           <SessionProvider session={pageProps.session} refetchInterval={10000}>
+            <RainbowKitProvider chains={chains}>
               <Head>
                 <meta charSet="utf-8" />
                 <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -61,10 +68,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 <link rel="apple-touch-icon" href="/apple-icon.png"></link>
                 <meta name="theme-color" content="#317EFB" />
               </Head>
-
               <AppProvider>
                 <Component {...pageProps} />
               </AppProvider>
+            </RainbowKitProvider>
           </SessionProvider>
         </MoralisProvider>,
       </WagmiConfig>

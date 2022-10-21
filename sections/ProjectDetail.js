@@ -1,13 +1,15 @@
 import Image from "next/image"
 import styled from "styled-components"
-import {useState} from 'react'
+import { useState } from 'react'
+import axios from 'axios'
 
 import Tag from "../components/typography/Tag"
 import SectionTitle from "../components/typography/SectionTitle"
 import ImgSkeleton from "../components/skeletons/ImgSkeleton"
 import Button from "../components/buttons/Button"
 import Share from '../components/buttons/Share'
-import { BookmarkIcon, BookmarkFilledIcon } from '../components/icons/common'
+import { BookmarkIcon, BookmarkFilledIcon, CancelIcon } from '../components/icons/Common'
+import Tooltip from '../components/Tooltip'
 
 const Container = styled.div`
   margin-top: 5%;
@@ -15,6 +17,7 @@ const Container = styled.div`
 
 
 const DetailBox = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -54,6 +57,7 @@ const LeftPart = styled.div`
 `
 
 const RightPart = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -116,8 +120,27 @@ const Bkmrk = styled.div`
   }
 `
 
-  // @param "my" indicates whether component visualized in context of MyProjects or Landing page
-const ProjectDetail = ({ title,description,category,subcategory, amPledged, amBackers, amGoal, amDays, image, microActive, my }) => {
+const ActionPanel = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: absolute; 
+  right: 0;
+  top: 0px;
+  right: 4%;
+`
+
+const CancelProject = styled.button`
+  position: relative;
+  &:hover{
+    cursor: pointer;
+    opacity: 0.9;
+  }
+`
+// @param "my" indicates whether component visualized in context of MyProjects or Landing page
+const ProjectDetail = ({ pid, title, description, category, subcategory, amPledged, amBackers, amGoal, amDays, image, microActive, my }) => {
+  const [cancelTooltip, setCancelTooltip] = useState(false)
+  const [projectId, setProjectId] = useState()
+
   const Bookmark = () => {
     return (
       <Bkmrk onClick={() => { handleBookmark() }}>
@@ -126,15 +149,41 @@ const ProjectDetail = ({ title,description,category,subcategory, amPledged, amBa
     )
   }
 
-  const Row = ({ title, desc, icon, color }) => {
+  const Row = ({ title, desc, right, color }) => {
     return (
       <RowBox>
         <RowCol>
           <RowTitle color={color}>{title}</RowTitle> <RowDesc>{desc}</RowDesc>
         </RowCol>
-        {icon}
+        {right}
       </RowBox>
     )
+  }
+
+
+  const cancel = async (pid) => {
+    setProjectId(pid)
+    await cancelMoralis(pid);
+  }
+
+  const cancelMoralis = async (pid) => {
+    console.log('Cancel')
+    const data = {
+      "state": 4,
+      "objectId": "Hd2GGcyh52V4uYRa2k4Rjbtm"
+    }
+    const config = {
+      headers: {
+        "X-Parse-Application-Id": `${process.env.NEXT_PUBLIC_DAPP_ID}`,
+      }
+    }
+    try {
+      const res = await axios.put(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project`, config, data)
+      console.log(res)
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const [marked, setMarked] = useState(false)
@@ -154,37 +203,42 @@ const ProjectDetail = ({ title,description,category,subcategory, amPledged, amBa
 
 
   return <Container>
-  {my && <SectionTitle title={'Active project'} subtitle={title} />}
-  <DetailBox>
-
-    <LeftPart>
-      {!image ? <ImgSkeleton /> : <Image src={detail.image} alt={title} width={500} height={500} />}
-      <Categories>
-        {category && <Tag tag={category} color={"#000850"} />}
-        {subcategory && <Tag tag={subcategory} color={"#035201"} />}
-      </Categories>
-      <Desc>{description}</Desc>
-    </LeftPart>
-    <RightPart>
-      <div>
-        <Row title={amPledged} desc={`pledged of ${amGoal} goal`} color="#00FFA3" icon={<Bookmark />} />
-        <Row title={amBackers} desc={`backers`} color="white" />
-        <Row title={microActive} desc={`microfunds active`} color="white" />
-        <FlexRow>
-          <Row title={amDays} desc={`days to go`} color="white" />
-          <Share fbQuote='fbQuote' twTitle='twTitle' twVia='twVia' liTitle='linked title' liSum='linked summary' liSource='linked source' />
-        </FlexRow>
-      </div>
-      <div>
-        <Button
-          text="Fund it!"
-          width={"100%"}
-          onClick={() => { handleDonate() }}
-        />
-      </div>
-    </RightPart>
-  </DetailBox>
-  </Container> 
+    {my && <SectionTitle title={'Active project'} subtitle={title} />}
+    <DetailBox>
+      {my && <ActionPanel>
+        <CancelProject onClick={()=>{cancel(pid)}} onMouseEnter={()=>{setCancelTooltip(true)}} onMouseLeave={()=>{setCancelTooltip(false)}}>
+          {cancelTooltip && <Tooltip text='Cancel project'/>}
+          <CancelIcon width={30} />
+        </CancelProject>
+      </ActionPanel>}
+      <LeftPart>
+        {!image ? <ImgSkeleton /> : <Image src={detail.image} alt={title} width={500} height={500} />}
+        <Categories>
+          {category && <Tag tag={category} color={"#000850"} />}
+          {subcategory && <Tag tag={subcategory} color={"#035201"} />}
+        </Categories>
+        <Desc>{description}</Desc>
+      </LeftPart>
+      <RightPart>
+        <div>
+          <Row title={amPledged} desc={`pledged of ${amGoal} goal`} color="#00FFA3" right={<Bookmark />} />
+          <Row title={amBackers} desc={`backers`} color="white" />
+          <Row title={microActive} desc={`microfunds active`} color="white" />
+          <FlexRow>
+            <Row title={amDays} desc={`days to go`} color="white" />
+            <Share fbQuote='fbQuote' twTitle='twTitle' twVia='twVia' liTitle='linked title' liSum='linked summary' liSource='linked source' />
+          </FlexRow>
+        </div>
+        <div>
+          <Button
+            text="Fund it!"
+            width={"100%"}
+            onClick={() => { handleDonate() }}
+          />
+        </div>
+      </RightPart>
+    </DetailBox>
+  </Container>
 }
 
 export default ProjectDetail

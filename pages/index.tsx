@@ -14,6 +14,8 @@ import LatestProjects from "../sections/Landing/LatestProjects"
 
 const Container = styled.div`
   margin-top: 1%;
+  display: flex;
+  flex-direction: column;
 `
 
 const EyeSevenBox = styled.div`
@@ -29,16 +31,17 @@ const Home: NextPage = () => {
     getProjects()
   }, [])
 
+
   // How to query categories https://aa6nfdqx573p.usemoralis.com:2053/server/classes/ProjectTest?where={%22category%22:"some category"}
   // Similar way possible to filter max if needed
   const getProjects = async () => {
       const config = {
       headers: {
-        "X-Parse-Application-Id": "4PdSQUwrX1404TxN641gEwmXZqZFpv8CzBIc4FLN"
+        "X-Parse-Application-Id": `${process.env.NEXT_PUBLIC_DAPP_ID}`,
       }
     }
     try{
-      const res = await axios.get("https://aa6nfdqx573p.usemoralis.com:2053/server/classes/ProjectTest?", config)
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project?`, config)
       setProjects(res.data.results)
     } catch (error){
       console.log(error)
@@ -55,8 +58,7 @@ const Home: NextPage = () => {
       </Head>
       <Header />
       <Features/>
-      <LatestProjects data={projects}/>
-
+      <LatestProjects data={projects} my={false}/>
       <EyeSevenBox>
         <Image src={Eye7} alt="Eye7" width={"600%"} height={"70%"} />
       </EyeSevenBox>

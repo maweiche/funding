@@ -1,12 +1,13 @@
 import { useState } from "react"
-import { useConnect, useAccount, useDisconnect,useSignMessage } from "wagmi"
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-import axios from 'axios';
+import { useMoralis } from "react-moralis";
 
 import Link from "next/link"
 import Image from "next/image"
-import Logo from "../public/Logo.png"
 import styled from "styled-components"
+
+import Logo from "../public/Logo.png"
+import Rainbow from '../components/buttons/Rainbow'
+import Notifications from '../sections/Notifications'
 
 const NavItem = styled.div`
   display: flex;
@@ -81,6 +82,7 @@ const AB = styled(A)`
 `
 
 const IconFrame = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   width: 38px;
@@ -88,24 +90,29 @@ const IconFrame = styled.div`
   border: 1px solid white;
   padding: 4px;
   border-radius: 5px;
+  &:hover{
+    cursor: pointer;
+  }
 `
 
-const ConnectBtn = styled.div`
-  background-color: #628e90;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 18px;
-  color: #b0f6ff;
-  font-family: "Gemunu Libre", sans-serif;
-  font-style: normal;
-  cursor: pointer;
+const Notis = styled.div`
+  position: absolute;
+  color: white;
+  text-align: center;
+  align-items: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 15px;
+  background: #ab0000;
+  right: -10%;
+  top: -20%;
 `
 
 const Header = () => {
-  const { isConnected } = useAccount()
-  const { disconnect, disconnectAsync } = useDisconnect()
-  const { connect, connectors, connectAsync  } = useConnect()
   const [active, setActive] = useState("Home")
+  const [noti, setNoti] = useState(false)
+  const [notis, setNotis] = useState(2)
+  const { isAuthenticated, user } = useMoralis();
   const header = [
     { title: "Discover", url: "" },
     { title: "Start a project", url: "" },
@@ -113,36 +120,8 @@ const Header = () => {
     { title: "My projects", url: "/my" },
   ]
 
-  const { signMessageAsync } = useSignMessage()
-
-  // TBD we'll need to replace basic Wagmi auth with next/auth to 
-
-
-  const handleAuth = async () => {
-    //disconnects the web3 provider if it's already active
-    if (isConnected) {
-      await disconnectAsync();
-    }
-    // enabling the web3 provider metamask
-    const { account, chain } = await connectAsync({ connector: new MetaMaskConnector() });
-
-    const userData = { address: account, chain: chain.id, network: 'evm' };
-    // making a post request to our 'request-message' endpoint
-    try{
-      const { data } = await axios.post('/api/auth/request-message', userData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const message = data.message;
-      const signature = await signMessageAsync({ message });
-  
-      console.log(signature)
-    } catch(error){
-      console.log(error)
-    }
-  };
-
+  // TBD map real number of new notifications from user profile - https://app.clickup.com/t/321nykk
+  // Moralis API - extract number of notifications, filter by state
   return (
     <>
       <HeadBox>
@@ -185,15 +164,15 @@ const Header = () => {
         </MenuBox>
 
         <ConnectBox>
-          {connectors.map((connector) => (
+          {/* {connectors.map((connector) => (
             <ConnectBtn disabled={!connector.ready} key={connector.id} onClick={() => (isConnected ? disconnect() : connect({ connector }))}>
               {isConnected ? "Disconnect" : connector.name}
               {!connector.ready && " (unsupported)"}
             </ConnectBtn>
-          ))}
-           <button onClick={() => handleAuth()}>Moralis Auth</button>
+          ))} */}
+          <Rainbow />
 
-          <IconFrame>
+          {isAuthenticated && <IconFrame onClick={() => { setNoti(!noti) }}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
               <path
                 strokeLinecap="round"
@@ -201,8 +180,10 @@ const Header = () => {
                 d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
               />
             </svg>
-          </IconFrame>
+            {notis >= 0 && <Notis>5</Notis>}
+          </IconFrame>}
         </ConnectBox>
+        {noti && <Notifications />}
       </HeadBox>
     </>
   )
