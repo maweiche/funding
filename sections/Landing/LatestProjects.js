@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import ProjectCard from '../../components/cards/ProjectCard'
+import SectionTitle from '../../components/typography/SectionTitle'
 import Title from '../../components/typography/Title'
 
 const Container = styled.div`
@@ -17,22 +18,22 @@ const TitleRow = styled.div`
     margin-top: 3%;
 `
 
-const LatestProjects = ({data}) => {
-    return <>    
-    <TitleRow><Title text='Latest Projects' /></TitleRow>
-    <Container>
-        {data.map((project, index) => {
-            return <ProjectCard 
-                key={index} 
-                title={project.title} 
-                description={project.description} 
-                subcategory={project.subcategory} 
-                link={`/project/${project.pid}`} 
-                id={project.pid}
-            />
-        })}                
-    </Container></>
-
+// @param "my" indicates whether component visualized in context of MyProjects or Landing page
+const LatestProjects = ({ data, my }) => {
+    return <>
+        {my ? <SectionTitle title='Project history' subtitle='Looking back at your success' /> : <TitleRow><Title text='Latest Projects' /></TitleRow>}
+        <Container>
+            {data.map((project, index) => {
+                return <ProjectCard
+                    key={index}
+                    title={project.title}
+                    description={project.description}
+                    subcategory={project.subcategory}
+                    link={`/project/${project.pid}`}
+                    id={project.pid}
+                />
+            })}
+        </Container></>
 }
 
 export default LatestProjects
