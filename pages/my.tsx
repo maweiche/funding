@@ -10,6 +10,11 @@ import Header from "../sections/Header";
 import Footer from "../sections/Footer";
 import ProjectDetail from "../sections/ProjectDetail"
 
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+`
+
 const BlankSpace = styled.div`
     margin-top: 8%;
     margin-bottom: 8%;
@@ -33,10 +38,11 @@ const My: NextPage = () => {
     const [amMicro, setAmMicro] = useState("N/A")
     const [amDays, setAmDays] = useState("N/A")
     const [amGoal, setAmGoal] = useState("N/A")
+    const [projectId, setProjectId] = useState()
 
     // Query only user's active project (state 1)
     // By design we only allow one active project per user
-    const { data } = useMoralisQuery("ProjectTest", (query) =>
+    const { data } = useMoralisQuery("Project", (query) =>
         query
             .equalTo("owner", address)
             .equalTo("state", 1))
@@ -47,6 +53,7 @@ const My: NextPage = () => {
             "description",
             "category",
             "subcategory",
+            "pid"
         ]), { autoFetch: true },
     );
 
@@ -56,6 +63,7 @@ const My: NextPage = () => {
             await setDescription(fetchDetail[0].description)
             await setCategory(fetchDetail[0].category)
             await setSubcategory(fetchDetail[0].subcategory)
+            await setProjectId(fetchDetail[0].pid)
         } catch (error) {
             console.log(error)
         }
@@ -64,32 +72,32 @@ const My: NextPage = () => {
     const getProjects = async () => {
         const config = {
             headers: {
-                "X-Parse-Application-Id": "4PdSQUwrX1404TxN641gEwmXZqZFpv8CzBIc4FLN"
+                "X-Parse-Application-Id": `${process.env.NEXT_PUBLIC_DAPP_ID}`
             }
         }
         try {
-            const res = await axios.get(`https://aa6nfdqx573p.usemoralis.com:2053/server/classes/ProjectTest?where={"owner":${address}}`, config)
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project?where={"owner":"${address}"}`, config)
             setProjects(res.data.results)
         } catch (error) {
             console.log(error)
         }
     }
 
+
     useEffect(() => {
         getData()
         getProjects()
     }, [!fetchDetail[0]])
 
-
-    return <><Header />
+    return <Container><Header />
         {address ? <div>
-            <ProjectDetail description={description} title={title} category={category} subcategory={subcategory} amBackers={amBackers} amMicro={amMicro} amPledged={amPledged} amDays={amDays} amGoal={amGoal} image={image} microActive={microActive} my />
+            <ProjectDetail pid={projectId} description={description} title={title} category={category} subcategory={subcategory} amBackers={amBackers} amPledged={amPledged} amDays={amDays} amGoal={amGoal} image={image} microActive={microActive} my />
             <BlankSpace />
             <LatestProjects data={projects} my />
         </div> :
             <div>No wallet found, please disconnect/connect to reinitialize</div>}
         <Footer />
-    </>
+    </Container>
 }
 
 export default My

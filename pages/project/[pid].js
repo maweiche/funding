@@ -36,7 +36,7 @@ const Project = () => {
   }
 
 
-  const { data } = useMoralisQuery("ProjectTest", (query) => query.equalTo("pid", pid));
+  const { data } = useMoralisQuery("Project", (query) => query.equalTo("pid", pid));
   const fetchDetail = JSON.parse(
     JSON.stringify(data, [
       "title",
