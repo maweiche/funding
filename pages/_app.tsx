@@ -1,4 +1,5 @@
 import Head from "next/head"
+import Header from "../sections/Header"
 import "../styles/globals.css"
 
 //Web3 auth
@@ -61,12 +62,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 <link rel="apple-touch-icon" href="/apple-icon.png"></link>
                 <meta name="theme-color" content="#317EFB" />
               </Head>
-
               <AppProvider>
                 <Component {...pageProps} />
               </AppProvider>
           </SessionProvider>
-        </MoralisProvider>,
+        </MoralisProvider>
       </WagmiConfig>
     </>
   )

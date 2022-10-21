@@ -7,7 +7,6 @@ import { useEffect, useState } from "react"
 import Script from "next/script"
 import axios from "axios"
 
-import Header from "../sections/Header"
 import Footer from "../sections/Footer"
 import Features from "../sections/Landing/Features"
 import LatestProjects from "../sections/Landing/LatestProjects"
@@ -56,7 +55,6 @@ const Home: NextPage = () => {
       <Header />
       <Features/>
       <LatestProjects data={projects}/>
-
       <EyeSevenBox>
         <Image src={Eye7} alt="Eye7" width={"600%"} height={"70%"} />
       </EyeSevenBox>
