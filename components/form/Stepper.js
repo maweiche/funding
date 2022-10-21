@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import { CheckMark } from "../icons/MobileSet"
 
 const Container = styled.div`
   display: flex;
@@ -30,7 +29,7 @@ const NotCircle = styled(Circle)`
 `
 
 const YesCircle = styled(Circle)`
-  background: #008d39;
+  background: #b0f6ff;
   &:hover {
     cursor: pointer;
     opacity: 0.8;
@@ -40,9 +39,10 @@ const YesCircle = styled(Circle)`
 const Line = styled.div`
   display: flex;
   flex-direction: column;
-  align-self: center;
+  align-self: flex-start;
   height: 1px;
   width: 50px;
+  margin-top: 20px;
   margin-left: 10px;
   margin-right: 10px;
   background: #c8c8c8;
@@ -57,40 +57,52 @@ const Line = styled.div`
   }
 `
 
-const Stepper = ({ increment, decrement, steps, step }) => {
+const StepContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
+const StepContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+`
+
+const Stepper = ({ handleStep, steps, step }) => {
   const Step = ({ s }) => {
     return (
       <>
-        {s < step && (
-          <YesCircle onClick={decrement}>
-            <CheckMark width={15} />
-          </YesCircle>
-        )}
+        {s < step && <YesCircle onClick={() => handleStep(s)}></YesCircle>}
         {s === step && <Circle />}
-        {s > step && <NotCircle onClick={increment} />}
+        {s > step && <NotCircle onClick={() => handleStep(s)} />}
       </>
     )
   }
 
   return (
     <Container>
-      <Step s={1} />
-      <Line />
-      <Step s={2} />
-      <Line />
-      <Step s={3} />
-      {steps >= 4 && (
-        <>
-          <Line />
-          <Step s={4} />
-          {steps >= 5 && (
-            <>
-              <Line />
-              <Step s={5} />
-            </>
-          )}
-        </>
-      )}
+      {steps.map((st, index) => {
+        if (index + 1 == steps.length) {
+          return (
+            <StepContent key={index}>
+              <Step s={index} />
+              <p>{st}</p>
+            </StepContent>
+          )
+        }
+
+        return (
+          <StepContainer key={index}>
+            <StepContent>
+              <Step s={index} />
+              <p>{st}</p>
+            </StepContent>
+
+            <Line />
+          </StepContainer>
+        )
+      })}
     </Container>
   )
 }

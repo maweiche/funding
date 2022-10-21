@@ -1,15 +1,16 @@
-import Head from "next/head"
-import "../styles/globals.css"
+import Head from "next/head";
+import Header from "../sections/Header";
+import "../styles/globals.css";
 
 //Web3 auth
-import { Chain, createClient, configureChains, WagmiConfig } from "wagmi"
-import { AppProvider } from "../sections/utils/appContext"
-import { alchemyProvider } from "wagmi/providers/alchemy"
-import { publicProvider } from "wagmi/providers/public"
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { SessionProvider } from "next-auth/react"
+import { Chain, createClient, configureChains, WagmiConfig } from "wagmi";
+import { AppProvider } from "../sections/utils/appContext";
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { publicProvider } from "wagmi/providers/public";
+import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { SessionProvider } from "next-auth/react";
 import { MoralisProvider } from "react-moralis";
-import '@rainbow-me/rainbowkit/styles.css';
+import "@rainbow-me/rainbowkit/styles.css";
 
 const mumbai: Chain = {
   id: 80_001,
@@ -26,14 +27,12 @@ const mumbai: Chain = {
   testnet: true,
 }
 
-
 const { provider, webSocketProvider, chains } = configureChains([mumbai], [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY }), publicProvider()])
 
 const { connectors } = getDefaultWallets({
   appName: 'My RainbowKit App',
   chains,
 });
-
 
 const client = createClient({
   provider,
@@ -43,9 +42,9 @@ const client = createClient({
 })
 
 type AppProps = {
-  Component: any
-  pageProps: any
-}
+  Component: any;
+  pageProps: any;
+};
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -73,8 +72,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
               </AppProvider>
             </RainbowKitProvider>
           </SessionProvider>
-        </MoralisProvider>,
+        </MoralisProvider>
       </WagmiConfig>
     </>
-  )
+  );
 }
