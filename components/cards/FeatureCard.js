@@ -10,8 +10,10 @@ const Card = styled.div`
     max-width: 800px;
     padding-top: 2em;
     margin: 2em;
+    transition: 0.2s;
     &:hover{
-        opacity: 0.9;
+        opacity: 0.8;
+        background: rgba(5, 0, 0, 0.4);
         cursor: pointer;
     }
     @media (max-width: 768px) {
@@ -21,18 +23,19 @@ const Card = styled.div`
 
 const Title = styled.div`
     margin-top: 1em;
-    font-family: 'Roboto';
+    font-family: "Gemunu Libre";
     font-style: normal;
-    font-weight: 700;
-    font-size: 1.6em;
+    font-weight: 500;
+    font-size: 1.7em;
+    color: #b0f6ff;
 `
 
 const Description = styled.div`
      margin-top: 2em;
      margin-bottom: 2em;
-     font-family: 'Roboto';
-     font-style: normal;
-     font-weight: 400;
+     font-family: 'Neucha';
+     letter-spacing: 0.8px;
+     font-weight: 300;
      font-size: 1.1em;
      color: #FFFFFF;
 `

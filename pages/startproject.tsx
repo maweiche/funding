@@ -32,11 +32,12 @@ const StartProject = () => {
   };
 
   return (
-    <div>
+    <>
+      <Header/>
       <Stepper handleStep={handleStepper} steps={steps} step={step} />
 
       <RenderItem step={step} />
-    </div>
+    </>
   );
 };
 

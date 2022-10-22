@@ -21,14 +21,14 @@ const BlankSpace = styled.div`
 `
 
 const My: NextPage = () => {
-    const [projects, setProjects] = useState([])
     const { address } = useAccount()
-
     const [image, setImage] = useState(null)
     const [title, setTitle] = useState("Default Title")
     const [description, setDescription] = useState("Default Description")
     const [category, setCategory] = useState(null)
     const [subcategory, setSubcategory] = useState(null)
+    const [projects, setProjects] = useState([])
+   
 
     // TBD smart contract connection
     // TBD "no project found message"
@@ -39,6 +39,7 @@ const My: NextPage = () => {
     const [amDays, setAmDays] = useState("N/A")
     const [amGoal, setAmGoal] = useState("N/A")
     const [projectId, setProjectId] = useState()
+    const [objectId, setObjectId] = useState()
 
     // Query only user's active project (state 1)
     // By design we only allow one active project per user
@@ -53,7 +54,8 @@ const My: NextPage = () => {
             "description",
             "category",
             "subcategory",
-            "pid"
+            "pid",
+            "objectId"
         ]), { autoFetch: true },
     );
 
@@ -64,6 +66,7 @@ const My: NextPage = () => {
             await setCategory(fetchDetail[0].category)
             await setSubcategory(fetchDetail[0].subcategory)
             await setProjectId(fetchDetail[0].pid)
+            await setObjectId(fetchDetail[0].objectId)
         } catch (error) {
             console.log(error)
         }
@@ -91,7 +94,7 @@ const My: NextPage = () => {
 
     return <Container><Header />
         {address ? <div>
-            <ProjectDetail pid={projectId} description={description} title={title} category={category} subcategory={subcategory} amBackers={amBackers} amPledged={amPledged} amDays={amDays} amGoal={amGoal} image={image} microActive={microActive} my />
+            <ProjectDetail objectId={objectId} pid={projectId} description={description} title={title} category={category} subcategory={subcategory} amBackers={amBackers} amPledged={amPledged} amDays={amDays} amGoal={amGoal} image={image} microActive={microActive} my />
             <BlankSpace />
             <LatestProjects data={projects} my />
         </div> :
