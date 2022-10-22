@@ -8,14 +8,28 @@ import axios from "axios";
 import Footer from "../sections/Footer";
 import Features from "../sections/Landing/Features";
 import LatestProjects from "../sections/Landing/LatestProjects";
+import Categories from '../sections/Landing/Categories';
+import Eye1 from '../public/Eye1.png'
+import { LandingSvg } from "../sections/Landing/LandingMain";
+
+const ImageBox = styled.div`
+    position: absolute;
+    right: 0;
+    z-index: -1;
+    @media (min-width: 1768px) {
+      top: 200px;
+    }
+`
 
 const Container = styled.div`
+  position: relative;
   margin-top: 1%;
   display: flex;
   flex-direction: column;
 `;
 
 const EyeSevenBox = styled.div`
+  margin: 5%;
   text-align: center;
   position: relative;
 `;
@@ -47,11 +61,15 @@ const Home: NextPage = () => {
   return (
     <Container>
       <Head>
-        <title>Eyeseek Fund</title>
+        <title>Eyeseek Funding</title>
         <meta name="title" content="Blockchain crowdfunding application powered by Moralis" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Header />
+      <LandingSvg width={'100%'}/>
+      {/* <ImageBox><Image src={Eye1} alt='Eye1' width={'1000px'} /></ImageBox> */}
       <Features />
+      <Categories />
       <LatestProjects data={projects} my={false} />
       <EyeSevenBox>
         <Image src={Eye7} alt="Eye7" width={"600%"} height={"70%"} />

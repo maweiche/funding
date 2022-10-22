@@ -1,18 +1,17 @@
 import styled from "styled-components"
 
 const Box = styled.div`
-  background: ${(props) => props.color};
   text-align: center;
   padding: 1%;
-  background: rgba(${(props) => props.color}, 0.4);
-  border: 1px solid #000850;
+  background: black;
+  border: 1px solid ${(props) => props.color};
   border-radius: 45px;
   padding-left: 15px;
   padding-right: 15px;
 `
 
 const Text = styled.div`
-  font-family: "Roboto Flex";
+  font-family: "Neucha";
   font-style: normal;
   font-weight: 300;
   font-size: 0.9em;

@@ -10,11 +10,14 @@ import Button from "../components/buttons/Button"
 import Share from '../components/buttons/Share'
 import { BookmarkIcon, BookmarkFilledIcon, CancelIcon } from '../components/icons/Common'
 import Tooltip from '../components/Tooltip'
+import { CanceledTypo } from '../components/icons/Typography'
+
+import donation from '../abi/donation.json'
+import { useContractWrite, usePrepareContractWrite, useContractEvent, useNetwork } from 'wagmi'
 
 const Container = styled.div`
   margin-top: 5%;
 `
-
 
 const DetailBox = styled.div`
   position: relative;
@@ -131,15 +134,48 @@ const ActionPanel = styled.div`
 
 const CancelProject = styled.button`
   position: relative;
+  background: inherit;
+  border: none;
   &:hover{
     cursor: pointer;
     opacity: 0.9;
   }
 `
+
+const CanceledBox = styled.div`
+  position: absolute;
+  transition: 0.5s;
+  z-index: 1;
+  top: -25%;
+  right: 0;
+  @media (max-width: 1068px) {
+    top: 25%;
+  }
+`
+
 // @param "my" indicates whether component visualized in context of MyProjects or Landing page
-const ProjectDetail = ({ pid, title, description, category, subcategory, amPledged, amBackers, amGoal, amDays, image, microActive, my }) => {
+const ProjectDetail = ({ objectId, pid, title, description, category, subcategory, amPledged, amBackers, amGoal, amDays, image, microActive, my }) => {
   const [cancelTooltip, setCancelTooltip] = useState(false)
-  const [projectId, setProjectId] = useState()
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState(false)
+  const { chain } = useNetwork()
+
+  const { write, isLoading } = useContractWrite({
+    addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
+    contractInterface: donation.abi,
+    functionName: 'cancelFund',
+    args: [pid],
+  })
+
+  // TBD cancel events not implemented yet in smart contracts, needed to cover both POSITIVE and NEGATIVE cases
+
+  // useContractEvent({
+  //   addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
+  //   contractInterface: donation.abi,
+  //   eventName: 'FundCanceled',
+  //   listener: () => setSuccess(true),
+  //   once: true
+  // })
 
   const Bookmark = () => {
     return (
@@ -160,29 +196,26 @@ const ProjectDetail = ({ pid, title, description, category, subcategory, amPledg
     )
   }
 
-
-  const cancel = async (pid) => {
-    setProjectId(pid)
-    await cancelMoralis(pid);
+  const cancel = async (oid, pid) => {
+    await cancelMoralis(oid);
+    await write(pid);
   }
 
-  const cancelMoralis = async (pid) => {
-    console.log('Cancel')
-    const data = {
-      "state": 4,
-      "objectId": "Hd2GGcyh52V4uYRa2k4Rjbtm"
-    }
+  const cancelMoralis = async (oid) => {
     const config = {
       headers: {
         "X-Parse-Application-Id": `${process.env.NEXT_PUBLIC_DAPP_ID}`,
+        "Content-Type": "application/json"
       }
     }
     try {
-      const res = await axios.put(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project`, config, data)
+      const res = await axios.put(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project/${oid}`, { 'state': 5 }, config)
       console.log(res)
+      setSuccess(true)
 
     } catch (error) {
       console.log(error)
+      setError(true)
     }
   }
 
@@ -205,11 +238,19 @@ const ProjectDetail = ({ pid, title, description, category, subcategory, amPledg
   return <Container>
     {my && <SectionTitle title={'Active project'} subtitle={title} />}
     <DetailBox>
+      {success && <CanceledBox><CanceledTypo width={400} /></CanceledBox>}
       {my && <ActionPanel>
-        <CancelProject onClick={()=>{cancel(pid)}} onMouseEnter={()=>{setCancelTooltip(true)}} onMouseLeave={()=>{setCancelTooltip(false)}}>
-          {cancelTooltip && <Tooltip text='Cancel project'/>}
-          <CancelIcon width={30} />
-        </CancelProject>
+        {!success && !isLoading ? <>
+          {chain && chain.name === 'Mumbai' ?
+            <CancelProject onClick={() => { cancelMoralis(objectId, pid) }} onMouseEnter={() => { setCancelTooltip(true) }} onMouseLeave={() => { setCancelTooltip(false) }}>
+              {cancelTooltip && <Tooltip text='Cancel project' />}
+              <CancelIcon width={30} />
+            </CancelProject> :
+            <CancelProject onMouseEnter={() => { setCancelTooltip(true) }} onMouseLeave={() => { setCancelTooltip(false) }}>
+              {cancelTooltip && <Tooltip text='Switch to Mumbai' />}
+              <CancelIcon width={30} />
+            </CancelProject>
+          }</> : <>Loading</>}
       </ActionPanel>}
       <LeftPart>
         {!image ? <ImgSkeleton /> : <Image src={detail.image} alt={title} width={500} height={500} />}

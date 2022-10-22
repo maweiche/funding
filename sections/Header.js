@@ -31,7 +31,7 @@ const HeadBox = styled.div`
   background: transparent;
   color: #b0f6ff;
   padding: 10px 50px;
-
+  margin-bottom: 3%;
   @media (max-width: 768px) {
     justify-content: center;
   }

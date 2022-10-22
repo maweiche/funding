@@ -2,7 +2,6 @@ import Head from "next/head";
 import { useState } from "react";
 import Rainbow from "../components/buttons/Rainbow";
 import Image from "next/image";
-import Logo from "../public/Logo.png";
 import polygon from "../public/icons/donate/polygon.png";
 import icon2 from "../public/icons/donate/icon2.png";
 import icon3 from "../public/icons/donate/icon3.png";
@@ -14,15 +13,6 @@ import { DonateSchema } from "../util/validator";
 import { usePrepareContractWrite, useContractWrite } from "wagmi";
 import { abi } from "../abi/index";
 
-const DonateHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  @media (max-width: 500px) {
-    padding: 10px;
-  }
-`;
 const DonateTitle = styled.h1`
   font-family: "Chenla";
   font-style: normal;
@@ -279,17 +269,7 @@ const Donate = () => {
 
   return (
     <div>
-      <Head>
-        <title>Eyeseek Donate</title>
-        <meta name="title" content="Blockchain crowdfunding application powered by Moralis" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <DonateHeader>
-        <Image src={Logo} alt="logo" width={"110%"} height={"50%"} />
-        <div>
-          <Rainbow />
-        </div>
-      </DonateHeader>
+      <Header/>
       <DonateTitle>Select your reward</DonateTitle>
 
       <DonateContentWrapper>
