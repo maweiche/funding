@@ -24,12 +24,15 @@ const mumbai: Chain = {
     default: "https://rpc-mumbai.maticvigil.com",
   },
   testnet: true,
-}
+};
 
-const { provider, webSocketProvider, chains } = configureChains([mumbai], [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY }), publicProvider()])
+const { provider, webSocketProvider, chains } = configureChains(
+  [mumbai],
+  [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY }), publicProvider()]
+);
 
 const { connectors } = getDefaultWallets({
-  appName: 'My RainbowKit App',
+  appName: "My RainbowKit App",
   chains,
 });
 
@@ -37,8 +40,8 @@ const client = createClient({
   provider,
   webSocketProvider,
   autoConnect: true,
-  connectors
-})
+  connectors,
+});
 
 type AppProps = {
   Component: any;
@@ -49,7 +52,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <WagmiConfig client={client}>
-        <MoralisProvider appId='M7wQiYLcbda4yH7hVX2W5ksbJo4xS74oNVKGZk0C' serverUrl='https://wgdujpk9pprx.grandmoralis.com:2053/server' >
+        <MoralisProvider appId="M7wQiYLcbda4yH7hVX2W5ksbJo4xS74oNVKGZk0C" serverUrl="https://wgdujpk9pprx.grandmoralis.com:2053/server">
           <SessionProvider session={pageProps.session} refetchInterval={10000}>
             <RainbowKitProvider chains={chains}>
               <Head>
@@ -67,6 +70,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 <meta name="theme-color" content="#317EFB" />
               </Head>
               <AppProvider>
+                <Header />
                 <Component {...pageProps} />
               </AppProvider>
             </RainbowKitProvider>

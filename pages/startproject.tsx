@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Stepper from "../components/form/Stepper";
-import Header from "../sections/Header";
+import SetGoals from "../sections/start_project/SetGoals";
 import Category from "../sections/start_project/Category";
 import TellStory from "../sections/start_project/TellStory";
 
@@ -23,6 +23,9 @@ const StartProject = () => {
 
       case 1:
         return <TellStory setStep={setStep} />;
+
+      case 2:
+        return <SetGoals setStep={setStep} />;
     }
 
     return null;
