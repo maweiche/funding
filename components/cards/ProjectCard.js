@@ -21,11 +21,14 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     flex-wrap: nowrap;
-    height: 500px;
+    height: 400px;
     width: 35%;
     max-width: 500px;
     padding: 2%;
     margin-top: 3%;
+    border: 1px solid rgba(163, 163, 163, 0.3);
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.5));
+    border-radius: 5px;
     &:hover{
         opacity: 0.8;
         cursor: pointer;
@@ -52,16 +55,17 @@ const Amount = styled.div`
 `
 
 const Title = styled.div`
-    font-family: 'Roboto';
+    font-family: "Gemunu Libre";
     font-style: normal;
     font-weight: 700;
     font-size: 1.5em;
-    color: #FFFFFF;
+    color: #b0f6ff;
     margin-top: 5%;
 `
 
 const Desc = styled.div`
-    font-family: 'Roboto';
+    font-family: 'Neucha';
+    letter-spacing: 0.1px;
     font-style: normal;
     font-weight: 300;
     font-size: 17px;

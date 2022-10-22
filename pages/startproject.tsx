@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Stepper from "../components/form/Stepper";
+import Header from "../sections/Header";
 import Category from "../sections/start_project/Category";
 import TellStory from "../sections/start_project/TellStory";
 
@@ -28,11 +29,12 @@ const StartProject = () => {
   };
 
   return (
-    <div>
+    <>
+      <Header/>
       <Stepper handleStep={handleStepper} steps={steps} step={step} />
 
       <RenderItem step={step} />
-    </div>
+    </>
   );
 };
 

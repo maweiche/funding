@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Header from "../sections/Header";
 import "../styles/globals.css";
 
 //Web3 auth
