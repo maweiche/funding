@@ -10,6 +10,7 @@ import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { SessionProvider } from "next-auth/react";
 import { MoralisProvider } from "react-moralis";
 import "@rainbow-me/rainbowkit/styles.css";
+import Header from "../sections/Header";
 
 const mumbai: Chain = {
   id: 80_001,

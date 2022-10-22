@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { useState } from "react";
 import Rainbow from "../components/buttons/Rainbow";
 import Image from "next/image";
@@ -269,9 +268,7 @@ const Donate = () => {
 
   return (
     <div>
-      <Header/>
       <DonateTitle>Select your reward</DonateTitle>
-
       <DonateContentWrapper>
         <DonateSubtitle>Select an option below</DonateSubtitle>
         <DonateOption>

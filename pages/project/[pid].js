@@ -4,7 +4,6 @@ import styled from "styled-components"
 import { useMoralisQuery } from 'react-moralis'
 
 import SectionTitle from "../../components/typography/SectionTitle"
-import Header from "../../sections/Header"
 import ProjectDetail from "../../sections/ProjectDetail"
 
 // Blockchain related 
@@ -80,7 +79,6 @@ const Project = () => {
 
   return (
     <>
-      <Header />
       <Container>
         <SectionTitle title={"Project detail"} subtitle={title} />
         <ProjectDetail description={description} title={title} category={category} subcategory={subcategory} amBackers={amBackers} amMicro={amMicro} amPledged={amPledged} amDays={amDays} amGoal={amGoal} image={image} microActive={microActive} />

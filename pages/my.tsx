@@ -6,7 +6,6 @@ import axios from "axios"
 import styled from "styled-components";
 
 import LatestProjects from "../sections/Landing/LatestProjects";
-import Header from "../sections/Header";
 import Footer from "../sections/Footer";
 import ProjectDetail from "../sections/ProjectDetail"
 
@@ -92,7 +91,7 @@ const My: NextPage = () => {
         getProjects()
     }, [!fetchDetail[0]])
 
-    return <Container><Header />
+    return <Container>
         {address ? <div>
             <ProjectDetail objectId={objectId} pid={projectId} description={description} title={title} category={category} subcategory={subcategory} amBackers={amBackers} amPledged={amPledged} amDays={amDays} amGoal={amGoal} image={image} microActive={microActive} my />
             <BlankSpace />
