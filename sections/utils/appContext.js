@@ -12,6 +12,7 @@ export const AppProvider = (props) => {
       { title: "USDC", logo: "/icons/usdc.png", chainId: "", active: true },
       { title: "USDT", logo: "/icons/usdt.png", chainId: "", active: false },
     ],
+    milestones: [],
   });
 
   return (

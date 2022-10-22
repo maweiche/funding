@@ -17,3 +17,35 @@ export const ImageContainer = styled.div`
   align-items: center;
   gap: 15px;
 `;
+
+export const MilestoneContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 20px;
+`;
+
+export const MilestoneTitle = styled.span`
+  font-weight: bold;
+  font-size: 18px;
+`;
+
+export const MainMilestoneContainer = styled.div`
+  margin-top: 20px;
+  background-color: #212929;
+  padding: 20px;
+  border-radius: 10px;
+`;
+
+export const MilestoneHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const CancelButton = styled.button`
+  background-color: red;
+  border-style: none;
+  border-radius: 5px;
+  padding: 8px 10px;
+`;
