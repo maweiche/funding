@@ -1,4 +1,6 @@
 import Head from "next/head";
+import { useState } from "react";
+import Rainbow from "../components/buttons/Rainbow";
 import Image from "next/image";
 import polygon from "../public/icons/donate/polygon.png";
 import icon2 from "../public/icons/donate/icon2.png";
@@ -6,7 +8,10 @@ import icon3 from "../public/icons/donate/icon3.png";
 import icon4 from "../public/icons/donate/icon4.png";
 import usdt from "../public/icons/donate/usdt.png";
 import styled from "styled-components";
-import Header from "../sections/Header";
+import { useFormik } from "formik";
+import { DonateSchema } from "../util/validator";
+import { usePrepareContractWrite, useContractWrite } from "wagmi";
+import { abi } from "../abi/index";
 
 const DonateTitle = styled.h1`
   font-family: "Chenla";
@@ -106,6 +111,20 @@ const Input = styled.input`
   border-radius: 10px;
   padding: 1rem;
   width: 100%;
+  margin-bottom: 10px;
+
+  // hiding input spinner on "input[type=number]" for Chrome, Safari, Edge, Opera
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  ::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  // hiding input spinner on "input[type=number]" for Firefox
+  -moz-appearance: textfield;
 `;
 const InputWrapper = styled.div`
   display: flex;
@@ -220,14 +239,36 @@ const Icon = styled.svg`
   stroke-width: 3px;
 `;
 
+const Error = styled.span`
+  color: red;
+`;
+
 const Donate = () => {
+  const [donateData, setDonateData] = useState({});
+
+  const { config } = usePrepareContractWrite({
+    address: "0xFfF3B40f7905704ce5Ae876b59B6E1C30fBEa995",
+    abi: abi,
+    functionName: "contribute",
+    args: [donateData],
+  });
+
+  const { write, data, isLoading, isSuccess } = useContractWrite(config);
+
+  const formik = useFormik({
+    initialValues: {
+      directDonation: "",
+      microfund: "",
+    },
+    validationSchema: DonateSchema,
+    onSubmit: (values) => {
+      setDonateData(values);
+      write?.();
+    },
+  });
+
   return (
     <div>
-      <Head>
-        <title>Eyeseek Donate</title>
-        <meta name="title" content="Blockchain crowdfunding application powered by Moralis" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <Header/>
       <DonateTitle>Select your reward</DonateTitle>
 
@@ -285,23 +326,44 @@ const Donate = () => {
             <FormWrapper>
               <InputWrapper>
                 <LabelWrapper>
-                  <label>Direct donation</label>
+                  <label htmlFor="directDonation">Direct donation</label>
                 </LabelWrapper>
 
                 <InputInnerWrapper>
-                  <Input type="text" placeholder="1000" />
+                  <Input
+                    id="directDonation"
+                    name="directDonation"
+                    type="number"
+                    placeholder="1000"
+                    value={formik.values.directDonation}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.errors.directDonation && formik.touched.directDonation && (
+                    <Error className="error">{formik.errors.directDonation}</Error>
+                  )}
                   <InputAmount>USDC</InputAmount>
                 </InputInnerWrapper>
               </InputWrapper>
               <InputWrapper>
                 <LabelWrapper>
-                  <label>Create own microfund</label>
+                  <label htmlFor="microfund">Create own microfund</label>
                 </LabelWrapper>
                 <InputInnerWrapper>
-                  <Input type="text" placeholder="1000" />
+                  <Input
+                    id="microfund"
+                    name="microfund"
+                    type="number"
+                    placeholder="1000"
+                    value={formik.values.microfund}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.errors.microfund && formik.touched.microfund && <Error className="error">{formik.errors.microfund}</Error>}
                   <InputAmount>USDC</InputAmount>
                 </InputInnerWrapper>
               </InputWrapper>
+
               <InputWrapper>
                 <LabelWrapper>
                   <label></label>
@@ -324,7 +386,9 @@ const Donate = () => {
               </InputWrapper>
             </FormWrapper>
             <DonateButtonWrapper>
-              <Button>Donate</Button>
+              <Button disabled={!write} onClick={formik.handleSubmit}>
+                Donate
+              </Button>
             </DonateButtonWrapper>
           </form>
         </div>
