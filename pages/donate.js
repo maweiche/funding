@@ -1,5 +1,6 @@
 import Head from "next/head";
-import ButtonHeader from "../components/buttons/ButtonHeader";
+import { useState } from "react";
+import Rainbow from "../components/buttons/Rainbow";
 import Image from "next/image";
 import Logo from "../public/Logo.png";
 import polygon from "../public/icons/donate/polygon.png";
@@ -10,6 +11,8 @@ import usdt from "../public/icons/donate/usdt.png";
 import styled from "styled-components";
 import { useFormik } from "formik";
 import { DonateSchema } from "../util/validator";
+import { usePrepareContractWrite, useContractWrite } from "wagmi";
+import { abi } from "../abi/index";
 
 const DonateHeader = styled.div`
   display: flex;
@@ -251,6 +254,17 @@ const Error = styled.span`
 `;
 
 const Donate = () => {
+  const [donateData, setDonateData] = useState({});
+
+  const { config } = usePrepareContractWrite({
+    address: "0xFfF3B40f7905704ce5Ae876b59B6E1C30fBEa995",
+    abi: abi,
+    functionName: "contribute",
+    args: [donateData],
+  });
+
+  const { write, data, isLoading, isSuccess } = useContractWrite(config);
+
   const formik = useFormik({
     initialValues: {
       directDonation: "",
@@ -258,11 +272,10 @@ const Donate = () => {
     },
     validationSchema: DonateSchema,
     onSubmit: (values) => {
-      console.log(values);
+      setDonateData(values);
+      write?.();
     },
   });
-
-  console.log(formik.errors);
 
   return (
     <div>
@@ -274,7 +287,7 @@ const Donate = () => {
       <DonateHeader>
         <Image src={Logo} alt="logo" width={"110%"} height={"50%"} />
         <div>
-          <ButtonHeader />
+          <Rainbow />
         </div>
       </DonateHeader>
       <DonateTitle>Select your reward</DonateTitle>
@@ -393,7 +406,9 @@ const Donate = () => {
               </InputWrapper>
             </FormWrapper>
             <DonateButtonWrapper>
-              <Button onClick={formik.handleSubmit}>Donate</Button>
+              <Button disabled={!write} onClick={formik.handleSubmit}>
+                Donate
+              </Button>
             </DonateButtonWrapper>
           </form>
         </div>
