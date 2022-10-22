@@ -57,4 +57,5 @@ export const TellContainer = styled.div`
   padding: 0 20px;
   margin-bottom: 50px;
   flex-direction: column;
+  gap: 10px;
 `;
