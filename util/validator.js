@@ -10,7 +10,6 @@ export const DonateSchema = Yup.object({
   microfund: Yup.string()
     .max(18, "maximium of 18 characters")
     .test("checkAmount", "can't donate less than 1000 usdc", function (value) {
-      console.log(value);
       return value == undefined || Number(value) >= 1000;
     }),
 });
