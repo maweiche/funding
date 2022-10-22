@@ -4,9 +4,7 @@ import Image from "next/image";
 import styled from "styled-components";
 import Eye7 from "../public/Eye7.png";
 import { useEffect, useState } from "react";
-import Script from "next/script";
 import axios from "axios";
-import Header from "../sections/Header";
 import Footer from "../sections/Footer";
 import Features from "../sections/Landing/Features";
 import LatestProjects from "../sections/Landing/LatestProjects";
@@ -15,12 +13,12 @@ const Container = styled.div`
   margin-top: 1%;
   display: flex;
   flex-direction: column;
-`
+`;
 
 const EyeSevenBox = styled.div`
   text-align: center;
   position: relative;
-`
+`;
 
 const Home: NextPage = () => {
   const [projects, setProjects] = useState([]);
@@ -30,20 +28,19 @@ const Home: NextPage = () => {
     getProjects();
   }, []);
 
-
   // How to query categories https://aa6nfdqx573p.usemoralis.com:2053/server/classes/ProjectTest?where={%22category%22:"some category"}
   // Similar way possible to filter max if needed
   const getProjects = async () => {
     const config = {
       headers: {
         "X-Parse-Application-Id": `${process.env.NEXT_PUBLIC_DAPP_ID}`,
-      }
-    }
-    try{
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project?`, config)
-      setProjects(res.data.results)
-    } catch (error){
-      console.log(error)
+      },
+    };
+    try {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project?`, config);
+      setProjects(res.data.results);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -54,9 +51,8 @@ const Home: NextPage = () => {
         <meta name="title" content="Blockchain crowdfunding application powered by Moralis" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header />
-      <Features/>
-      <LatestProjects data={projects} my={false}/>
+      <Features />
+      <LatestProjects data={projects} my={false} />
       <EyeSevenBox>
         <Image src={Eye7} alt="Eye7" width={"600%"} height={"70%"} />
       </EyeSevenBox>
