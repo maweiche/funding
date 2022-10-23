@@ -33,7 +33,6 @@ const StartProject = () => {
 
   return (
     <>
-      <Header/>
       <Stepper handleStep={handleStepper} steps={steps} step={step} />
 
       <RenderItem step={step} />
