@@ -11,6 +11,7 @@ import { SessionProvider } from "next-auth/react";
 import { MoralisProvider } from "react-moralis";
 import "@rainbow-me/rainbowkit/styles.css";
 import Header from "../sections/Header";
+import Loading from "../components/Loading";
 
 const mumbai: Chain = {
   id: 80_001,
@@ -71,8 +72,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                 <meta name="theme-color" content="#317EFB" />
               </Head>
               <AppProvider>
-                <Header />
-                <Component {...pageProps} />
+                <Loading>
+                  <Header />
+                  <Component {...pageProps} />
+                </Loading>
               </AppProvider>
             </RainbowKitProvider>
           </SessionProvider>
