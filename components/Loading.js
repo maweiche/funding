@@ -1,5 +1,13 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import styled from "styled-components";
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+`;
 
 const Loading = (props) => {
   const router = useRouter();
@@ -20,7 +28,13 @@ const Loading = (props) => {
     };
   }, [router]);
 
-  return loading ? <div>Loading....</div> : props.children;
+  return loading ? (
+    <LoadingContainer>
+      <div>Loading....</div>
+    </LoadingContainer>
+  ) : (
+    props.children
+  );
 };
 
 export default Loading;
