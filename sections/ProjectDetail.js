@@ -11,6 +11,7 @@ import Share from '../components/buttons/Share'
 import { BookmarkIcon, BookmarkFilledIcon, CancelIcon } from '../components/icons/Common'
 import Tooltip from '../components/Tooltip'
 import { CanceledTypo } from '../components/icons/Typography'
+import Donate from './Donate'
 
 import donation from '../abi/donation.json'
 import { useContractWrite, usePrepareContractWrite, useContractEvent, useNetwork } from 'wagmi'
@@ -159,6 +160,7 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
   const { chain } = useNetwork()
+  const [donate, setDonate] = useState(false)
 
   const { write, isLoading } = useContractWrite({
     addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
@@ -230,13 +232,13 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
   }
 
   const handleDonate = () => {
-    // TBD https://app.clickup.com/t/327d8bc
-    console.log('Donate')
+    setDonate(true)
   }
 
 
-  return <Container>
-    {my && <SectionTitle title={'Active project'} subtitle={title} />}
+
+  return  <> {!donate ? <Container>
+    {my ? <SectionTitle title={'Active project'} subtitle={title} /> : <SectionTitle title={"Project detail"} subtitle={title} />}
     <DetailBox>
       {success && <CanceledBox><CanceledTypo width={400} /></CanceledBox>}
       {my && <ActionPanel>
@@ -279,7 +281,7 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
         </div>
       </RightPart>
     </DetailBox>
-  </Container>
+  </Container> : <Donate pid={pid}/>} </>
 }
 
 export default ProjectDetail

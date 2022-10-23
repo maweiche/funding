@@ -15,7 +15,6 @@ const SectionTitle = ({ title, subtitle }) => {
   return (
     <>
       <TitleRow>
-        {" "}
         <Title text={title} />
       </TitleRow>
       <SubRow>

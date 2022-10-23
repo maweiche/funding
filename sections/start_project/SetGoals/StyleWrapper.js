@@ -12,11 +12,26 @@ export const InactiveImage = styled.img`
 `;
 
 export const ImageContainer = styled.div`
+  width: 100%;
+  padding-left: 2%;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 15px;
+  margin-bottom: 2%;
 `;
+
+export const SelectionWrapper = styled.div`
+  width: 100%;
+  background: linear-gradient(132.28deg, rgba(47, 47, 47, 0.3) -21.57%, rgba(0, 0, 0, 0.261) 100%);
+  border: 1px solid #3C3C3C;
+  border-radius: 5px;
+  padding: 15px;
+`
+
+export const Label = styled.label`
+  width: 100px;
+`
 
 export const MilestoneContainer = styled.div`
   display: flex;
@@ -32,7 +47,9 @@ export const MilestoneTitle = styled.span`
 
 export const MainMilestoneContainer = styled.div`
   margin-top: 20px;
-  background-color: #212929;
+  background: linear-gradient(132.28deg, rgba(47, 47, 47, 0.3) -21.57%, rgba(0, 0, 0, 0.261) 100%);
+  border: 1px solid #3C3C3C;
+  border-radius: 5px;
   padding: 20px;
   border-radius: 10px;
 `;
@@ -48,4 +65,8 @@ export const CancelButton = styled.button`
   border-style: none;
   border-radius: 5px;
   padding: 8px 10px;
+  &:hover{
+    cursor: pointer;
+  }
 `;
+

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { useMoralisQuery } from 'react-moralis'
 
-import SectionTitle from "../../components/typography/SectionTitle"
 import ProjectDetail from "../../sections/ProjectDetail"
 
 // Blockchain related 
@@ -13,6 +12,7 @@ import { useContractRead } from 'wagmi'
 
 const Container = styled.div`
   margin-top: 5%;
+  margin-bottom: 5%;
 `
 
 const Project = () => {
@@ -76,12 +76,21 @@ const Project = () => {
   }, [!fetchDetail[0]])
 
 
-
   return (
     <>
       <Container>
-        <SectionTitle title={"Project detail"} subtitle={title} />
-        <ProjectDetail description={description} title={title} category={category} subcategory={subcategory} amBackers={amBackers} amMicro={amMicro} amPledged={amPledged} amDays={amDays} amGoal={amGoal} image={image} microActive={microActive} />
+        <ProjectDetail 
+          description={description} 
+          title={title} 
+          category={category} 
+          subcategory={subcategory} 
+          amBackers={amBackers} 
+          amMicro={amMicro} 
+          amPledged={amPledged} 
+          amDays={amDays} 
+          amGoal={amGoal} 
+          image={image} 
+          microActive={microActive} />
       </Container>
     </>
   )

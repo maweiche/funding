@@ -1,6 +1,6 @@
 import { useApp } from "../../utils/appContext";
 import { TellContainer, InputContainer } from "../TellStory/StyleWrapper";
-import { ImageContainer, MilestoneContainer, MilestoneTitle, MainMilestoneContainer, MilestoneHeader, CancelButton } from "./StyleWrapper";
+import { ImageContainer, MilestoneContainer, MilestoneTitle, MainMilestoneContainer, MilestoneHeader, CancelButton, Label, SelectionWrapper } from "./StyleWrapper";
 import { ButtonContainer, MainContainer, NextButton } from "../Category/StyleWrapper";
 import ImageSelect from "../../../components/ImageSelect";
 
@@ -19,7 +19,7 @@ const RenderBlockchain = () => {
 
   return (
     <ImageContainer>
-      <label>Blockchain: </label>
+      <Label>Blockchain: </Label>
       {blockchains.map((bc, index) => {
         const { title, logo, chainId, active } = bc;
 
@@ -44,7 +44,7 @@ const RenderCurrency = () => {
 
   return (
     <ImageContainer>
-      <label>Currency: </label>
+      <Label>Currency: </Label>
       {currency.map((bc, index) => {
         const { title, logo, chainId, active } = bc;
 
@@ -91,7 +91,7 @@ const RenderMilestones = () => {
             <label className="input_label">Amount</label>
 
             <div className="input_container">
-              <input className="input_style" type="text" placeholder="Enter your USDC amount" />
+              <input className="input_style" type="text" placeholder="Enter the amount" />
               <p className="input_description">Set amount to reach the milestone</p>
             </div>
           </InputContainer>
@@ -118,24 +118,29 @@ const RenderMilestones = () => {
 
 const SetGoals = ({ setStep }) => {
   const { appState, setAppState } = useApp();
-  const { category, subcategory, isNext } = { ...appState };
+  const { isNext } = { ...appState };
 
   const handleClick = () => {
     setStep((prev) => (prev += 1));
     setAppState((prev) => ({ ...prev, isNext: false }));
   };
 
+  const handleBack = () => {
+    setStep((prev) => (prev -= 1));
+  }
+
   return (
     <MainContainer>
       <TellContainer>
-        <RenderBlockchain />
-        <RenderCurrency />
+        <SelectionWrapper>
+          <RenderBlockchain />
+          <RenderCurrency />
+        </SelectionWrapper>
         <RenderMilestones />
-        {!isNext && (
-          <ButtonContainer>
-            <NextButton onClick={handleClick}>Next</NextButton>
-          </ButtonContainer>
-        )}
+        <ButtonContainer>
+          <NextButton onClick={handleBack}>Back</NextButton>
+          {isNext && <NextButton onClick={handleClick}>Next</NextButton>}
+        </ButtonContainer>
       </TellContainer>
     </MainContainer>
   );

@@ -116,7 +116,7 @@ const Header = () => {
   const header = [
     { title: "Discover", url: "" },
     { title: "Start a project", url: "/startproject" },
-    { title: "FAQ", url: "" },
+    { title: "FAQ", url: "/faq" },
     { title: "My projects", url: "/my" },
   ]
 

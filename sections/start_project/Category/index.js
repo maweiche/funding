@@ -3,6 +3,8 @@ import { useApp } from "../../utils/appContext";
 import { MainContainer, SiteContainer, Container, ButtonContainer, NextButton } from "./StyleWrapper";
 
 import Select from "react-select";
+import Button from "../../../components/buttons/Button";
+import SectionTitle from "../../../components/typography/SectionTitle";
 
 const Category = ({ setStep }) => {
   const { appState, setAppState } = useApp();
@@ -31,8 +33,35 @@ const Category = ({ setStep }) => {
   const handleCategory = (e) => setAppState((prev) => ({ ...prev, category: e.value }));
   const handleSubCategory = (e) => setAppState((prev) => ({ ...prev, subcategory: e.value, isNext: true }));
 
+  const customStyles = {
+    menu: (provided) => ({
+      ...provided,
+      background: 'rgba(107, 255, 255, 0.05)',
+      border: '1px solid #FFFFFF',
+      borderRadius: '15px'
+    }),
+    control: (provided) => ({
+      ...provided,
+      background: 'rgba(107, 255, 255, 0.05)',
+      border: '1px solid #FFFFFF',
+      borderRadius: '15px'
+
+    }),
+    option: (provided) => ({
+      ...provided,
+      fontSize: '1em',
+      color: 'white'
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: '#B0F6FF',
+      fontSize: '1em'
+    }),
+  }
+
   return (
     <MainContainer>
+      <SectionTitle title="Categorize your project" subtitle={'These will help backers find your project, and you can change them later if you need to.'} />
       <SiteContainer>
         <Container>
           <Select
@@ -40,6 +69,7 @@ const Category = ({ setStep }) => {
             defaultValue={{ label: category || "Select Category", value: category }}
             options={categoryKey}
             onChange={handleCategory}
+            styles={customStyles}
           />
           <Select
             className="select-category"
@@ -47,14 +77,13 @@ const Category = ({ setStep }) => {
             placeholder="Select SubCategory"
             options={subcategoryKey}
             onChange={handleSubCategory}
+            styles={customStyles}
           />
         </Container>
-
-        {isNext && (
-          <ButtonContainer>
-            <NextButton onClick={handleClick}>Next</NextButton>
-          </ButtonContainer>
-        )}
+        <ButtonContainer>
+          <NextButton>Back to homepage</NextButton>
+          {isNext ? <NextButton onClick={handleClick}>Next</NextButton> : <NextButton disabled>Next</NextButton>}
+        </ButtonContainer>
       </SiteContainer>
     </MainContainer>
   );
