@@ -67,6 +67,13 @@ const StepContent = styled.div`
   flex-direction: column;
   align-items: center;
   min-width: 80px;
+
+`
+
+const StepText = styled.div`
+    font-family: 'Roboto';
+    font-size: 0.9em;
+    margin-top: 5%;
 `
 
 const Stepper = ({ handleStep, steps, step }) => {
@@ -87,7 +94,7 @@ const Stepper = ({ handleStep, steps, step }) => {
           return (
             <StepContent key={index}>
               <Step s={index} />
-              <p>{st}</p>
+              <StepText>{st}</StepText>
             </StepContent>
           )
         }
@@ -96,7 +103,7 @@ const Stepper = ({ handleStep, steps, step }) => {
           <StepContainer key={index}>
             <StepContent>
               <Step s={index} />
-              <p>{st}</p>
+              <StepText>{st}</StepText>
             </StepContent>
 
             <Line />

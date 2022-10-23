@@ -71,7 +71,7 @@ const Home: NextPage = () => {
       <Categories />
       <LatestProjects data={projects} my={false} />
       <EyeSevenBox>
-        <Image src={Eye7} alt="Eye7" width={"600%"} height={"70%"} />
+      <Image src={Eye7} alt="Eye7" width={"400%"} height={"40%"} />
       </EyeSevenBox>
       <Footer />
       {/* <Script

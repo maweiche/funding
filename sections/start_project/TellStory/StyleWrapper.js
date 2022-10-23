@@ -4,6 +4,10 @@ export const FormStyle = styled.form`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  background: linear-gradient(132.28deg, rgba(47, 47, 47, 0.3) -21.57%, rgba(0, 0, 0, 0.261) 100%);
+  border: 1px solid #3C3C3C;
+  border-radius: 5px;
+  padding: 4%;
 
   input[type="file"] {
     display: none;
@@ -43,7 +47,7 @@ export const InputContainer = styled.div`
   }
 
   .input_description {
-    font-size: 15px;
+    font-size: 0.8em;
   }
 
   .input_container {
@@ -52,10 +56,13 @@ export const InputContainer = styled.div`
 `;
 
 export const TellContainer = styled.div`
-  width: 50vw;
   display: flex;
-  padding: 0 20px;
-  margin-bottom: 50px;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  gap: 10px;
+  padding-left: 18%;
+  padding-right: 18%;
+  margin-top: 3%;
+  font-family: "Montserrat";
 `;
+

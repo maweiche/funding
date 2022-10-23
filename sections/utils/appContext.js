@@ -13,6 +13,8 @@ export const AppProvider = (props) => {
       { title: "USDT", logo: "/icons/usdt.png", chainId: "", active: false },
     ],
     milestones: [],
+    cat: "All",
+    approved: false,
   });
 
   return (

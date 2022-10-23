@@ -3,11 +3,11 @@ import styled from "styled-components"
 export const Container = styled.div`
   display: flex;
   flex-direction: row;
+  width: 100%;
   justify-content: center;
   margin-top: 2%;
   margin-bottom: 2%;
   gap: 20px;
-  width: 100%;
 `
 
 export const SiteContainer = styled.div`
@@ -15,14 +15,15 @@ export const SiteContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 50vw;
+  padding-left: 18%;
+  padding-right: 18%;
+  margin-top: 3%;
 `
 
 export const NextButton = styled.button`
   background-color: #3c4048;
   padding: 10px 20px;
   border-radius: 5px;
-
   background-color: #7bd3d3;
   border-radius: 8px;
   border-style: none;
@@ -57,10 +58,12 @@ export const ButtonContainer = styled.div`
   display: flex;
   width: 100%;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
+  margin-top: 5%;
+  margin-bottom: 15%;
 `
 
 export const MainContainer = styled.div`
-  display: flex;
-  justify-content: center;
+  padding-top: 5%;
+  margin-bottom: 10%;
 `
