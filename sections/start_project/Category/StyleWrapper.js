@@ -65,4 +65,5 @@ export const ButtonContainer = styled.div`
 
 export const MainContainer = styled.div`
   padding-top: 5%;
+  margin-bottom: 10%;
 `

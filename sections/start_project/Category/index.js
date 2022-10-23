@@ -3,7 +3,6 @@ import { useApp } from "../../utils/appContext";
 import { MainContainer, SiteContainer, Container, ButtonContainer, NextButton } from "./StyleWrapper";
 
 import Select from "react-select";
-import Button from "../../../components/buttons/Button";
 import SectionTitle from "../../../components/typography/SectionTitle";
 
 const Category = ({ setStep }) => {
@@ -33,10 +32,11 @@ const Category = ({ setStep }) => {
   const handleCategory = (e) => setAppState((prev) => ({ ...prev, category: e.value }));
   const handleSubCategory = (e) => setAppState((prev) => ({ ...prev, subcategory: e.value, isNext: true }));
 
+  // TBD UI fix hover color
   const customStyles = {
     menu: (provided) => ({
       ...provided,
-      background: 'rgba(107, 255, 255, 0.05)',
+      background: '#141414',
       border: '1px solid #FFFFFF',
       borderRadius: '15px'
     }),
@@ -44,18 +44,18 @@ const Category = ({ setStep }) => {
       ...provided,
       background: 'rgba(107, 255, 255, 0.05)',
       border: '1px solid #FFFFFF',
-      borderRadius: '15px'
+      borderRadius: '15px',
 
     }),
     option: (provided) => ({
       ...provided,
-      fontSize: '1em',
-      color: 'white'
+      fontSize: '0.9em',
+      color: '#B0F6FF'
     }),
     singleValue: (provided) => ({
       ...provided,
       color: '#B0F6FF',
-      fontSize: '1em'
+      fontSize: '0.9em'
     }),
   }
 
