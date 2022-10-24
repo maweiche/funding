@@ -13,12 +13,17 @@ import { usePrepareContractWrite, useContractWrite } from "wagmi";
 import donation from "../abi/donation.json";
 import SectionTitle from "../components/typography/SectionTitle";
 import ApproveButton from "../components/buttons/ApproveButton";
+import { Row } from '../components/format/Row'
+import { InfoIcon, SuccessIcon } from "../components/icons/Common";
+import Tooltip from "../components/Tooltip";
+import CalcOutcome from '../components/functional/CalcOutcome'
 
 const Container = styled.div`
   margin-top: 8%;
 `
 
 const DonateOption = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
@@ -59,7 +64,8 @@ const OptionItemWrapper = styled.div`
   }
 `;
 const DonateOptionTitle = styled.div`
-  width: 20%;
+  width: 33%;
+  font-family: "Roboto";
 
   @media (max-width: 769px) {
     width: 35%;
@@ -106,7 +112,7 @@ const Input = styled.input`
 const InputWrapper = styled.div`
   display: flex;
   align-items: center;
-  padding-bottom: 2rem;
+  padding: 2%;
   font-family: "Montserrat";
   @media (max-width: 500px) {
     flex-direction: column;
@@ -199,7 +205,13 @@ const Checkbox = styled.input`
   border-radius: 50%;
   transition: all 150ms;
   padding: 1px;
+`
 
+const DonateOptionSub = styled.div`
+  font-family: "Roboto";
+  font-size: 0.7em;
+  font-weight: 300;
+  font-style: italic;
 `
 const CheckboxContainer = styled.div`
   display: inline-block;
@@ -218,13 +230,22 @@ const Error = styled.div`
   font-size: 0.8rem;
 `;
 
+const InfoBox = styled.div`
+  &:hover{
+    cursor: pointer;
+  }
+`
+
 const Donate = ({ pid }) => {
   const [currency, setCurrency] = useState("USDC");
+  const [blockchain, setBlockchain] = useState("polygon")
+  const [explorer, setExplorer] = useState('https://mumbai.polygonscan.com/tx/')
   const [amountM, setAmountM] = useState(0);
   const [amountD, setAmountD] = useState(0)
   const [checkedReward, setCheckedReward] = useState(true);
   const [checkedFirstReward, setCheckedFirstReward] = useState(false);
   const [projectId, setProjectId] = useState(0);
+  const [tooltip, setTooltip] = useState(false)
 
   // TBD check allowance and balance before 
   // 1. Check allowance
@@ -238,9 +259,7 @@ const Donate = ({ pid }) => {
     args: [amountM, amountD, 0],
   });
 
-
-
-  const { write, isLoading } = useContractWrite(config);
+  const { write, isSuccess, data } = useContractWrite(config);
 
   const formik = useFormik({
     initialValues: {
@@ -258,7 +277,11 @@ const Donate = ({ pid }) => {
 
   const handleSubmit = () => {
     write?.()
-    console.log(amountM + amountD + "Total")
+    if (blockchain === 'polygon'){
+      setExplorer('https://mumbai.polygonscan.com/tx/')
+    } else if (blockchain === 'bsc'){
+      setExplorer('https://bscscan.com/tx/')
+    } 
   }
 
   const handleChangeD = (e) => {
@@ -273,49 +296,51 @@ const Donate = ({ pid }) => {
     <SectionTitle title="Select your reward" subtitle={'Select an option below'} />
     <DonateContentWrapper>
       <DonateOption>
-        <DonateOptionTitle><h4>Blockchain</h4></DonateOptionTitle>
+        {tooltip && <Tooltip text='No matter from which chain you pay. Axelar will take care to route funds on target'/>}
+        <DonateOptionTitle>
+            <Row>Blockchain <InfoBox onMouseEnter={()=>{setTooltip(true)}} onMouseLeave={()=>{setTooltip(false)}}> <InfoIcon width={15}/></InfoBox>
+            </Row><DonateOptionSub>Select your source of donation</DonateOptionSub>
+        </DonateOptionTitle>
         <OptionItemWrapper>
           <div>
-            <Image src={polygon} alt="polygon" />
+            <Image src={polygon} alt="polygon" width={'40%'} height={'40%'}  />
           </div>
           <div>
-            <Image src={icon2} alt="icon2" />
+            <Image src={icon2} alt="fantom" width={'40%'} height={'40%'} />
           </div>
           <div>
-            <Image src={icon3} alt="icon3" />
+            <Image src={icon3} alt="bnb" width={'40%'} height={'40%'}  />
           </div>
         </OptionItemWrapper>
       </DonateOption>
       <DonateOption>
         <DonateOptionTitle>
-          <h4>Currency</h4>
+          <Row>Currency</Row><DonateOptionSub>Currently only USDC supported</DonateOptionSub>
         </DonateOptionTitle>
 
         <OptionItemWrapper>
           <div>
-            <Image src={icon4} alt="icon4" />
-          </div>
-          <div>
-            <Image src={usdt} alt="usdt" />
+            <Image src={icon4} alt="usdc" width={'40%'} height={'40%'} />
           </div>
         </OptionItemWrapper>
       </DonateOption>
       <DonateOption>
         <DonateOptionTitle>
-          <h4>Donate without reward</h4>
+          <Row>Donate</Row><DonateOptionSub>Without promised reward</DonateOptionSub>
         </DonateOptionTitle>
         <OptionItemWrapper>
               <Checkbox type="checkbox" checked={checkedReward}  onChange={() => setCheckedReward(!checkedReward)}/>
         </OptionItemWrapper>
       </DonateOption>
-      <DonateOption>
+
+      {!checkedReward && <DonateOption>
         <DonateOptionTitle>
-          <h4>Donate with reward #1</h4>
+          <Row>Donate with reward #1</Row><DonateOptionSub>Tbd description</DonateOptionSub>
         </DonateOptionTitle>
         <OptionItemWrapper>
               <Checkbox type="checkbox" checked={checkedFirstReward}  onChange={() => setCheckedFirstReward(!checkedFirstReward)}/>
         </OptionItemWrapper>
-      </DonateOption>
+      </DonateOption>}
       {checkedReward && <div>
         <FormWrapper>
           <InputWrapper>
@@ -338,6 +363,7 @@ const Donate = ({ pid }) => {
               <InputAmount>{currency}</InputAmount>
             </InputInnerWrapper>
           </InputWrapper>
+          <CalcOutcome amountD={amountD}/>
           <InputWrapper>
             <LabelWrapper>
               <label htmlFor="microfund">Create own microfund</label>
@@ -381,8 +407,10 @@ const Donate = ({ pid }) => {
         <DonateButtonWrapper>
           <div><ApproveButton amount={amountD + amountM} /></div>
           <div><Button disabled={!write} onClick={() => handleSubmit?.()} text='Donate' width={'200px'} /> </div>
-          {isLoading && <p>Waiting for confirmation...</p>}
         </DonateButtonWrapper>
+        {isSuccess && <div><SuccessIcon width={20}/>
+                {explorer}{JSON.stringify(data)}
+         </div>}
       </div>}
     </DonateContentWrapper>
   </Container>

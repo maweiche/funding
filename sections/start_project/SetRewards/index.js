@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useApp } from "../../utils/appContext";
 
-import Button from "../../../components/buttons/Button";
 import SectionTitle from "../../../components/typography/SectionTitle";
 import { RewardContainer, ButtonRow, Container } from "./StyleWrapper";
 import { MainContainer, NextButton } from "../Category/StyleWrapper";
