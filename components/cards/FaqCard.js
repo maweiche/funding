@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 
 const Card = styled.div`
-    padding: 2% 0% 0% 4%;
+    padding: 2%;
+    padding-left: 4%;
     background: #000000;
     border: 1px solid #4E4E4E;
     border-radius: 15px;
-    width: 60%;
     max-height: 250px;
     @media (max-width: 1168px) {
         max-height: 200px;
@@ -15,7 +15,7 @@ const Card = styled.div`
 `
 const An = styled.div`
     margin-top: 2%;
-    margin-bottom: 3%;
+    margin-bottom: 4%;
 `
 
 const Li = styled.li`
