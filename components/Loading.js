@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import Lottie from "lottie-react";
+import loadingAnimation from "../data/loadingAnimation.json";
 
 const LoadingContainer = styled.div`
   display: flex;
@@ -30,7 +32,7 @@ const Loading = (props) => {
 
   return loading ? (
     <LoadingContainer>
-      <div>Loading....</div>
+      <Lottie animationData={loadingAnimation} loop={true} />
     </LoadingContainer>
   ) : (
     props.children

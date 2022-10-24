@@ -24,6 +24,7 @@ const Cross: NextPage = () => {
   const provider = useProvider()
 
   const { config } = usePrepareContractWrite({
+    // @ts-ignore
     address: '0xBF62ef1486468a6bd26Dd669C06db43dEd5B849B', // Axelar gateway contract. different for each chain
     functionName: 'callContractWithToken',
     args: [EvmChain.POLYGON, 'destinationContract', 'payload(bytes)', 'MATIC', 5000] //Payload is critical to differentiate Micro/Donate pledges + owner
@@ -31,11 +32,12 @@ const Cross: NextPage = () => {
 
   const { data, isLoading, isSuccess, write } = useContractWrite(config)
 
-
+// @ts-ignore
   const address = signer?._address;
 
 
   const sdk = new AxelarQueryAPI({
+    // @ts-ignore
     environment: "testnet",
   });
 
@@ -48,6 +50,7 @@ const Cross: NextPage = () => {
     const gasFee = await sdk.estimateGasFee(
       EvmChain.POLYGON,
       EvmChain.FANTOM,
+      // @ts-ignore
       GasToken.POLYGON,
       estimateGasUsed
     );

@@ -55,6 +55,7 @@ const My: NextPage = () => {
             "subcategory",
             "pid",
             "objectId"
+            // @ts-ignore
         ]), { autoFetch: true },
     );
 
@@ -84,7 +85,6 @@ const My: NextPage = () => {
             console.log(error)
         }
     }
-
 
     useEffect(() => {
         getData()

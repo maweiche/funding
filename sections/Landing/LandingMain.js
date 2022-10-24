@@ -15,12 +15,12 @@ const Explainer = styled.div`
     width: 300px;
     height: 104px;
     left: 200px;
-    top: 100px;
     background: #111111;
     border: 0.5px solid #1E1E1E;
     border-radius: 45px;
-    padding: 2.5%;
-    padding-left: 3.5%;
+    padding: 20px;
+    padding-left: 25px;
+    font-family: 'Neucha';
 `
 
 const TitleBox = styled.div`
@@ -47,10 +47,13 @@ const HeadDesc = styled.div`
 `
 
 const ExpTitle = styled.div`
-
+    color: #B0F6FF;
+    font-size: 1.1em;
 `
 
 const ExpSub = styled.div`
+    color: white;
+    font-size: 1em;
 `
 
 const MPath = styled.path`
@@ -66,6 +69,15 @@ const MPath = styled.path`
 // TBD Fonts needed to be imported - Custom font: Sue Ellen Francisco
 // TBD Explainer animation 
 
+const d = {
+    google: "Top cloud technology provider",
+    covalent: "Unified multichain API",
+    axelar: "Cross-chain message passing",
+    moralis: "Bridge between web2 and web3",
+    polygon: "Supernetwork of scaling solutions",
+    bnb: "Most popular blockchain by traffic",
+    fantom: "High-performant EVM-compatible platform",
+}
 
 export const LandingSvg = ({width,height}) => {
     const [expTitle, setExpTitle] = useState("")
@@ -80,7 +92,7 @@ export const LandingSvg = ({width,height}) => {
 
     const showMoralis = () =>{
         setExpTitle('Moralis')
-        setExpDesc('Moralis desc')
+        setExpDesc(d.moralis)
         setMorColor('#1FA6F5')
         setFanColor('#F0F0F0')
         setBnbColor('#F0F0F0')
@@ -92,7 +104,7 @@ export const LandingSvg = ({width,height}) => {
 
     const showPolygon = () =>{
         setExpTitle('Polygon')
-        setExpDesc('Polygon desc')
+        setExpDesc(d.polygon)
         setMorColor('#F0F0F0')
         setFanColor('#F0F0F0')
         setBnbColor('#F0F0F0')
@@ -104,7 +116,7 @@ export const LandingSvg = ({width,height}) => {
 
     const showBinance = () =>{
         setExpTitle('Binance')
-        setExpDesc('Binance desc')
+        setExpDesc(d.bnb)
         setMorColor('#F0F0F0')
         setFanColor('#F0F0F0')
         setBnbColor('#F3BA2F')
@@ -116,7 +128,7 @@ export const LandingSvg = ({width,height}) => {
 
     const showFantom = () =>{
         setExpTitle('Fantom')
-        setExpDesc('Fantom desc')
+        setExpDesc(d.fantom)
         setMorColor('#F0F0F0')
         setFanColor('#005EFF')
         setBnbColor('#F0F0F0')
@@ -128,7 +140,7 @@ export const LandingSvg = ({width,height}) => {
 
     const showGoogle = () =>{
         setExpTitle('Google')
-        setExpDesc('Google desc')
+        setExpDesc(d.google)
         setMorColor('#F0F0F0')
         setFanColor('#F0F0F0')
         setBnbColor('#F0F0F0')
@@ -140,7 +152,7 @@ export const LandingSvg = ({width,height}) => {
 
     const showCov = () =>{
         setExpTitle('Cov')
-        setExpDesc('Cov desc')
+        setExpDesc(d.covalent)
         setMorColor('#F0F0F0')
         setFanColor('#F0F0F0')
         setBnbColor('#F0F0F0')
@@ -152,7 +164,7 @@ export const LandingSvg = ({width,height}) => {
 
     const showAxelar = () =>{
         setExpTitle('Axelar')
-        setExpDesc('Axelar desc')
+        setExpDesc(d.axelar)
         setMorColor('#F0F0F0')
         setFanColor('#F0F0F0')
         setBnbColor('#F0F0F0')

@@ -65,7 +65,7 @@ const Home: NextPage = () => {
         <meta name="title" content="Blockchain crowdfunding application powered by Moralis" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <LandingSvg width={'100%'}/>
+      <LandingSvg width={'100%'} height='auto'/>
       {/* <ImageBox><Image src={Eye1} alt='Eye1' width={'1000px'} /></ImageBox> */}
       <Features />
       <Categories />

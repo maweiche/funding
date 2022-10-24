@@ -4,6 +4,7 @@ import { MainContainer, SiteContainer, Container, ButtonContainer, NextButton } 
 
 import Select from "react-select";
 import SectionTitle from "../../../components/typography/SectionTitle";
+import ProjectTypeSelection from '../ProjectTypeSelection';
 
 const Category = ({ setStep }) => {
   const { appState, setAppState } = useApp();
@@ -59,10 +60,13 @@ const Category = ({ setStep }) => {
     }),
   }
 
+  // TBD Type selection will not affect MVP implementation, it's preparation for Streaming features
+
   return (
     <MainContainer>
       <SectionTitle title="Categorize your project" subtitle={'These will help backers find your project, and you can change them later if you need to.'} />
       <SiteContainer>
+        <ProjectTypeSelection/>
         <Container>
           <Select
             className="select-category"
