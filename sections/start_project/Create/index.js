@@ -77,7 +77,7 @@ const Create = ({ setStep }) => {
         addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
         contractInterface: donation.abi,
         functionName: 'createFund',
-        args: [pm1, 0],
+        args: [pm1],
     })
 
     const { write } = useContractWrite(config)

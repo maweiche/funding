@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useApp } from "../../utils/appContext";
 import { MainContainer, SiteContainer, Container, ButtonContainer, NextButton, DisButton } from "./StyleWrapper";
 
+import Link from "next/link";
 import Select from "react-select";
 import SectionTitle from "../../../components/typography/SectionTitle";
 import ProjectTypeSelection from '../ProjectTypeSelection';
@@ -84,7 +85,7 @@ const Category = ({ setStep }) => {
           />
         </Container>
         <ButtonContainer>
-          <NextButton>Back to homepage</NextButton>
+          <Link href='/'><NextButton>Back to homepage</NextButton></Link>
           {subcategory ? <NextButton onClick={handleClick}>Next</NextButton> : <DisButton disabled>Next</DisButton>}
         </ButtonContainer>
       </SiteContainer>

@@ -70,5 +70,7 @@ export const Mandatory = styled.div`
   font-size: 0.7em;
   color: #ff0000;
   font-family: "Montserrat";
+  width: 100%;
+  text-align: right;
 `
 

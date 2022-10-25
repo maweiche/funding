@@ -6,15 +6,13 @@ import axios from 'axios'
 import Tag from "../components/typography/Tag"
 import SectionTitle from "../components/typography/SectionTitle"
 import ImgSkeleton from "../components/skeletons/ImgSkeleton"
-import ButtonAlt from "../components/buttons/ButtonAlt"
-import Share from '../components/buttons/Share'
-import { BookmarkIcon, BookmarkFilledIcon, CancelIcon } from '../components/icons/Common'
+import {CancelIcon } from '../components/icons/Common'
 import Tooltip from '../components/Tooltip'
 import { CanceledTypo } from '../components/icons/Typography'
-import Donate from './Donate'
+import ProjectDetailRight from "./ProjectDetailRight"
 
 import donation from '../abi/donation.json'
-import { useContractWrite, useNetwork } from 'wagmi'
+import { useContractWrite, useNetwork, useContractEvent, usePrepareContractWrite } from 'wagmi'
 
 const Container = styled.div`
   margin-top: 5%;
@@ -39,6 +37,13 @@ const DetailBox = styled.div`
   }
 `
 
+const Categories = styled.div`
+  margin-top: 2px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+`
+
 const Desc = styled.div`
   margin-top: 2%;
   font-family: "Roboto";
@@ -57,70 +62,6 @@ const LeftPart = styled.div`
     width: 100%;
     margin-bottom: 5%;
     margin-top: 5%;
-  }
-`
-
-const RightPart = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-top: 3px solid #b0f6ff;
-  width: 50%;
-  margin-left: 3%;
-  @media (max-width: 768px) {
-    width: 100%;
-    margin: 0;
-    margin-top: 5%;
-    margin-bottom: 5%;
-  }
-`
-
-const Categories = styled.div`
-  margin-top: 2px;
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-`
-
-const RowBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-top: 1.4%;
-  padding-bottom: 0.5%;
-`
-
-const RowCol = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-const RowTitle = styled.div`
-  font-family: "Chenla";
-  font-style: normal;
-  font-size: 1.5em;
-  font-weight: 400;
-  color: ${(props) => props.color};
-`
-
-const RowDesc = styled.div`
-  color: white;
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-`
-
-const FlexRow = styled.div`
-  justify-content: space-between;
-  display: flex;
-  flex-direction: row;
-`
-
-const Bkmrk = styled.div`
-  display: flex;
-  min-height: 30px;
-  &:hover {
-    cursor: pointer;
   }
 `
 
@@ -153,19 +94,14 @@ const CanceledBox = styled.div`
     top: 25%;
   }
 `
-
-const ButtonBox = styled.div`
-  margin-top: 4%;
-`
-
-
 // @param "my" indicates whether component visualized in context of MyProjects or Landing page
-const ProjectDetail = ({ objectId, pid, title, description, category, subcategory, amPledged, amBackers, amGoal, amDays, image, microActive, my }) => {
+const ProjectDetail = ({ objectId, pid, title, description, category, subcategory, image, my }) => {
   const [cancelTooltip, setCancelTooltip] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
   const { chain } = useNetwork()
-  const [donate, setDonate] = useState(false)
+
+  // TBD add prepare contract write - To make blockchain part work
 
   const { write, isLoading } = useContractWrite({
     addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
@@ -174,37 +110,17 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
     args: [pid],
   })
 
-  // TBD cancel events not implemented yet in smart contracts, needed to cover both POSITIVE and NEGATIVE cases
 
-  // useContractEvent({
-  //   addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
-  //   contractInterface: donation.abi,
-  //   eventName: 'FundCanceled',
-  //   listener: () => setSuccess(true),
-  //   once: true
-  // })
-
-  const Bookmark = () => {
-    return (
-      <Bkmrk onClick={() => { handleBookmark() }}>
-        {!marked ? <BookmarkIcon width={20} /> : <BookmarkFilledIcon width={20} />}
-      </Bkmrk>
-    )
-  }
-
-  const Row = ({ title, desc, right, color }) => {
-    return (
-      <RowBox>
-        <RowCol>
-          <RowTitle color={color}>{title}</RowTitle> <RowDesc>{desc}</RowDesc>
-        </RowCol>
-        {right}
-      </RowBox>
-    )
-  }
+  useContractEvent({
+    addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
+    contractInterface: donation.abi,
+    eventName: 'Cancelled',
+    listener: () => setSuccess(true),
+    once: true
+  })
 
   const cancel = async (oid, pid) => {
-    await cancelMoralis(oid);
+   // await cancelMoralis(oid);
     await write(pid);
   }
 
@@ -226,28 +142,14 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
     }
   }
 
-  const [marked, setMarked] = useState(false)
-
-  const handleBookmark = () => {
-    setMarked(!marked)
-    // TBD Tier 1 - https://app.clickup.com/t/32jy4wv
-    // Push to bookmark array
-    // Fix moving icon upon switch
-    // Bookmarks could be handled only for authed users
-  }
-
-  const handleDonate = () => {
-    setDonate(true)
-  }
-
-  return  <> {!donate ? <Container>
+  return  <Container>
     {my ? <SectionTitle title={'Active project'} subtitle={title} /> : <SectionTitle title={"Project detail"} subtitle={title} />}
     <DetailBox>
       {success && <CanceledBox><CanceledTypo width={400} /></CanceledBox>}
       {my && <ActionPanel>
         {!success && !isLoading ? <>
           {chain && chain.name === 'Mumbai' ?
-            <CancelProject onClick={() => { cancelMoralis(objectId, pid) }} onMouseEnter={() => { setCancelTooltip(true) }} onMouseLeave={() => { setCancelTooltip(false) }}>
+            <CancelProject onClick={() => { cancel(objectId, pid) }} onMouseEnter={() => { setCancelTooltip(true) }} onMouseLeave={() => { setCancelTooltip(false) }}>
               {cancelTooltip && <Tooltip text='Cancel project' />}
               <CancelIcon width={30} />
             </CancelProject> :
@@ -265,26 +167,9 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
         </Categories>
         <Desc>{description}</Desc>
       </LeftPart>
-      <RightPart>
-        <div>
-          <Row title={amPledged} desc={`pledged of ${amGoal} goal`} color="#00FFA3" right={<Bookmark />} />
-          <Row title={amBackers} desc={`backers`} color="white" />
-          <Row title={microActive} desc={`microfunds active`} color="white" />
-          <FlexRow>
-            <Row title={amDays} desc={`days to go`} color="white" />
-            <Share fbQuote='fbQuote' twTitle='twTitle' twVia='twVia' liTitle='linked title' liSum='linked summary' liSource='linked source' />
-          </FlexRow>
-        </div>
-        <ButtonBox>
-          <ButtonAlt
-            width={'100%'}
-            text="Fund it!"
-            onClick={() => { handleDonate() }}
-          />
-        </ButtonBox>
-      </RightPart>
+      <ProjectDetailRight pid={pid}/>
     </DetailBox>
-  </Container> : <Donate pid={pid}/>} </>
+  </Container> 
 }
 
 export default ProjectDetail
