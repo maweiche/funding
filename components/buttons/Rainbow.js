@@ -3,15 +3,18 @@ import styled from 'styled-components'
 import { useMoralis } from "react-moralis";
 
 const ConnectBtn = styled.button`
-  background-color: #628e90;
+  background-color: #9bffff;
   padding: 5px 10px;
   border-radius: 5px;
   border: none;
   font-size: 1em;
-  color: #b0f6ff;
+  color: black;
   font-family: "Gemunu Libre", sans-serif;
   font-style: normal;
   cursor: pointer;
+  &:hover{
+    opacity: 0.9;
+  }
 `
 
 const Rainbow = () => {

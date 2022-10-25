@@ -1,7 +1,7 @@
 import { useApp } from "../../utils/appContext";
-import { TellContainer, InputContainer } from "../TellStory/StyleWrapper";
+import { TellContainer, InputContainer,Mandatory } from "../TellStory/StyleWrapper";
 import { ImageContainer, MilestoneContainer, MilestoneTitle, MainMilestoneContainer, MilestoneHeader, CancelButton, Label, SelectionWrapper } from "./StyleWrapper";
-import { ButtonContainer, MainContainer, NextButton } from "../Category/StyleWrapper";
+import { ButtonContainer, DisButton, MainContainer, NextButton } from "../Category/StyleWrapper";
 import ImageSelect from "../../../components/ImageSelect";
 
 const RenderBlockchain = () => {
@@ -56,7 +56,7 @@ const RenderCurrency = () => {
 
 const RenderMilestones = () => {
   const { appState, setAppState } = useApp();
-  const { milestones } = appState;
+  const { milestones, pm1 } = appState;
 
   const handleAddMilestone = () => {
     const temp = {
@@ -91,7 +91,7 @@ const RenderMilestones = () => {
             <label className="input_label">Amount</label>
 
             <div className="input_container">
-              <input className="input_style" type="text" placeholder="Enter the amount" />
+              <input className="input_style" type="text" placeholder="Enter the amount" onChange={(e) => setAppState((prev) => ({ ...prev, pm1: e.target.value }))}/>
               <p className="input_description">Set amount to reach the milestone</p>
             </div>
           </InputContainer>
@@ -118,7 +118,7 @@ const RenderMilestones = () => {
 
 const SetGoals = ({ setStep }) => {
   const { appState, setAppState } = useApp();
-  const { isNext } = { ...appState };
+  const { isNext, pm1 } = { ...appState };
 
   const handleClick = () => {
     setStep((prev) => (prev += 1));
@@ -137,9 +137,10 @@ const SetGoals = ({ setStep }) => {
           <RenderCurrency />
         </SelectionWrapper>
         <RenderMilestones />
+        <Mandatory>(dev) 1 Milestone amount is mandatory</Mandatory>
         <ButtonContainer>
           <NextButton onClick={handleBack}>Back</NextButton>
-          {isNext && <NextButton onClick={handleClick}>Next</NextButton>}
+          {pm1 >= 0 ? <NextButton onClick={handleClick}>Next</NextButton> : <DisButton>Next</DisButton>}
         </ButtonContainer>
       </TellContainer>
     </MainContainer>

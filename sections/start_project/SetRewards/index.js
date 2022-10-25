@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useApp } from "../../utils/appContext";
 
 import SectionTitle from "../../../components/typography/SectionTitle";
-import { RewardContainer, ButtonRow, Container } from "./StyleWrapper";
+import { RewardContainer, ButtonRow } from "./StyleWrapper";
 import { MainContainer, NextButton } from "../Category/StyleWrapper";
 
 const SetRewards = ({ setStep }) => {
@@ -31,7 +31,7 @@ const SetRewards = ({ setStep }) => {
     
     <ButtonRow>
           <NextButton onClick={handleBack}>Back</NextButton>
-          {isNext ? <NextButton onClick={handleClick}>Next</NextButton> : <NextButton disabled>Next</NextButton>}
+          <NextButton onClick={handleClick}>Next</NextButton> 
     </ButtonRow>
    </RewardContainer>
     </MainContainer>

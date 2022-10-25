@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import polygon from "../public/icons/donate/polygon.png";
 import icon2 from "../public/icons/donate/icon2.png";
@@ -17,6 +17,7 @@ import { Row } from '../components/format/Row'
 import { InfoIcon, SuccessIcon } from "../components/icons/Common";
 import Tooltip from "../components/Tooltip";
 import CalcOutcome from '../components/functional/CalcOutcome'
+import axios from "axios";
 
 const Container = styled.div`
   margin-top: 8%;
@@ -238,6 +239,7 @@ const InfoBox = styled.div`
 
 const Donate = ({ pid }) => {
   const [currency, setCurrency] = useState("USDC");
+  const [balance, setBalance] = useState(0)
   const [blockchain, setBlockchain] = useState("polygon")
   const [explorer, setExplorer] = useState('https://mumbai.polygonscan.com/tx/')
   const [amountM, setAmountM] = useState(0);
@@ -275,8 +277,8 @@ const Donate = ({ pid }) => {
   });
 
 
-  const handleSubmit = () => {
-    write?.()
+  const handleSubmit = async() => {
+    await write?.()
     if (blockchain === 'polygon'){
       setExplorer('https://mumbai.polygonscan.com/tx/')
     } else if (blockchain === 'bsc'){
@@ -291,6 +293,29 @@ const Donate = ({ pid }) => {
   const handleChangeM = (e) => {
     setAmountM(e.target.value)
   }
+
+  // Use account will be needed + Test on Polygon prod/ Or use Covalent
+  
+
+  const getBalance = async () => {
+    const head = {
+      headers: {
+      "X-API-Key": "53DdXn3RtWHuEWmRPaQiXgdl4u3YLc8OTQVLeBNqxACou395pwJVL6b2qoG9M4pW",
+      "accept": "application/json"
+     },
+    }
+    try{
+      const res = await axios.get(`https://deep-index.moralis.io/api/v2/${address}/erc20?chain=mumbai&token_addresses=0x0000000000000000000000000000000000001010`, head)
+      setBalance(res.data)
+      console.log(res.data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    getBalance()
+  }, [])
 
   return <Container>
     <SectionTitle title="Select your reward" subtitle={'Select an option below'} />
@@ -322,6 +347,7 @@ const Donate = ({ pid }) => {
           <div>
             <Image src={icon4} alt="usdc" width={'40%'} height={'40%'} />
           </div>
+          <>Balance: {balance}</>
         </OptionItemWrapper>
       </DonateOption>
       <DonateOption>

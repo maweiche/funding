@@ -33,8 +33,8 @@ const FaqCard = ({ answer, point1, point2, point3, point4 }) => {
         <An>{answer}</An>
         <Li>{point1}</Li>
         <Li>{point2}</Li>
-        <Li>{point3}</Li>
-        <Li>{point4}</Li>
+        {point3 && <Li>{point3}</Li>}
+        {point4 && <Li>{point4}</Li>}
     </Card>
 }
 

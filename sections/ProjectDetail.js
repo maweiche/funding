@@ -6,7 +6,7 @@ import axios from 'axios'
 import Tag from "../components/typography/Tag"
 import SectionTitle from "../components/typography/SectionTitle"
 import ImgSkeleton from "../components/skeletons/ImgSkeleton"
-import Button from "../components/buttons/Button"
+import ButtonAlt from "../components/buttons/ButtonAlt"
 import Share from '../components/buttons/Share'
 import { BookmarkIcon, BookmarkFilledIcon, CancelIcon } from '../components/icons/Common'
 import Tooltip from '../components/Tooltip'
@@ -14,7 +14,7 @@ import { CanceledTypo } from '../components/icons/Typography'
 import Donate from './Donate'
 
 import donation from '../abi/donation.json'
-import { useContractWrite, usePrepareContractWrite, useContractEvent, useNetwork } from 'wagmi'
+import { useContractWrite, useNetwork } from 'wagmi'
 
 const Container = styled.div`
   margin-top: 5%;
@@ -154,6 +154,11 @@ const CanceledBox = styled.div`
   }
 `
 
+const ButtonBox = styled.div`
+  margin-top: 4%;
+`
+
+
 // @param "my" indicates whether component visualized in context of MyProjects or Landing page
 const ProjectDetail = ({ objectId, pid, title, description, category, subcategory, amPledged, amBackers, amGoal, amDays, image, microActive, my }) => {
   const [cancelTooltip, setCancelTooltip] = useState(false)
@@ -235,8 +240,6 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
     setDonate(true)
   }
 
-
-
   return  <> {!donate ? <Container>
     {my ? <SectionTitle title={'Active project'} subtitle={title} /> : <SectionTitle title={"Project detail"} subtitle={title} />}
     <DetailBox>
@@ -272,13 +275,13 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
             <Share fbQuote='fbQuote' twTitle='twTitle' twVia='twVia' liTitle='linked title' liSum='linked summary' liSource='linked source' />
           </FlexRow>
         </div>
-        <div>
-          <Button
+        <ButtonBox>
+          <ButtonAlt
+            width={'100%'}
             text="Fund it!"
-            width={"100%"}
             onClick={() => { handleDonate() }}
           />
-        </div>
+        </ButtonBox>
       </RightPart>
     </DetailBox>
   </Container> : <Donate pid={pid}/>} </>

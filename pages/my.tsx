@@ -8,6 +8,8 @@ import styled from "styled-components";
 import LatestProjects from "../sections/Landing/LatestProjects";
 import Footer from "../sections/Footer";
 import ProjectDetail from "../sections/ProjectDetail"
+import NotAuth from '../sections/NotAuth'
+import NotProject from '../sections/NotProject'
 
 const Container = styled.div`
     display: flex;
@@ -22,15 +24,14 @@ const BlankSpace = styled.div`
 const My: NextPage = () => {
     const { address } = useAccount()
     const [image, setImage] = useState(null)
-    const [title, setTitle] = useState("Default Title")
-    const [description, setDescription] = useState("Default Description")
+    const [title, setTitle] = useState(null)
+    const [description, setDescription] = useState(null)
     const [category, setCategory] = useState(null)
     const [subcategory, setSubcategory] = useState(null)
     const [projects, setProjects] = useState([])
-   
+
 
     // TBD smart contract connection
-    // TBD "no project found message"
     const [microActive, setMicroActive] = useState("N/A")
     const [amPledged, setAmPledged] = useState("N/A")
     const [amBackers, setAmBackers] = useState("N/A")
@@ -93,11 +94,23 @@ const My: NextPage = () => {
 
     return <Container>
         {address ? <div>
-            <ProjectDetail objectId={objectId} pid={projectId} description={description} title={title} category={category} subcategory={subcategory} amBackers={amBackers} amPledged={amPledged} amDays={amDays} amGoal={amGoal} image={image} microActive={microActive} my />
+          {title ?  <ProjectDetail 
+                objectId={objectId} 
+                pid={projectId} 
+                description={description} 
+                title={title} 
+                category={category} 
+                subcategory={subcategory} 
+                amBackers={amBackers} 
+                amPledged={amPledged} 
+                amDays={amDays} 
+                amGoal={amGoal} 
+                image={image} 
+                microActive={microActive} 
+                my /> : <NotProject/>}
             <BlankSpace />
             <LatestProjects data={projects} my />
-        </div> :
-            <div>No wallet found, please disconnect/connect to reinitialize</div>}
+        </div> : <NotAuth/>}
         <Footer />
     </Container>
 }

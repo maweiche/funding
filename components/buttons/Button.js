@@ -25,25 +25,15 @@ const MyButton = styled(motion.button)`
   }
 `
 
-const DisabledButton = styled(MyButton)`
-  opacity: 0.3;
-  &:hover{
-    cursor: not-allowed;
-    opacity: 0.3;
-  }
-`
-
-const Button = ({ text, onClick, disabled }) => {
+const Button = ({ text, onClick }) => {
   return (
     <>
-    {!disabled ? <MyButton     
-      whileHover={{ scale: 0.98 }} 
-      transition={{ type: "spring", stiffness: 500, damping: 3 }} 
-      onClick={onClick} width={'200px'}>
-      {text}
-    </MyButton> :
-    <DisabledButton width={'200px'} disabled>{text}</DisabledButton>}
-    
+      <MyButton     
+        whileHover={{ scale: 0.98 }} 
+        transition={{ type: "spring", stiffness: 500, damping: 3 }} 
+        onClick={onClick} width={'200px'}>
+        {text}
+      </MyButton>
     </>
   )
 }

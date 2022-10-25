@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useApp } from "../../utils/appContext";
-import { MainContainer, SiteContainer, Container, ButtonContainer, NextButton } from "./StyleWrapper";
+import { MainContainer, SiteContainer, Container, ButtonContainer, NextButton, DisButton } from "./StyleWrapper";
 
 import Select from "react-select";
 import SectionTitle from "../../../components/typography/SectionTitle";
@@ -8,7 +8,7 @@ import ProjectTypeSelection from '../ProjectTypeSelection';
 
 const Category = ({ setStep }) => {
   const { appState, setAppState } = useApp();
-  const { category, subcategory, isNext } = { ...appState };
+  const { category, subcategory } = { ...appState };
 
   const categories = {
     Technology: ["Gadgets", "Robots", "Wearables", "Other"],
@@ -45,13 +45,12 @@ const Category = ({ setStep }) => {
       ...provided,
       background: 'rgba(107, 255, 255, 0.05)',
       border: '1px solid #FFFFFF',
-      borderRadius: '15px',
-
+      borderRadius: '15px'
     }),
     option: (provided) => ({
       ...provided,
       fontSize: '0.9em',
-      color: '#B0F6FF'
+      color: '#B0F6FF',
     }),
     singleValue: (provided) => ({
       ...provided,
@@ -86,7 +85,7 @@ const Category = ({ setStep }) => {
         </Container>
         <ButtonContainer>
           <NextButton>Back to homepage</NextButton>
-          {isNext ? <NextButton onClick={handleClick}>Next</NextButton> : <NextButton disabled>Next</NextButton>}
+          {subcategory ? <NextButton onClick={handleClick}>Next</NextButton> : <DisButton disabled>Next</DisButton>}
         </ButtonContainer>
       </SiteContainer>
     </MainContainer>

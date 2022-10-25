@@ -17,40 +17,27 @@ const Container = styled.div`
 
 const Project = () => {
   const router = useRouter()
-  const { pid } = router.query 
+  const { objectId } = router.query 
 
-  const micros = useContractRead({
-    addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
-    contractInterface: donation.abi,
-    functionName: 'getConnectedMicroFunds',
-    chainId: 80001,
-    args: [pid],
-    watch: false,
-  })
+  var microActive = "N/A"
 
-  var microActive = ""
-  
-  if (micros.data){
-    microActive = micros.data.toString()
-  }
-
-
-  const { data } = useMoralisQuery("Project", (query) => query.equalTo("pid", pid));
+  const { data } = useMoralisQuery("Project", (query) => query.equalTo("objectId", objectId));
   const fetchDetail = JSON.parse(
     JSON.stringify(data, [
       "title",
       "description",
       "category",
       "subcategory",
+      "pid"
     ]), [], { autoFetch: true },
   );
-
 
   const [image, setImage] = useState(null)
   const [title, setTitle] = useState("Default Title")
   const [description, setDescription] = useState("Default Description")
   const [category, setCategory] = useState(null)
   const [subcategory, setSubcategory] = useState(null)
+  const [pid, setPid] = useState(null)
 
   const [amPledged, setAmPledged] = useState("N/A")
   const [amBackers, setAmBackers] = useState("N/A")
@@ -66,6 +53,21 @@ const Project = () => {
       await setDescription(fetchDetail[0].description)
       await setCategory(fetchDetail[0].category)
       await setSubcategory(fetchDetail[0].subcategory)
+      await setPid(fetchDetail[0].pid)
+
+      const micros = useContractRead({
+        addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
+        contractInterface: donation.abi,
+        functionName: 'getConnectedMicroFunds',
+        chainId: 80001,
+        args: [pid],
+        watch: false,
+      })
+    
+      if (micros.data){
+        microActive = micros.data.toString()
+      }
+
     } catch (error) {
       console.log(error)
     }
