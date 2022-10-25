@@ -75,6 +75,7 @@ const ProjectDetailRight = ({pid}) => {
     // TBD pid is not known
     // TBD Days not formatted
     // TBD Backers lacks in contract
+    // TBD  PID is not distributed correctly from the parent, right now workaround by hardocde
     var bal = '0'
     var microInvolved = '0'
     var days = '0'
