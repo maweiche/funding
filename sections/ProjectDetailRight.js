@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import styled from 'styled-components'
 import donation from '../abi/donation.json'
 import { useContractRead } from 'wagmi'
@@ -70,12 +70,11 @@ const ButtonBox = styled.div`
 
 const ProjectDetailRight = ({pid}) => {
     const [amBackers, setAmBackers] = useState("N/A")
-    const [amMicro, setAmMicro] = useState("N/A")
-    const [amDays, setAmDays] = useState("N/A")
-    const [amGoal, setAmGoal] = useState("N/A")
     const [marked, setMarked] = useState(false)
 
     // TBD pid is not known
+    // TBD Days not formatted
+    // TBD Backers lacks in contract
     var bal = '0'
     var microInvolved = '0'
     var days = '0'
