@@ -97,19 +97,19 @@ const CanceledBox = styled.div`
 // @param "my" indicates whether component visualized in context of MyProjects or Landing page
 const ProjectDetail = ({ objectId, pid, title, description, category, subcategory, image, bookmarks, my }) => {
   const [cancelTooltip, setCancelTooltip] = useState(false)
-  const [success, setSuccess] = useState(false)
+  const [canceled, setCanceled] = useState(false)
   const [error, setError] = useState(false)
   const { chain } = useNetwork()
 
   // TBD add prepare contract write - To make blockchain part work
-
-  const { write, isLoading } = useContractWrite({
+  const {config}  = usePrepareContractWrite({
     addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
     contractInterface: donation.abi,
     functionName: 'cancelFund',
     args: [pid],
   })
 
+  const { isSuccess, isError,isLoading, write } = useContractWrite(config)
 
   useContractEvent({
     addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
@@ -119,9 +119,9 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
     once: true
   })
 
-  const cancel = async (oid, pid) => {
-   // await cancelMoralis(oid);
-    await write(pid);
+  const cancel = async (oid) => {
+    write?.()
+   await cancelMoralis(oid);
   }
 
   const cancelMoralis = async (oid) => {
@@ -132,10 +132,9 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
       }
     }
     try {
-      const res = await axios.put(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project/${oid}`, { 'state': 5 }, config)
+      const res = await axios.put(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project/${oid}`, { 'state': 4 }, config)
       console.log(res)
-      setSuccess(true)
-
+      setCanceled(true)
     } catch (error) {
       console.log(error)
       setError(true)
@@ -145,9 +144,11 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
   return  <Container>
     {my ? <SectionTitle title={'Active project'} subtitle={title} /> : <SectionTitle title={"Project detail"} subtitle={title} />}
     <DetailBox>
-      {success && <CanceledBox><CanceledTypo width={400} /></CanceledBox>}
+      {isSuccess && <>Success</>}
+      {isError && <>Error</>}
+      {canceled && <CanceledBox><CanceledTypo width={400} /></CanceledBox>}
       {my && <ActionPanel>
-        {!success && !isLoading ? <>
+        {!canceled && !isLoading ? <>
           {chain && chain.name === 'Mumbai' ?
             <CancelProject onClick={() => { cancel(objectId, pid) }} onMouseEnter={() => { setCancelTooltip(true) }} onMouseLeave={() => { setCancelTooltip(false) }}>
               {cancelTooltip && <Tooltip text='Cancel project' />}
@@ -157,7 +158,7 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
               {cancelTooltip && <Tooltip text='Switch to Mumbai' />}
               <CancelIcon width={30} />
             </CancelProject>
-          }</> : <>Loading</>}
+          }</> : <></>}
       </ActionPanel>}
       <LeftPart>
         {!image ? <ImgSkeleton /> : <Image src={detail.image} alt={title} width={500} height={500} />}

@@ -33,6 +33,8 @@ const My: NextPage = () => {
     const [objectId, setObjectId] = useState()
     const [bookmarks, setBookmarks] = useState([])
 
+    // Rerender my -> Debug, console
+
     // Query only user's active project (state 1)
     // By design we only allow one active project per user
     const { data } = useMoralisQuery("Project", (query) =>

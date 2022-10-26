@@ -1,4 +1,5 @@
 import { useRouter } from "next/router"
+import type { NextPage } from "next";
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { useMoralisQuery } from 'react-moralis'
@@ -10,7 +11,7 @@ const Container = styled.div`
   margin-bottom: 5%;
 `
 
-const Project = () => {
+const Project: NextPage = () => {
   const router = useRouter()
   const { objectId } = router.query 
   const { data } = useMoralisQuery("Project", (query) => query.equalTo("objectId", objectId));
@@ -20,6 +21,7 @@ const Project = () => {
       "description",
       "category",
       "subcategory",
+      "bookmarks",
       "pid"
     ]), [], { autoFetch: true },
   );

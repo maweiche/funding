@@ -17,6 +17,7 @@ const RightPart = styled.div`
   border-top: 3px solid #b0f6ff;
   width: 50%;
   margin-left: 3%;
+  margin-top: 2%;
   @media (max-width: 768px) {
     width: 100%;
     margin: 0;
