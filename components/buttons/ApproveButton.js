@@ -43,7 +43,7 @@ const Container = styled.div`
 
 const ApprovalBox = styled.div`
     position: absolute;
-    bottom: 10px;
+    bottom: 1px;
     left: 0;
     z-index: 50;
 `
@@ -103,8 +103,7 @@ const ApproveButton = (amount) => {
         setLoading(true)
     }
 
-    return <Container>{isError && <>Error</>}
-
+    return <Container>
         <ApprovalBox>
             {ev && loading && <><Lottie height={30} width={30} options={okAnim} /></>} 
             {!ev && loading && <><Lottie height={50} width={50} options={loadingAnim} /></>}

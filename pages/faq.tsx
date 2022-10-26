@@ -8,7 +8,8 @@ import Footer from '../sections/Footer'
 import SectionTitle from '../components/typography/SectionTitle';
 import { BookIcon, DeniedIcon, KeyIcon } from '../components/icons/Common';
 import FaqCard from '../components/cards/FaqCard';
-import DataPlay from '../sections/Landing/DataPlay';
+
+import { useMoralis,useMoralisCloudFunction } from 'react-moralis';
 
 const Container = styled.div`
 `
@@ -78,11 +79,14 @@ const texts = {
     "p34": "Allows rewards in fungible tokens as additional benefit"
 }
 
-
-
 const Faq: NextPage = () => {
+    const { data, error, isLoading } = useMoralisCloudFunction("topScores");3   
+    console.log(data)
     return <>
         <Container>
+        <div>
+          <button onClick={() => auth()}>Authenticate</button>
+        </div>
             <SectionTitle title="FAQ" subtitle='Learn more about Eyeseek Funding' />
             <FaqContainer>
                 <Row>
