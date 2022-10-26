@@ -11,7 +11,7 @@ import Button from "../../components/buttons/Button";
 import styled from "styled-components";
 import { useFormik } from "formik";
 import {DonateSchema} from '../../util/validator'
-import { usePrepareContractWrite, useContractWrite, useAccount } from "wagmi";
+import { usePrepareContractWrite, useContractWrite, useAccount, useContractRead } from "wagmi";
 import donation from "../../abi/donation.json";
 import SectionTitle from "../../components/typography/SectionTitle";
 import ApproveButton from "../../components/buttons/ApproveButton";
@@ -20,9 +20,11 @@ import { InfoIcon, SuccessIcon } from "../../components/icons/Common";
 import Tooltip from "../../components/Tooltip";
 import CalcOutcome from '../../components/functional/CalcOutcome'
 import BalanceComponent from '../../components/functional/BalanceComponent'
+import WarningCard from '../../components/cards/WarningCard'
 
 const Container = styled.div`
   margin-top: 8%;
+  margin-bottom: 15%;
 `
 
 const DonateOption = styled.div`
@@ -45,6 +47,10 @@ const DonateContentWrapper = styled.div`
   padding-right: 18%;
   @media (max-width: 750px) {
     padding: 0 5%;
+  }
+  @media (min-width: 2000px) {
+    padding-left: 25%;
+    padding-right: 25%;
   }
 `;
 
@@ -84,6 +90,7 @@ const FormWrapper = styled.div`
   border-radius: 5px;
   padding: 10px 20px;
   padding: 2rem 5rem 1rem 5rem;
+  margin-bottom: 3%;
   @media (max-width: 769px) {
     padding: 2rem 1rem 1rem 3rem;
   }
@@ -113,23 +120,13 @@ const Input = styled.input`
 `;
 
 const InputWrapper = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   padding: 2%;
-  font-family: "Montserrat";
+  font-family: "Roboto";
   @media (max-width: 500px) {
     flex-direction: column;
-  }
-`;
-
-const LabelWrapper = styled.div`
-  width: 25%;
-  @media (max-width: 769px) {
-    width: 45%;
-  }
-  @media (max-width: 500px) {
-    margin-bottom: 1rem;
-    width: 100%;
   }
 `;
 
@@ -243,6 +240,21 @@ const InfoBox = styled.div`
   }
 `
 
+const DonationRow = styled.div`
+  width: 30%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  @media (max-width: 769px) {
+    width: 45%;
+  }
+  @media (max-width: 500px) {
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+`
+
 const Donate: NextPage = () => {
   const [currency, setCurrency] = useState("USDC");
   const [token, setToken] = useState(process.env.NEXT_PUBLIC_AD_TOKEN)
@@ -254,25 +266,42 @@ const Donate: NextPage = () => {
   const [checkedFirstReward, setCheckedFirstReward] = useState(false);
   const [projectId, setProjectId] = useState(0);
   const [tooltip, setTooltip] = useState(false)
+  const [microTooltip, setMicroTooltip] = useState(false)
   const {address } = useAccount();
+
+  // Calculation part
+  // TBD UI breaks if amount string or non-number
+  const [multi, setMulti] = useState("")
+  const [conn, setConn] = useState("")
+
+  const outcome = useContractRead({
+      addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
+      contractInterface: donation.abi,
+      functionName: 'calcOutcome',
+      args: [0, amountD]
+    })
+  
+    const connections = useContractRead({
+      addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
+      contractInterface: donation.abi,
+      functionName: 'calcInvolvedMicros',
+      args: [0, amountD]
+    })
+  
+    const calcMe = () => {
+      setMulti((outcome.data).toString())
+      setConn((connections.data).toString())
+    }
 
   const router = useRouter()
   const { pid } = router.query 
 
-
-  // TBD check allowance and balance before 
-  // 1. Check allowance
-  // 2. Balance of Eye token = Minimálně zobrazit
-
-  const { config } = usePrepareContractWrite({
+  const { config, error } = usePrepareContractWrite({
     addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
     contractInterface: donation.abi,
     functionName: 'contribute',
-    // TBD Project ID hardcoded until new smart contract is deployed
     args: [amountM, amountD, pid],
   });
-
-  console.log(pid)
 
   const { write, isSuccess, data } = useContractWrite(config);
 
@@ -300,6 +329,7 @@ const Donate: NextPage = () => {
 
   const handleChangeD = (e) => {
     setAmountD(e.target.value)
+    calcMe()
   }
 
   const handleChangeM = (e) => {
@@ -312,8 +342,7 @@ const Donate: NextPage = () => {
       <DonateOption>
         {tooltip && <Tooltip text='No matter from which chain you pay. Axelar will take care to route funds on target'/>}
         <DonateOptionTitle>
-            <Row>Blockchain <InfoBox onMouseEnter={()=>{setTooltip(true)}} onMouseLeave={()=>{setTooltip(false)}}> <InfoIcon width={15}/></InfoBox>
-            </Row><DonateOptionSub>Select your source of donation</DonateOptionSub>
+            <Row>Blockchain <InfoBox onMouseEnter={()=>{setTooltip(true)}} onMouseLeave={()=>{setTooltip(false)}}> <InfoIcon width={15}/></InfoBox></Row><DonateOptionSub>Select your source of donation</DonateOptionSub>
         </DonateOptionTitle>
         <OptionItemWrapper>
           <div>
@@ -347,7 +376,6 @@ const Donate: NextPage = () => {
               <Checkbox type="checkbox" checked={checkedReward} onChange={() => setCheckedReward(!checkedReward)}/>
         </OptionItemWrapper>
       </DonateOption>
-
       {!checkedReward && <DonateOption>
         <DonateOptionTitle>
           <Row>Donate with reward #1</Row><DonateOptionSub>Tbd description</DonateOptionSub>
@@ -359,9 +387,7 @@ const Donate: NextPage = () => {
       {checkedReward && <div>
         <FormWrapper>
           <InputWrapper>
-            <LabelWrapper>
-              <label htmlFor="directDonation">Direct donation</label>
-            </LabelWrapper>
+            <DonationRow> <div>Direct donation (TBD)</div> <InfoBox onMouseEnter={()=>{setMicroTooltip(true)}} onMouseLeave={()=>{setMicroTooltip(false)}}> <InfoIcon width={15}/></InfoBox></DonationRow>
             <InputInnerWrapper>
               <Input
                 id="directDonation"
@@ -378,11 +404,10 @@ const Donate: NextPage = () => {
               <InputAmount>{currency}</InputAmount>
             </InputInnerWrapper>
           </InputWrapper>
-          <CalcOutcome amountD={amountD}/>
+          <CalcOutcome multi={multi} conn={conn}/>
           <InputWrapper>
-            <LabelWrapper>
-              <label htmlFor="microfund">Create own microfund</label>
-            </LabelWrapper>
+            {microTooltip && <Tooltip text='Anytime someone donates, the same amount is charged from all active microfunds until it is depleted. Non-depleted amount will be returned to you upon project finish.'/>}
+             <DonationRow> <div>Create microfund</div> <InfoBox onMouseEnter={()=>{setMicroTooltip(true)}} onMouseLeave={()=>{setMicroTooltip(false)}}> <InfoIcon width={15}/></InfoBox></DonationRow>
             <InputInnerWrapper>
               <Input
                 id="microfund"
@@ -398,25 +423,21 @@ const Donate: NextPage = () => {
             </InputInnerWrapper>
           </InputWrapper>
         </FormWrapper>
-        <FormInfo>
-              <p>
-                Microfund donation will NOT add funds to the project directly. It will create incentivization for other users with
-                simple rules:
-              </p>
+            <WarningCard title={'Beware of scammers!'} description={'TBD'}/>
+            <FormInfo>
               <ul>
                 <DonateList>
-                  Anytime someone donates, the same amount is charged from all active microfunds until it is depleted
-                </DonateList>
-                <DonateList>
-                  If microfund is not fully depleted upon end of the crowdfunding, rest of resources are returned back to microfunds
-                  owners after achieving project goals
+                  Funded amount must be approved before sending to the Eyeseek contract
                 </DonateList>
               </ul>
             </FormInfo>
         <DonateButtonWrapper>
-          <div><ApproveButton amount={amountD + amountM} /></div>
-          <div><Button disabled={!write} onClick={() => handleSubmit?.()} text='Donate' width={'200px'} /> </div>
+            <ApproveButton amount={amountD + amountM} />
+          <div>
+            {error ? <Button text='Donate' width={'200px'} error /> : <Button disabled={!write} onClick={() => handleSubmit?.()} text='Send funds' width={'200px'} /> } 
+          </div>
         </DonateButtonWrapper>
+        
         {isSuccess && <div><SuccessIcon width={20}/>
                 {explorer}{JSON.stringify(data)}
          </div>}

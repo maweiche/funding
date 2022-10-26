@@ -34,49 +34,13 @@ const Value = styled.div`
     font-family: 'Gemunu Libre';
 `
 
-const Button = styled.button`
-    background: linear-gradient(270.16deg, rgba(107, 255, 255, 0.05) 0.59%, rgba(107, 255, 255, 0) 99.41%);
-    border: none;
-    padding-top: 1%;
-    padding-bottom: 1%;
-    &:hover{
-        cursor: pointer;
-        background: linear-gradient(270.13deg, rgba(107, 255, 255, 0.2) 0.03%, rgba(173, 255, 255, 0) 99.44%);
-    }
-`
 
-
-
-
-const CalcOutcome = ({amountD}) => {
-    const [multi, setMulti] = useState()
-    const [conn, setConn] = useState()
-
-    const outcome = useContractRead({
-        addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
-        contractInterface: donation.abi,
-        functionName: 'calcOutcome',
-        args: [0, amountD]
-      })
-    
-      const connections = useContractRead({
-        addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
-        contractInterface: donation.abi,
-        functionName: 'calcInvolvedMicros',
-        args: [0, amountD]
-      })
-    
-      const calcMe = () => {
-        setMulti((outcome.data).toString())
-        setConn((connections.data).toString())
-      }
+const CalcOutcome = ({conn, multi}) => {
 
 
     return <Container>
         <Row><Item>Microfund multiplier</Item><Value>{conn} X</Value></Row>
         <Row><Item>Fund receives (in total)</Item><Value>{multi} USDC</Value></Row>
-        <Button onClick={()=>{calcMe()}}>Calculate donation impact</Button>
-
     </Container>
 }
 

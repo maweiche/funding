@@ -2,7 +2,7 @@ import {motion} from 'framer-motion'
 import styled from 'styled-components'
 
 const MyButton = styled(motion.button)`
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid ${props => props.error ? 'red' : 'white'};
   padding: 1.5%;
   padding-left: 10px;
   padding-right: 10px;
@@ -25,13 +25,15 @@ const MyButton = styled(motion.button)`
   }
 `
 
-const Button = ({ text, onClick }) => {
+const Button = ({ text, onClick, error }) => {
   return (
     <>
       <MyButton     
-        whileHover={{ scale: 0.98 }} 
-        transition={{ type: "spring", stiffness: 500, damping: 3 }} 
-        onClick={onClick} width={'200px'}>
+          error={error}
+          whileHover={{ scale: 0.98 }} 
+          transition={{ type: "spring", stiffness: 500, damping: 3 }} 
+          onClick={onClick} width={'200px'}
+        >
         {text}
       </MyButton>
     </>
