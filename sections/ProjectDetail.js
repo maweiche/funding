@@ -95,7 +95,7 @@ const CanceledBox = styled.div`
   }
 `
 // @param "my" indicates whether component visualized in context of MyProjects or Landing page
-const ProjectDetail = ({ objectId, pid, title, description, category, subcategory, image, my }) => {
+const ProjectDetail = ({ objectId, pid, title, description, category, subcategory, image, bookmarks, my }) => {
   const [cancelTooltip, setCancelTooltip] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
@@ -167,7 +167,7 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
         </Categories>
         <Desc>{description}</Desc>
       </LeftPart>
-      <ProjectDetailRight pid={pid}/>
+      <ProjectDetailRight pid={pid} objectId={objectId} bookmarks={bookmarks} />
     </DetailBox>
   </Container> 
 }

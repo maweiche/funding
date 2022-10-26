@@ -295,7 +295,7 @@ const Donate = ({ pid }) => {
     setAmountM(e.target.value)
   }
 
-  // Use account will be needed + Test on Polygon prod/ Or use Covalent
+  // TBD Use account will be needed + Test on Polygon prod/ Or use Covalent
   
 
   const getBalance = async () => {

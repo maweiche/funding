@@ -11,6 +11,7 @@ import LatestProjects from "../sections/Landing/LatestProjects";
 import Categories from '../sections/Landing/Categories';
 import Eye1 from '../public/Eye1.png'
 import { LandingSvg } from "../sections/Landing/LandingMain";
+import { useApp } from "../sections/utils/appContext";
 
 const ImageBox = styled.div`
     position: absolute;
@@ -36,14 +37,14 @@ const EyeSevenBox = styled.div`
 
 const Home: NextPage = () => {
   const [projects, setProjects] = useState([]);
+  const { appState } = useApp();
+  const { filterCat } = { ...appState };
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     getProjects();
   }, []);
 
-  // How to query categories https://aa6nfdqx573p.usemoralis.com:2053/server/classes/ProjectTest?where={%22category%22:"some category"}
-  // Similar way possible to filter max if needed
   const getProjects = async () => {
     const config = {
       headers: {
@@ -51,8 +52,14 @@ const Home: NextPage = () => {
       },
     };
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project?`, config);
-      setProjects(res.data.results);
+      if (filterCat === "All") {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project`, config);
+        setProjects(res.data.results);
+      }
+      else {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project?where={"category":"${filterCat}"}`, config);
+        setProjects(res.data.results);
+      }
     } catch (error) {
       console.log(error);
     }

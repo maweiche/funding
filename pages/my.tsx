@@ -29,17 +29,9 @@ const My: NextPage = () => {
     const [category, setCategory] = useState(null)
     const [subcategory, setSubcategory] = useState(null)
     const [projects, setProjects] = useState([])
-
-
-    // TBD smart contract connection
-    const [microActive, setMicroActive] = useState("N/A")
-    const [amPledged, setAmPledged] = useState("N/A")
-    const [amBackers, setAmBackers] = useState("N/A")
-    const [amMicro, setAmMicro] = useState("N/A")
-    const [amDays, setAmDays] = useState("N/A")
-    const [amGoal, setAmGoal] = useState("N/A")
     const [projectId, setProjectId] = useState()
     const [objectId, setObjectId] = useState()
+    const [bookmarks, setBookmarks] = useState([])
 
     // Query only user's active project (state 1)
     // By design we only allow one active project per user
@@ -55,6 +47,7 @@ const My: NextPage = () => {
             "category",
             "subcategory",
             "pid",
+            "bookmarks",
             "objectId"
             // @ts-ignore
         ]), { autoFetch: true },
@@ -67,6 +60,7 @@ const My: NextPage = () => {
             await setCategory(fetchDetail[0].category)
             await setSubcategory(fetchDetail[0].subcategory)
             await setProjectId(fetchDetail[0].pid)
+            await setBookmarks(fetchDetail[0].bookmarks)
             await setObjectId(fetchDetail[0].objectId)
         } catch (error) {
             console.log(error)
@@ -101,12 +95,8 @@ const My: NextPage = () => {
                 title={title} 
                 category={category} 
                 subcategory={subcategory} 
-                amBackers={amBackers} 
-                amPledged={amPledged} 
-                amDays={amDays} 
-                amGoal={amGoal} 
                 image={image} 
-                microActive={microActive} 
+                bookmarks={bookmarks}
                 my /> : <NotProject/>}
             <BlankSpace />
             <LatestProjects data={projects} my />

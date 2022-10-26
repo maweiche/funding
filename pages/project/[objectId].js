@@ -30,6 +30,7 @@ const Project = () => {
   const [category, setCategory] = useState(null)
   const [subcategory, setSubcategory] = useState(null)
   const [pid, setPid] = useState(null)
+  const [bookmarks, setBookmarks] = useState([])
 
   const getData = async () => {
     try {
@@ -38,6 +39,7 @@ const Project = () => {
       await setCategory(fetchDetail[0].category)
       await setSubcategory(fetchDetail[0].subcategory)
       await setPid(fetchDetail[0].pid)
+      await setBookmarks(fetchDetail[0].bookmarks)
 
     } catch (error) {
       console.log(error)
@@ -58,6 +60,7 @@ const Project = () => {
           category={category} 
           subcategory={subcategory} 
           image={image} 
+          bookmarks={bookmarks}
           pid={pid} />
       </Container>
     </>
