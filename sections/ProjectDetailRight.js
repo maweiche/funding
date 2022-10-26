@@ -6,7 +6,8 @@ import Link from 'next/link'
 
 import ButtonAlt from "../components/buttons/ButtonAlt"
 import Share from '../components/buttons/Share'
-import { BookmarkIcon, BookmarkFilledIcon } from '../components/icons/Common'
+import Bookmark from '../components/functional/Bookmark'
+
 
 const RightPart = styled.div`
   position: relative;
@@ -16,6 +17,7 @@ const RightPart = styled.div`
   border-top: 3px solid #b0f6ff;
   width: 50%;
   margin-left: 3%;
+  margin-top: 2%;
   @media (max-width: 768px) {
     width: 100%;
     margin: 0;
@@ -55,22 +57,12 @@ const FlexRow = styled.div`
   display: flex;
   flex-direction: row;
 `
-
-const Bkmrk = styled.div`
-  display: flex;
-  min-height: 30px;
-  &:hover {
-    cursor: pointer;
-  }
-`
-
 const ButtonBox = styled.div`
   margin-top: 4%;
 `
 
-const ProjectDetailRight = ({pid}) => {
+const ProjectDetailRight = ({pid, objectId, bookmarks}) => {
     const [amBackers, setAmBackers] = useState("N/A")
-    const [marked, setMarked] = useState(false)
 
     // TBD pid is not known
     // TBD Days not formatted
@@ -144,24 +136,10 @@ const ProjectDetailRight = ({pid}) => {
         )
     }
 
-    const Bookmark = () => {
-        return (
-            <Bkmrk onClick={() => { handleBookmark() }}>
-                {!marked ? <BookmarkIcon width={20} /> : <BookmarkFilledIcon width={20} />}
-            </Bkmrk>
-        )
-    }
 
-    const handleBookmark = () => {
-        setMarked(!marked)
-        // TBD Tier 1 - https://app.clickup.com/t/32jy4wv
-        // Push to bookmark array
-        // Fix moving icon upon switch
-        // Bookmarks could be handled only for authed users
-      }
     return <RightPart>
         <div>
-            <Row title={bal} desc={`pledged of ${max} goal`} color="#00FFA3" right={<Bookmark />} />
+            <Row title={bal} desc={`pledged of ${max} goal`} color="#00FFA3" right={<Bookmark objectId={objectId} bookmarks={bookmarks} />} />
             <Row title={amBackers} desc={`backers`} color="white" />
             <Row title={microInvolved} desc={`microfunds active`} color="white" />
             <FlexRow>

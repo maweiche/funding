@@ -1,4 +1,5 @@
 import { useRouter } from "next/router"
+import type { NextPage } from "next";
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { useMoralisQuery } from 'react-moralis'
@@ -10,7 +11,7 @@ const Container = styled.div`
   margin-bottom: 5%;
 `
 
-const Project = () => {
+const Project: NextPage = () => {
   const router = useRouter()
   const { objectId } = router.query 
   const { data } = useMoralisQuery("Project", (query) => query.equalTo("objectId", objectId));
@@ -20,6 +21,7 @@ const Project = () => {
       "description",
       "category",
       "subcategory",
+      "bookmarks",
       "pid"
     ]), [], { autoFetch: true },
   );
@@ -30,6 +32,7 @@ const Project = () => {
   const [category, setCategory] = useState(null)
   const [subcategory, setSubcategory] = useState(null)
   const [pid, setPid] = useState(null)
+  const [bookmarks, setBookmarks] = useState([])
 
   const getData = async () => {
     try {
@@ -38,6 +41,7 @@ const Project = () => {
       await setCategory(fetchDetail[0].category)
       await setSubcategory(fetchDetail[0].subcategory)
       await setPid(fetchDetail[0].pid)
+      await setBookmarks(fetchDetail[0].bookmarks)
 
     } catch (error) {
       console.log(error)
@@ -58,6 +62,7 @@ const Project = () => {
           category={category} 
           subcategory={subcategory} 
           image={image} 
+          bookmarks={bookmarks}
           pid={pid} />
       </Container>
     </>

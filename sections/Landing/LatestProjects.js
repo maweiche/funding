@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-
 import ProjectCard from '../../components/cards/ProjectCard'
 import SectionTitle from '../../components/typography/SectionTitle'
 

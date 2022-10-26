@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/router"
 import type { NextPage } from "next";
 import Image from "next/image";
 import polygon from "../../public/icons/donate/polygon.png";
@@ -10,7 +11,7 @@ import Button from "../../components/buttons/Button";
 import styled from "styled-components";
 import { useFormik } from "formik";
 import {DonateSchema} from '../../util/validator'
-import { usePrepareContractWrite, useContractWrite } from "wagmi";
+import { usePrepareContractWrite, useContractWrite, useAccount } from "wagmi";
 import donation from "../../abi/donation.json";
 import SectionTitle from "../../components/typography/SectionTitle";
 import ApproveButton from "../../components/buttons/ApproveButton";
@@ -18,7 +19,7 @@ import { Row } from '../../components/format/Row'
 import { InfoIcon, SuccessIcon } from "../../components/icons/Common";
 import Tooltip from "../../components/Tooltip";
 import CalcOutcome from '../../components/functional/CalcOutcome'
-import axios from "axios";
+import BalanceComponent from '../../components/functional/BalanceComponent'
 
 const Container = styled.div`
   margin-top: 8%;
@@ -154,9 +155,13 @@ const InputAmount = styled.div`
 `;
 
 const FormInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5%;
   font-family: "Roboto";
   font-size: 0.9em;
-  width: 80%;
+  width: 100%;
   @media (max-width: 500px) {
     width: 100%;
   }
@@ -238,9 +243,9 @@ const InfoBox = styled.div`
   }
 `
 
-const Donate = ({ pid }) => {
+const Donate: NextPage = () => {
   const [currency, setCurrency] = useState("USDC");
-  const [balance, setBalance] = useState(0)
+  const [token, setToken] = useState(process.env.NEXT_PUBLIC_AD_TOKEN)
   const [blockchain, setBlockchain] = useState("polygon")
   const [explorer, setExplorer] = useState('https://mumbai.polygonscan.com/tx/')
   const [amountM, setAmountM] = useState(0);
@@ -249,6 +254,11 @@ const Donate = ({ pid }) => {
   const [checkedFirstReward, setCheckedFirstReward] = useState(false);
   const [projectId, setProjectId] = useState(0);
   const [tooltip, setTooltip] = useState(false)
+  const {address } = useAccount();
+
+  const router = useRouter()
+  const { pid } = router.query 
+
 
   // TBD check allowance and balance before 
   // 1. Check allowance
@@ -257,10 +267,12 @@ const Donate = ({ pid }) => {
   const { config } = usePrepareContractWrite({
     addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
     contractInterface: donation.abi,
-    functionName: 'createMicroFund',
+    functionName: 'contribute',
     // TBD Project ID hardcoded until new smart contract is deployed
-    args: [amountM, amountD, 0],
+    args: [amountM, amountD, pid],
   });
+
+  console.log(pid)
 
   const { write, isSuccess, data } = useContractWrite(config);
 
@@ -276,7 +288,6 @@ const Donate = ({ pid }) => {
       write?.();
     },
   });
-
 
   const handleSubmit = async() => {
     await write?.()
@@ -294,29 +305,6 @@ const Donate = ({ pid }) => {
   const handleChangeM = (e) => {
     setAmountM(e.target.value)
   }
-
-  // Use account will be needed + Test on Polygon prod/ Or use Covalent
-  
-
-  const getBalance = async () => {
-    const head = {
-      headers: {
-      "X-API-Key": "53DdXn3RtWHuEWmRPaQiXgdl4u3YLc8OTQVLeBNqxACou395pwJVL6b2qoG9M4pW",
-      "accept": "application/json"
-     },
-    }
-    try{
-      const res = await axios.get(`https://deep-index.moralis.io/api/v2/${address}/erc20?chain=mumbai&token_addresses=0x0000000000000000000000000000000000001010`, head)
-      setBalance(res.data)
-      console.log(res.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  useEffect(() => {
-    getBalance()
-  }, [])
 
   return <Container>
     <SectionTitle title="Select your reward" subtitle={'Select an option below'} />
@@ -348,7 +336,7 @@ const Donate = ({ pid }) => {
           <div>
             <Image src={icon4} alt="usdc" width={'40%'} height={'40%'} />
           </div>
-          <>Balance: {balance}</>
+          <BalanceComponent address={address} token={token} amount={amountM+amountD}/>
         </OptionItemWrapper>
       </DonateOption>
       <DonateOption>
@@ -356,7 +344,7 @@ const Donate = ({ pid }) => {
           <Row>Donate</Row><DonateOptionSub>Without promised reward</DonateOptionSub>
         </DonateOptionTitle>
         <OptionItemWrapper>
-              <Checkbox type="checkbox" checked={checkedReward}  onChange={() => setCheckedReward(!checkedReward)}/>
+              <Checkbox type="checkbox" checked={checkedReward} onChange={() => setCheckedReward(!checkedReward)}/>
         </OptionItemWrapper>
       </DonateOption>
 
@@ -409,12 +397,8 @@ const Donate = ({ pid }) => {
               <InputAmount>{currency}</InputAmount>
             </InputInnerWrapper>
           </InputWrapper>
-
-          <InputWrapper>
-            <LabelWrapper>
-              <label></label>
-            </LabelWrapper>
-            <FormInfo>
+        </FormWrapper>
+        <FormInfo>
               <p>
                 Microfund donation will NOT add funds to the project directly. It will create incentivization for other users with
                 simple rules:
@@ -429,8 +413,6 @@ const Donate = ({ pid }) => {
                 </DonateList>
               </ul>
             </FormInfo>
-          </InputWrapper>
-        </FormWrapper>
         <DonateButtonWrapper>
           <div><ApproveButton amount={amountD + amountM} /></div>
           <div><Button disabled={!write} onClick={() => handleSubmit?.()} text='Donate' width={'200px'} /> </div>

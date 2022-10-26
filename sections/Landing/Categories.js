@@ -1,7 +1,6 @@
 import styled from 'styled-components'
-import {useContext, useState} from 'react'
-import { AppContext } from '../utils/appContext'
 import {cats} from '../../data/cats'
+import { useApp } from "../../sections/utils/appContext";
 
 const Container = styled.div`
     display: flex;
@@ -28,14 +27,22 @@ const ACat = styled(Cat)`
 `
 
 const Categories = () => {
-    const {category, setCategory} = useState('Technology')
-    const handleCat = (cat) => {
-        console.log(cat)
-        //Set context with selected category
+    const { appState, setAppState } = useApp();
+    const { filterCat } = { ...appState };
+  
+    // TBD infinite loop
+    const handleCat = async(cat) => {
+        try {
+          //  await setAppState((prev) => ({ ...prev, filterCat: cat }))
+        } catch(err) {
+            console.log(err)
+        }
     }
+
+
     return <Container>
             {cats.map((cat) =>
-             <div>{cat === category ? <Cat onClick={handleCat(cat)}>{cat}</Cat> : <ACat  onClick={()=>{handleCat(cat)}}>{cat}</ACat>}</div>
+             <div>{cat === filterCat ? <Cat onClick={handleCat(cat)}>{cat}</Cat> : <ACat  onClick={()=>{handleCat(cat)}}>{cat}</ACat>}</div>
         )}
         </Container>
 }

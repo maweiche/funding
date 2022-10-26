@@ -24,14 +24,14 @@ const Item = styled.div`
     width: 50%;
     font-size: 1em;
     color: white;
-    font-family: "Montserrat";
+    font-family: 'Gemunu Libre';
 `
 
 const Value = styled.div`
-    font-family: 'Roboto';
     font-style: italic;
     font-weight: 500;
     color: #FFFFFF;
+    font-family: 'Gemunu Libre';
 `
 
 const Button = styled.button`
