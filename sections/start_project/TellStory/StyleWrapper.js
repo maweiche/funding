@@ -33,7 +33,7 @@ export const InputContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 80px;
-
+  font-family: "Montserrat";
   .input_label {
     min-width: 100px;
   }
@@ -47,7 +47,7 @@ export const InputContainer = styled.div`
   }
 
   .input_description {
-    font-size: 0.8em;
+    font-size: 0.7em;
   }
 
   .input_container {
@@ -65,4 +65,12 @@ export const TellContainer = styled.div`
   margin-top: 3%;
   font-family: "Montserrat";
 `;
+
+export const Mandatory = styled.div`
+  font-size: 0.7em;
+  color: #ff0000;
+  font-family: "Montserrat";
+  width: 100%;
+  text-align: right;
+`
 

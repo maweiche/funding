@@ -13,8 +13,15 @@ export const AppProvider = (props) => {
       { title: "USDT", logo: "/icons/usdt.png", chainId: "", active: false },
     ],
     milestones: [],
-    cat: "All",
-    approved: false,
+    pTitle: "Default project title",
+    pDesc: "",
+    pWeb: "",
+    pSocial: "",
+    pType: "Standard", // Stream vs Standard
+    pm1: 0, // 1st milestone. More milestones will be added later
+    cateogry: null,
+    subcategory: null,
+    filterCat: "All",
   });
 
   return (

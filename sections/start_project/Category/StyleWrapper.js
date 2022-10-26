@@ -54,6 +54,13 @@ export const NextButton = styled.button`
   }
 `
 
+export const DisButton = styled(NextButton)`
+  opacity: 0.2;
+  &:hover{
+    cursor: not-allowed;
+  }
+`
+
 export const ButtonContainer = styled.div`
   display: flex;
   width: 100%;

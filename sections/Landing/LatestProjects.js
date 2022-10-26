@@ -15,12 +15,6 @@ const ProjectBox = styled.div`
     padding: 5%;
     gap: 2%;
 `
-
-const TitleRow = styled.div`
-    text-align: center;
-    margin-top: 3%;
-`
-
 // @param "my" indicates whether component visualized in context of MyProjects or Landing page
 const LatestProjects = ({ data, my }) => {
     return <Container>
@@ -33,7 +27,7 @@ const LatestProjects = ({ data, my }) => {
                     description={project.description}
                     category={project.category}
                     subcategory={project.subcategory}
-                    link={`/project/${project.pid}`}
+                    link={`/project/${project.objectId}`}
                     id={project.pid}
                 />
             })}

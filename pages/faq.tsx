@@ -8,6 +8,7 @@ import Footer from '../sections/Footer'
 import SectionTitle from '../components/typography/SectionTitle';
 import { BookIcon, DeniedIcon, KeyIcon } from '../components/icons/Common';
 import FaqCard from '../components/cards/FaqCard';
+import DataPlay from '../sections/Landing/DataPlay';
 
 const Container = styled.div`
 `
@@ -15,7 +16,7 @@ const Row = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
-    margin-top: 8%;
+    margin-top: 7%;
     padding-bottom: 4%;
     gap: 10%;
     border-bottom: 1px solid #262626;;

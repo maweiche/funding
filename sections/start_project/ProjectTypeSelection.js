@@ -1,7 +1,27 @@
 import styled from 'styled-components';
 import FaqCard from '../../components/cards/FaqCard';
-import { PiggyIcon, StreamIcon } from '../../components/icons/Landing';
-import {useState} from 'react'
+import Lottie from 'react-lottie';
+import { useApp } from '../utils/appContext';
+import blockchainAnimation from '../../data/blockchainAnimation.json'
+import streamAnimation from '../../data/streamAnimation.json'
+
+const animOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: blockchainAnimation,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice'
+    }
+};
+
+const streamOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: streamAnimation,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice'
+    }
+}
 
 const Container = styled.div`
     display: flex;
@@ -29,6 +49,16 @@ const Col = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-radius: 45px;
+    margin: 1%;
+`
+// TBD unnecessary moving with components
+const ActStrCol = styled(Col)`
+    background: linear-gradient(108.23deg, rgba(0, 16, 4, 0.7) -44.23%, rgba(0, 16, 4, 0) 123%);
+`
+
+const ActCol = styled(Col)`
+    background: linear-gradient(251.95deg, rgba(16, 0, 13, 0.7) -51.44%, rgba(0, 16, 4, 0) 131.39%);
 `
 
 const TextBox = styled.div`
@@ -41,13 +71,18 @@ const Clickable = styled.div`
     flex-direction: column;
     align-items: center;
     padding: 5%;
+    border-radius: 5px;
     margin: 2%;
     &:hover{
         cursor: pointer;
-        opacity: 0.8;
-        background: rgba(5, 0, 233, 0.02);
+        opacity: 0.9;
     }
-   
+`
+
+const TypeTitle = styled.div`
+    font-size: 1.3em;
+    font-family: 'Neucha';
+    margin-top: 5%;
 `
 
 const text = {
@@ -64,21 +99,37 @@ const text = {
 }
 
 const ProjectTypeSelection = () => {
-    const [type, setType] = useState(0)
+    const { appState, setAppState } = useApp();
+    const { pType } = { ...appState };
+
+    const handleType = (type) => {
+        setAppState({ ...appState, pType: type });
+    }
     // Set type to 0 for crowdfunding, 1 for streaming, tbd save type to the context, well POST it to Moralis
 
     return <Container>
         <Title>Funding type (out of scope now)</Title>
         <Title>TBD UI + Some animation</Title>
        <Row> 
-            <Col>
-                <Clickable><PiggyIcon width={100}/><div>Standard</div></Clickable>
+       {pType === 'Standard' ?  
+            <ActCol>
+                <Clickable onClick={()=>{handleType('Standard')}}><Lottie height={150} width={150} options={animOptions} /><TypeTitle>Standard</TypeTitle></Clickable>
                 <TextBox><FaqCard answer={text.a1} point1={text.p11} point2={text.p12} point3={text.p13} point4={text.p14}/></TextBox>
-            </Col>
+            </ActCol>:
             <Col>
-                <Clickable><StreamIcon width={100}/><div>Stream</div></Clickable>
+                <Clickable onClick={()=>{handleType('Standard')}}><Lottie height={150} width={150} options={animOptions} /><TypeTitle>Standard</TypeTitle></Clickable>
+                <TextBox><FaqCard answer={text.a1} point1={text.p11} point2={text.p12} point3={text.p13} point4={text.p14}/></TextBox>
+            </Col>}
+
+        {pType === 'Stream' ?    
+            <ActStrCol>
+                <Clickable onClick={()=>{handleType('Stream')}}><Lottie height={150} width={150} options={streamOptions} /><TypeTitle>Stream</TypeTitle></Clickable>
                 <TextBox><FaqCard answer={text.a1} point1={text.p21} point2={text.p22} point3={text.p23} point4={text.p24}/></TextBox>
-            </Col>
+            </ActStrCol> : 
+            <Col>
+                <Clickable onClick={()=>{handleType('Stream')}}><Lottie height={150} width={150} options={streamOptions} /><TypeTitle>Stream</TypeTitle></Clickable>
+                <TextBox><FaqCard answer={text.a1} point1={text.p21} point2={text.p22} point3={text.p23} point4={text.p24}/></TextBox>
+            </Col>}
         </Row>
     </Container>
 }
