@@ -23,6 +23,7 @@ import BalanceComponent from '../../components/functional/BalanceComponent'
 
 const Container = styled.div`
   margin-top: 8%;
+  margin-bottom: 15%;
 `
 
 const DonateOption = styled.div`
@@ -45,6 +46,10 @@ const DonateContentWrapper = styled.div`
   padding-right: 18%;
   @media (max-width: 750px) {
     padding: 0 5%;
+  }
+  @media (min-width: 2000px) {
+    padding-left: 25%;
+    padding-right: 25%;
   }
 `;
 
@@ -259,20 +264,12 @@ const Donate: NextPage = () => {
   const router = useRouter()
   const { pid } = router.query 
 
-
-  // TBD check allowance and balance before 
-  // 1. Check allowance
-  // 2. Balance of Eye token = Minimálně zobrazit
-
-  const { config } = usePrepareContractWrite({
+  const { config, error } = usePrepareContractWrite({
     addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
     contractInterface: donation.abi,
     functionName: 'contribute',
-    // TBD Project ID hardcoded until new smart contract is deployed
     args: [amountM, amountD, pid],
   });
-
-  console.log(pid)
 
   const { write, isSuccess, data } = useContractWrite(config);
 
@@ -415,7 +412,9 @@ const Donate: NextPage = () => {
             </FormInfo>
         <DonateButtonWrapper>
           <div><ApproveButton amount={amountD + amountM} /></div>
-          <div><Button disabled={!write} onClick={() => handleSubmit?.()} text='Donate' width={'200px'} /> </div>
+          <div>
+            {error ? <Button text='Donate' width={'200px'} error /> : <Button disabled={!write} onClick={() => handleSubmit?.()} text='Donate' width={'200px'} /> } 
+          </div>
         </DonateButtonWrapper>
         {isSuccess && <div><SuccessIcon width={20}/>
                 {explorer}{JSON.stringify(data)}

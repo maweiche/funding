@@ -19,6 +19,35 @@ import axios from "axios";
 import Link from "next/link";
 
 
+// Animation configs 
+const okAnim = {
+    loop: false,
+    autoplay: true,
+    animationData: successAnimation,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice'
+    }
+};
+
+const errAnim = {
+    loop: false,
+    autoplay: true,
+    animationData: errorAnimation,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice'
+    }
+};
+
+const loadingAnim = {
+    loop: true,
+    autoplay: true,
+    animationData: smallLoading,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice'
+    }
+};
+
+
 const texts = {
     title: 'Rules to follow to be eligible of Eyeseek funding',
     p1: "Owner has to inform regularly backers with project updates",
@@ -36,33 +65,6 @@ const Create = ({ setStep }) => {
     const [success, setSuccess] = useState(false)
     const [oid, setOid] = useState(null)
 
-    // Animation configs 
-    const okAnim = {
-        loop: false,
-        autoplay: true,
-        animationData: successAnimation,
-        rendererSettings: {
-            preserveAspectRatio: 'xMidYMid slice'
-        }
-    };
-
-    const errAnim = {
-        loop: false,
-        autoplay: true,
-        animationData: errorAnimation,
-        rendererSettings: {
-            preserveAspectRatio: 'xMidYMid slice'
-        }
-    };
-
-    const loadingAnim = {
-        loop: true,
-        autoplay: true,
-        animationData: smallLoading,
-        rendererSettings: {
-            preserveAspectRatio: 'xMidYMid slice'
-        }
-    };
     const handleBack = () => {
         setStep((prev) => (prev -= 1));
     }
@@ -82,7 +84,7 @@ const Create = ({ setStep }) => {
 
     const { write } = useContractWrite(config)
 
-    const handleContract = async () => {write?.()}
+    const handleContract = async () => { write?.() }
 
     const handleMoralis = async () => {
         const head = {
