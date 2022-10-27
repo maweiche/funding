@@ -1,102 +1,84 @@
-import type { NextPage } from "next"
-import Head from "next/head"
-import Image from "next/image"
-import styled from "styled-components"
-import { useRouter } from "next/router"
-import Eye7 from "../public/Eye7.png"
-import { useEffect } from "react"
-import Script from "next/script"
-import Link from "next/link"
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import styled from "styled-components";
+import Eye7 from "../public/Eye7.png";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Footer from "../sections/Footer";
+import Features from "../sections/Landing/Features";
+import LatestProjects from "../sections/Landing/LatestProjects";
+import Categories from '../sections/Landing/Categories';
+import Eye1 from '../public/Eye1.png'
+import { LandingSvg } from "../sections/Landing/LandingMain";
+import { useApp } from "../sections/utils/appContext";
 
-import { MetaMaskConnector } from "wagmi/connectors/metaMask"
-import { signIn } from "next-auth/react"
-import { useAccount, useConnect, useSignMessage, useDisconnect } from "wagmi"
-import axios from "axios"
-
-import Header from "../sections/Header"
-import Footer from "../sections/Footer"
-import Title from "../components/typography/Title"
-import Subtitle from "../components/typography/Subtitle"
-import Button from "../components/buttons/Button"
+const ImageBox = styled.div`
+    position: absolute;
+    right: 0;
+    z-index: -1;
+    @media (min-width: 1768px) {
+      top: 200px;
+    }
+`
 import StatsTable from "../components/statsTable/statsTable"
 const Container = styled.div`
+  position: relative;
   margin-top: 1%;
-`
+  display: flex;
+  flex-direction: column;
+`;
 
 const EyeSevenBox = styled.div`
+  margin: 5%;
   text-align: center;
   position: relative;
-`
-const A = styled.a`
-  &:hover {
-    opacity: 0.7;
-    color: blue;
-    cursor: pointer;
-  }
-`
+`;
 
 const Home: NextPage = () => {
+  const [projects, setProjects] = useState([]);
+  const { appState } = useApp();
+  const { filterCat } = { ...appState };
+
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
-  }, [])
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    getProjects();
+  }, []);
 
-  // Web3 Auth handling
-  const { connectAsync } = useConnect()
-  const { disconnectAsync } = useDisconnect()
-  const { isConnected } = useAccount()
-  const { signMessageAsync } = useSignMessage()
-  const { push } = useRouter()
-
-  const handleAuth = async () => {
-    if (isConnected) {
-      await disconnectAsync()
-    }
-
-    const { account, chain } = await connectAsync({ connector: new MetaMaskConnector() })
-
-    const userData = { address: account, chain: chain.id, network: "evm" }
-    console.log(userData)
-
-    const { data } = await axios.post("/api/auth/request-message", userData, {
+  const getProjects = async () => {
+    const config = {
       headers: {
-        "content-type": "application/json",
+        "X-Parse-Application-Id": `${process.env.NEXT_PUBLIC_DAPP_ID}`,
       },
-    })
-
-    const message = data.message
-
-    const signature = await signMessageAsync({ message })
-
-    // redirect user after success authentication to '/dashboard' page
-    // @ts-ignore
-    const { url } = await signIn("credentials", { message, signature, redirect: false, callbackUrl: "/user" })
-    /**
-     * instead of using signIn(..., redirect: "/dashboard")
-     * we get the url from callback and push it to the router to avoid page refreshing
-     */
-    push(url)
-  }
+    };
+    try {
+      if (filterCat === "All") {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project`, config);
+        setProjects(res.data.results);
+      }
+      else {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project?where={"category":"${filterCat}"}`, config);
+        setProjects(res.data.results);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Container>
       <Head>
-        <title>Eyeseek Fund</title>
+        <title>Eyeseek Funding</title>
         <meta name="title" content="Blockchain crowdfunding application powered by Moralis" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header />
-      <Title text="Components/Typography/Title" />
-      <Subtitle text="Components/Typography/Subtitle" />
-      <Button text={"Components/buttons/button"} />
-      <div>
-        <br></br>
-        <Link href="/project/abc">
-          <A>pages/project/[pid].js</A>
-        </Link>
-        <div>This link will be userful for features "My projects", "Latest projects", "Stats" ,etc.</div>
-      </div>
+      <LandingSvg width={'100%'} height='auto'/>
+      {/* <ImageBox><Image src={Eye1} alt='Eye1' width={'1000px'} /></ImageBox> */}
+      <Features />
+      <Categories />
+      <LatestProjects data={projects} my={false} />
       <EyeSevenBox>
-        <Image src={Eye7} alt="Eye7" width={"600%"} height={"70%"} />
+      <Image src={Eye7} alt="Eye7" width={"400%"} height={"40%"} />
       </EyeSevenBox>
       <StatsTable />
 
@@ -115,7 +97,7 @@ const Home: NextPage = () => {
         `}
       </Script> */}
     </Container>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

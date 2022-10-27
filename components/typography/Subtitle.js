@@ -1,13 +1,13 @@
 import styled from "styled-components"
 
 const Box = styled.div`
-  font-size: 2.1em;
-  font-family: "Roboto";
+  font-size: 1.6em;
+  font-family: "Neucha";
   font-style: normal;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   font-weight: 300;
   @media (max-width: 1168px) {
-    font-size: 1.5em;
+    font-size: 1.1em;
   }
 `
 
