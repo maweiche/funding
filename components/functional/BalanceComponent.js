@@ -4,7 +4,7 @@ import {useBalance} from 'wagmi'
 const Container = styled.div`
     display: flex;
     font-size: 0.9em;
-    font-weight: 500;
+    font-weight: 400;
     font-family: 'Gemunu Libre';
 `
 const BalanceComponent = ({token, address, amount}) => {
@@ -13,7 +13,6 @@ const BalanceComponent = ({token, address, amount}) => {
         addressOrName: address,
         token: token,
       })
-
      // TBD Finish tier - format number to 2 decimals, compare amount to balance, color red if insufficient
 
     return <Container>

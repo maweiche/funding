@@ -21,8 +21,8 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     flex-wrap: nowrap;
-    height: 400px;
-    width: 35%;
+    max-height: 450px;
+    width: 32%;
     max-width: 500px;
     padding: 2%;
     margin-top: 3%;

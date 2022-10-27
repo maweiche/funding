@@ -4,6 +4,7 @@ import Lottie from 'react-lottie';
 import { useApp } from '../utils/appContext';
 import blockchainAnimation from '../../data/blockchainAnimation.json'
 import streamAnimation from '../../data/streamAnimation.json'
+import {useState} from 'react';
 
 const animOptions = {
     loop: true,
@@ -46,19 +47,12 @@ const Title = styled.div`
 `
 
 const Col = styled.div`
+    background: ${props => props.color};
     display: flex;
     flex-direction: column;
     align-items: center;
     border-radius: 45px;
     margin: 1%;
-`
-// TBD unnecessary moving with components
-const ActStrCol = styled(Col)`
-    background: linear-gradient(108.23deg, rgba(0, 16, 4, 0.7) -44.23%, rgba(0, 16, 4, 0) 123%);
-`
-
-const ActCol = styled(Col)`
-    background: linear-gradient(251.95deg, rgba(16, 0, 13, 0.7) -51.44%, rgba(0, 16, 4, 0) 131.39%);
 `
 
 const TextBox = styled.div`
@@ -99,11 +93,21 @@ const text = {
 }
 
 const ProjectTypeSelection = () => {
+    const [standColor, setStandColor] = useState('radial-gradient(111.37% 111.37% at 50% 50%, rgba(137, 0, 171, 0.04) 0%, rgba(5, 0, 233, 0) 97.7%)')
+    const [streamColor, setStreamColor] = useState('none')
     const { appState, setAppState } = useApp();
     const { pType } = { ...appState };
 
-    const handleType = (type) => {
+    const handleStandType = (type,color) => {
         setAppState({ ...appState, pType: type });
+        setStandColor(color)
+        setStreamColor('none')
+    }
+
+    const handleStreamType = (type,color) => {
+        setAppState({ ...appState, pType: type });
+        setStandColor('none')
+        setStreamColor(color)
     }
     // Set type to 0 for crowdfunding, 1 for streaming, tbd save type to the context, well POST it to Moralis
 
@@ -111,25 +115,20 @@ const ProjectTypeSelection = () => {
         <Title>Funding type (out of scope now)</Title>
         <Title>TBD UI + Some animation</Title>
        <Row> 
-       {pType === 'Standard' ?  
-            <ActCol>
-                <Clickable onClick={()=>{handleType('Standard')}}><Lottie height={150} width={150} options={animOptions} /><TypeTitle>Standard</TypeTitle></Clickable>
+            <Col color={standColor}>
+                <Clickable onClick={()=>{handleStandType('Standard','radial-gradient(111.37% 111.37% at 50% 50%, rgba(137, 0, 171, 0.05) 0%, rgba(5, 0, 233, 0) 97.7%)')}}>
+                    <Lottie height={150} width={150} options={animOptions} />
+                    <TypeTitle>Standard</TypeTitle>
+                </Clickable>
                 <TextBox><FaqCard answer={text.a1} point1={text.p11} point2={text.p12} point3={text.p13} point4={text.p14}/></TextBox>
-            </ActCol>:
-            <Col>
-                <Clickable onClick={()=>{handleType('Standard')}}><Lottie height={150} width={150} options={animOptions} /><TypeTitle>Standard</TypeTitle></Clickable>
-                <TextBox><FaqCard answer={text.a1} point1={text.p11} point2={text.p12} point3={text.p13} point4={text.p14}/></TextBox>
-            </Col>}
-
-        {pType === 'Stream' ?    
-            <ActStrCol>
-                <Clickable onClick={()=>{handleType('Stream')}}><Lottie height={150} width={150} options={streamOptions} /><TypeTitle>Stream</TypeTitle></Clickable>
+            </Col>
+            <Col color={streamColor}>
+                <Clickable onClick={()=>{handleStreamType('Stream','radial-gradient(111.37% 111.37% at 50% 50%, rgba(0, 119, 12, 0.06) 0%, rgba(5, 0, 233, 0) 97.7%)')}}>
+                    <Lottie height={150} width={150} options={streamOptions} />
+                    <TypeTitle>Stream</TypeTitle>
+                </Clickable>
                 <TextBox><FaqCard answer={text.a1} point1={text.p21} point2={text.p22} point3={text.p23} point4={text.p24}/></TextBox>
-            </ActStrCol> : 
-            <Col>
-                <Clickable onClick={()=>{handleType('Stream')}}><Lottie height={150} width={150} options={streamOptions} /><TypeTitle>Stream</TypeTitle></Clickable>
-                <TextBox><FaqCard answer={text.a1} point1={text.p21} point2={text.p22} point3={text.p23} point4={text.p24}/></TextBox>
-            </Col>}
+            </Col>
         </Row>
     </Container>
 }

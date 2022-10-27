@@ -6,7 +6,7 @@ import axios from 'axios'
 import Tag from "../components/typography/Tag"
 import SectionTitle from "../components/typography/SectionTitle"
 import ImgSkeleton from "../components/skeletons/ImgSkeleton"
-import {CancelIcon } from '../components/icons/Common'
+import {CancelIcon, VerifiedIcon } from '../components/icons/Common'
 import Tooltip from '../components/Tooltip'
 import { CanceledTypo } from '../components/icons/Typography'
 import ProjectDetailRight from "./ProjectDetailRight"
@@ -15,6 +15,7 @@ import donation from '../abi/donation.json'
 import { useContractWrite, useNetwork, useContractEvent, usePrepareContractWrite } from 'wagmi'
 
 const Container = styled.div`
+  position: relative;
   margin-top: 5%;
 `
 
@@ -35,6 +36,13 @@ const DetailBox = styled.div`
     margin: 1%;
     padding: 1%;
   }
+`
+
+const AbsoluteBox = styled.div`
+  position: absolute;
+  left: -20px;
+  top: -30px;
+  z-index: 1;
 `
 
 const Categories = styled.div`
@@ -95,8 +103,10 @@ const CanceledBox = styled.div`
   }
 `
 // @param "my" indicates whether component visualized in context of MyProjects or Landing page
-const ProjectDetail = ({ objectId, pid, title, description, category, subcategory, image, bookmarks, my }) => {
+const ProjectDetail = ({ objectId, pid, title, description, category, subcategory, image, bookmarks, verified, my }) => {
   const [cancelTooltip, setCancelTooltip] = useState(false)
+  const [verifiedTooltip, setVerifiedTooltip] = useState(false)
+  const [nonVerifiedTooltip, setNonVerifiedTooltip] = useState(false)
   const [canceled, setCanceled] = useState(false)
   const [error, setError] = useState(false)
   const { chain } = useNetwork()
@@ -144,8 +154,15 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
   return  <Container>
     {my ? <SectionTitle title={'Active project'} subtitle={title} /> : <SectionTitle title={"Project detail"} subtitle={title} />}
     <DetailBox>
+      {verifiedTooltip && <Tooltip text={'Verified by Eyeseek team'} />}
+      {nonVerifiedTooltip && <Tooltip text={'Not verified'} />}
+      <AbsoluteBox>
+      {verified ?
+        <div onMouseEnter={() => { setVerifiedTooltip(true) }} onMouseLeave={() => { setVerifiedTooltip(false) }}><VerifiedIcon width={70}/></div> :
+        <></>
+      }
       {isSuccess && <>Success</>}
-      {isError && <>Error</>}
+      {isError && <>Error</>}</AbsoluteBox>
       {canceled && <CanceledBox><CanceledTypo width={400} /></CanceledBox>}
       {my && <ActionPanel>
         {!canceled && !isLoading ? <>
