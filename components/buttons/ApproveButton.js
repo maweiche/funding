@@ -1,13 +1,13 @@
 import {useState} from 'react'
 import Button from './Button'
-import { useContractWrite, usePrepareContractWrite, useAccount, useContractRead, useContractEvent } from 'wagmi'
+import { useContractWrite, usePrepareContractWrite, useAccount, useContractEvent } from 'wagmi'
 import styled from 'styled-components'
 import token from '../../abi/token.json'
 import Rainbow from './Rainbow'
 import Lottie from "react-lottie";
 import successAnimation from '../../data/successAnimation.json'
-import errorAnimation from '../../data/errorAnimation.json'
 import smallLoading from '../../data/smallLoading.json'
+import { BigNumber,utils } from 'ethers'
 
 // Animation configs 
 const okAnim = {
@@ -18,16 +18,6 @@ const okAnim = {
         preserveAspectRatio: 'xMidYMid slice'
     }
 };
-
-const errAnim = {
-    loop: false,
-    autoplay: true,
-    animationData: errorAnimation,
-    rendererSettings: {
-        preserveAspectRatio: 'xMidYMid slice'
-    }
-};
-
 const loadingAnim = {
     loop: true,
     autoplay: true,
@@ -48,41 +38,46 @@ const ApprovalBox = styled.div`
     z-index: 50;
 `
 
-const ApButton = styled(Button)`
-    border: 1px solid green;
+const Approve = styled.div`
+    display: flex;
+    flex-direction: column;
+    position: relative;
 `
 
-const ErButton = styled(Button)`
-    border: 1px solid red;
+const Amount = styled.div`
+    font-size: 0.8em;
+    position: absolute;
+    color: white;
+    right: 0;
+    top: -3px;
+    font-family: 'Gemunu Libre';
 `
 
-const LButton = styled(Button)`
-    border: 1px solid grey;
-`
-
-const ApproveButton = (amount) => {
+const ApproveButton = (sum) => {
     const { address } = useAccount()
     const [ev, setEv] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [bColor, setBColor] = useState('green')
+    // Add other USDC contracts to the testnet
+    // TBD Aproved decimals format / 18
+    
+
+    const decimals = 18;
+    const input = (sum.sum);
+    const amount = BigNumber.from(input).mul(BigNumber.from(10).pow(decimals));
+
+    const dec = utils.formatUnits(amount, decimals);
 
     const listened = () => {
         setEv(true)
     }
-    const { config, error } = usePrepareContractWrite({
+    const { config } = usePrepareContractWrite({
         addressOrName: process.env.NEXT_PUBLIC_AD_TOKEN,
         contractInterface: token.abi,
         functionName: 'approve',
-        args: [process.env.NEXT_PUBLIC_AD_DONATOR, "5000"],
+        args: [process.env.NEXT_PUBLIC_AD_DONATOR, amount],
     })
 
-    const {data} = useContractRead({
-        addressOrName: process.env.NEXT_PUBLIC_AD_TOKEN,
-        contractInterface: token.abi,
-        functionName: 'allowance',
-        args: [address, process.env.NEXT_PUBLIC_AD_DONATOR]
-      })
-    
+
     useContractEvent({
         addressOrName: process.env.NEXT_PUBLIC_AD_TOKEN,
         contractInterface: token.abi,
@@ -91,12 +86,8 @@ const ApproveButton = (amount) => {
         once: true
       })
     
-    // TBD hardcoded value now
-    // TBD network check
-    // If amount < approval => Mark red styling
-    // If amount > approval => Mark green styling
 
-    const { isError, write } = useContractWrite(config)
+    const { write } = useContractWrite(config)
 
     const handleApprove = async () => {
         await write?.()
@@ -109,10 +100,12 @@ const ApproveButton = (amount) => {
             {!ev && loading && <><Lottie height={50} width={50} options={loadingAnim} /></>}
         </ApprovalBox>
         {!address && <Rainbow/>}
-        {error && <div>Invalid amount or network</div>}
         {address && 
-         <Button  width={'200px'} disabled={!write} onClick={() => handleApprove()} text={<>
-            {data && <>Approved: {data?.toString()} </>}</>} /> 
+         <Button 
+            width={'200px'} 
+            disabled={!write} 
+            onClick={() => handleApprove()} 
+            text={<Approve><div>Approve</div><Amount>${sum.sum}</Amount></Approve>} /> 
         }
     </Container>
 }
