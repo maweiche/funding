@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { useMoralisQuery } from 'react-moralis'
 
+import Share from "../../components/Share"
 import ProjectDetail from "../../sections/ProjectDetail"
 
 const Container = styled.div`
@@ -56,6 +57,7 @@ const Project: NextPage = () => {
   return (
     <>
       <Container>
+        <Share />
         <ProjectDetail 
           description={description} 
           title={title} 
