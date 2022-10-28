@@ -50,7 +50,8 @@ export const MainMilestoneContainer = styled.div`
   background: linear-gradient(132.28deg, rgba(47, 47, 47, 0.3) -21.57%, rgba(0, 0, 0, 0.261) 100%);
   border: 1px solid #3C3C3C;
   border-radius: 5px;
-  padding: 20px;
+  width: 100%;
+  padding: 5%;
   border-radius: 10px;
 `;
 

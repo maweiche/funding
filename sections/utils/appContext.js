@@ -10,15 +10,14 @@ export const AppProvider = (props) => {
     ],
     currency: [
       { title: "USDC", logo: "/icons/usdc.png", chainId: "", active: true },
-      { title: "USDT", logo: "/icons/usdt.png", chainId: "", active: false },
+    //Descoped temporarily  { title: "USDT", logo: "/icons/usdt.png", chainId: "", active: false },
     ],
     milestones: [],
     pTitle: "Default project title",
     pDesc: "",
-    pWeb: "",
-    pSocial: "",
+    pWeb: "https://www.d3vlibrary.com",
+    pSocial: "https://twitter.com/d3v_library",
     pType: "Standard", // Stream vs Standard
-    pm1: 0, // 1st milestone. More milestones will be added later
     cateogry: null,
     subcategory: null,
     filterCat: "All",

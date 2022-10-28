@@ -22,7 +22,7 @@ const Preferences = () => {
         const config = {
           headers: {
             "X-Parse-Application-Id": `${process.env.NEXT_PUBLIC_DAPP_ID}`,
-            "x-Parse-Master-Key": `${process.env.NEXT_PUBLIC_MORALIS}`
+            "x-Parse-Master-Key": `${process.env.MORALIS}`
           },
         };
         try {

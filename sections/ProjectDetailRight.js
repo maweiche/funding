@@ -5,7 +5,7 @@ import { useContractRead } from 'wagmi'
 import Link from 'next/link'
 
 import ButtonAlt from "../components/buttons/ButtonAlt"
-import Share from '../components/buttons/Share'
+import Socials from '../components/buttons/Socials'
 import Bookmark from '../components/functional/Bookmark'
 
 
@@ -144,7 +144,7 @@ const ProjectDetailRight = ({pid, objectId, bookmarks}) => {
             <Row title={microInvolved} desc={`microfunds active`} color="white" />
             <FlexRow>
                 <Row title={days} desc={`days to go`} color="white" />
-                <Share fbQuote='fbQuote' twTitle='twTitle' twVia='twVia' liTitle='linked title' liSum='linked summary' liSource='linked source' />
+                <Socials/>
             </FlexRow>
         </div>
         <ButtonBox>
