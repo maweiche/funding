@@ -102,7 +102,8 @@ const Create = ({ setStep }) => {
                 "type": pType,
                 "owner": address,
                 "state": 0, // Always 0 for new projects
-                "chain": "mumbai"
+                "chain": "mumbai",
+                "bookmarks": [address] // Add owner to bookmark
             }, head)
             console.log(res.data)
             setOid(res.data.objectId)

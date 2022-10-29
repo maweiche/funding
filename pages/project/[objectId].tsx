@@ -73,7 +73,9 @@ const Project: NextPage = () => {
           bookmarks={bookmarks}
           verified={verified}
           state={status}
-          pid={pid} />
+          pid={pid}
+          objectId={objectId}
+        />
       </Container>
     </>
   )

@@ -127,6 +127,13 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
     args: [pid],
   })
 
+  const moralisApiConfig = {
+    headers: {
+      "X-Parse-Application-Id": `${process.env.NEXT_PUBLIC_DAPP_ID}`,
+      "Content-Type": "application/json"
+    }
+  }
+
   const { isSuccess, isError,isLoading, write } = useContractWrite(config)
 
   const useEv = (e) => {
@@ -147,19 +154,25 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
     await cancelMoralis(oid);
   }
 
-
+  const handleCancelNotifications = async () => {
+    if (bookmarks) {
+        bookmarks.forEach(async (bookmark) => {
+            await axios.post(`${process.env.NEXT_PUBLIC_DAPP}/classes/Notification`, {
+            'title': 'Project Canceled',
+            'description': `Project ${title} was cancelled before the deadline by the owner. All resources were refunded to the backers.`,
+            'type': 'projectCanceled',
+            'user': bookmark
+            }, moralisApiConfig)
+        })
+    }
+  }
 
   const cancelMoralis = async (oid) => {
-    const config = {
-      headers: {
-        "X-Parse-Application-Id": `${process.env.NEXT_PUBLIC_DAPP_ID}`,
-        "Content-Type": "application/json"
-      }
-    }
     try {
-      const res = await axios.put(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project/${oid}`, { 'state': 4 }, config)
+      const res = await axios.put(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project/${oid}`, { 'state': 4 }, moralisApiConfig)
       console.log(res)
-      setCanceled(true)
+      setCanceled(true);
+      handleCancelNotifications();
     } catch (error) {
       console.log(error)
       setError(true)
@@ -201,7 +214,7 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
       </LeftPart>
       {state === 1 ?   <ProjectDetailRight pid={pid} objectId={objectId} bookmarks={bookmarks} /> : <Inactive>Inactive</Inactive>}
     </DetailBox>
-  </Container> 
+  </Container>
 }
 
 export default ProjectDetail
