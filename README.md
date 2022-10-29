@@ -54,6 +54,6 @@ git clone with Github CLI     gh repo clone YOUR_USERNAME/funding
 
 ```sh
 1. Open the project in VS Code
-2. npm install
-3. npm run dev
+2. yarn install
+3. yarn dev
 ```

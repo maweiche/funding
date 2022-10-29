@@ -2,6 +2,7 @@ import Head from "next/head";
 import "../styles/globals.css";
 
 //Web3 auth
+import styled from "styled-components";
 import { Chain, createClient, configureChains, WagmiConfig } from "wagmi";
 import { AppProvider } from "../sections/utils/appContext";
 import { alchemyProvider } from "wagmi/providers/alchemy";
@@ -12,6 +13,12 @@ import { MoralisProvider } from "react-moralis";
 import "@rainbow-me/rainbowkit/styles.css";
 import Header from "../sections/Header";
 import Loading from "../components/Loading";
+
+const Container = styled.div`
+  color: white;
+  background: #141414;
+  font-family: Inter, sans-serif !important;
+`
 
 const mumbai: Chain = {
   id: 80_001,
@@ -52,7 +59,7 @@ type AppProps = {
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <Container>
       <WagmiConfig client={client}>
         <MoralisProvider appId="M7wQiYLcbda4yH7hVX2W5ksbJo4xS74oNVKGZk0C" serverUrl="https://wgdujpk9pprx.grandmoralis.com:2053/server">
           <SessionProvider session={pageProps.session} refetchInterval={10000}>
@@ -81,6 +88,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           </SessionProvider>
         </MoralisProvider>
       </WagmiConfig>
-    </>
+    </Container>
   );
 }

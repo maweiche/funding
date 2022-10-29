@@ -57,6 +57,7 @@ const Col = styled.div`
     align-items: center;
     border-radius: 45px;
     margin: 1%;
+    width: 50%;
     @media (max-width: 768px) {
         width: 100%;
     }
@@ -74,6 +75,7 @@ const Col = styled.div`
 const TextBox = styled.div`
     display: flex;
     font-size: 0.9em;
+    height: 100%;
 `
 const Clickable = styled.div`
     display: flex;
@@ -146,7 +148,7 @@ const ProjectTypeSelection = () => {
                     <Lottie height={150} width={150} options={streamOptions} />
                     <TypeTitle color={streamTitleColor}>Stream</TypeTitle>
                 </Clickable>
-                <TextBox><FaqCard answer={text.a1} point1={text.p21} point2={text.p22} point3={text.p23} point4={text.p24} /></TextBox>
+                <TextBox><FaqCard answer={text.a2} point1={text.p21} point2={text.p22} point3={text.p23} point4={text.p24} /></TextBox>
             </Col>
         </Row>
     </Container>

@@ -1,11 +1,20 @@
 import { FormStyle, InputContainer, TellContainer, Mandatory } from "./StyleWrapper";
+import {useState} from 'react'
 import { useApp } from "../../utils/appContext";
 import { MainContainer, ButtonContainer, NextButton, DisButton } from "../Category/StyleWrapper";
 import SectionTitle from "../../../components/typography/SectionTitle";
+import {useMoralisFile} from 'react-moralis'
+import FileUploader from '../../../helpers/FileUploader'
+import Image from "next/image";
 
 const TellStory = ({ setStep }) => {
   const { appState, setAppState } = useApp();
   const { pTitle, pDesc, pWeb, pSocial } = { ...appState };
+  const [selectedFile, setSelectedFile] = useState(null);
+  const {
+    moralisFile,
+    saveFile,
+  } = useMoralisFile();
 
 
   const story_form = [
@@ -25,7 +34,12 @@ const TellStory = ({ setStep }) => {
   }
 
   // TBD all fields mandatory
-  // TBD validate HTTPS links
+  // TBD iamge upload not handled correctly
+
+  const uploadImage = () => {
+    saveFile("batman.jpeg", file);
+  }
+  
 
   return (
     <MainContainer>
@@ -33,9 +47,10 @@ const TellStory = ({ setStep }) => {
       <TellContainer>
         <FormStyle method="post" action="" enctype="multipart/form-data">
           <label className="custom-file-upload">
-            <input className="input-file" type="file" name="files[]" id="file" />
-            <span className="input-span">Image Upload (IPFS TBD)</span>
-
+            <span className="input-span">Image Upload (TBD)</span>
+                     <FileUploader
+                       onFileSelect={(file) => setSelectedFile(file)}
+                />
           </label>
           {story_form.map((sf) => {
             const { title, description, text_field, change, p } = sf;
