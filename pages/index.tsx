@@ -80,6 +80,9 @@ const Home: NextPage = () => {
       <EyeSevenBox>
       <Image src={Eye7} alt="Eye7" width={"400%"} height={"40%"} />
       </EyeSevenBox>
+
+
+
       <Footer />
       {/* <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-TKH8YE4L07"
