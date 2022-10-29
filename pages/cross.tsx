@@ -50,14 +50,13 @@ const Cross: NextPage = () => {
   });
 
   const txHash: string = "Some transaction hash";
-  const txStatus: GMPStatusResponse = await sdkRecovery.queryTransactionStatus(txHash);
 
 
   /// Crosschain functionality playground, separated from core scope
   /// Under development
 
   // Get token address from the gateway contract
-  const tokenAddress = await srcGatewayContract.tokenAddresses("aUSDC");
+ // const tokenAddress = await srcGatewayContract.tokenAddresses("aUSDC");
 
   // 1. Approve contract spending for the srouce contract
   // string calldata destinationChain,// Mumbai

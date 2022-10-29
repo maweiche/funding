@@ -35,6 +35,7 @@ const TellStory = ({ setStep }) => {
           <label className="custom-file-upload">
             <input className="input-file" type="file" name="files[]" id="file" />
             <span className="input-span">Image Upload (IPFS TBD)</span>
+
           </label>
           {story_form.map((sf) => {
             const { title, description, text_field, change, p } = sf;

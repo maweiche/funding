@@ -25,6 +25,7 @@ const Project: NextPage = () => {
       "verified",
       "state",
       "pid"
+      //@ts-ignore
     ]), [], { autoFetch: true },
   );
 
@@ -62,6 +63,7 @@ const Project: NextPage = () => {
   return (
     <>
       <Container>
+      {/* @ts-ignore */}
         <ProjectDetail 
           description={description} 
           title={title} 

@@ -23,13 +23,16 @@ const Stream: NextPage = () => {
     const flowRate = 1;
     try {
       const createFlowOperation = sf.cfaV1.createFlow({
+        //@ts-ignore
         receiver: address,
+        //@ts-ignore
         flowRate: flowRate,
         superToken: DAIx
       });
 
       console.log("Creating your stream...");
       console.log(signer)
+      //@ts-ignore
       const result = await createFlowOperation.exec(signer);
       console.log(result);
 

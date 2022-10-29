@@ -8,6 +8,7 @@ const InputWrapper = styled.div`
   display: flex;
   align-items: center;
   padding: 2%;
+  color: white;
   font-family: "Roboto";
   @media (max-width: 500px) {
     flex-direction: column;

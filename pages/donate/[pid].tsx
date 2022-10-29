@@ -178,9 +178,10 @@ const Donate: NextPage = () => {
   },[]);
 
   /// TBD after axelar, handle mutlichain conditions
-
+//@ts-ignore
   const handleChain = (chain,id) => {
     setBlockchain(chain)
+    //@ts-ignore
     switchNetwork(id)
   }
 
@@ -191,17 +192,17 @@ const Donate: NextPage = () => {
     setReward2(false);
   }
 
-  const changeRewardNo = async (r) => {
+  const changeRewardNo = async (r:boolean) => {
     await rewardFalse();
     await setRewardNo(r)
   }
 
-  const changeReward1 = async (r) => {
+  const changeReward1 = async (r:boolean) => {
     await rewardFalse();
     await setReward1(r)
   }
 
-  const changeReward2 = async (r) => {
+  const changeReward2 = async (r:boolean) => {
     await rewardFalse();
     await setReward2(r)
   }
