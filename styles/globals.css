@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Gemunu+Libre:wght@100;200;300;400;500;700&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Staatliches&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gemunu+Libre:wght@100;200;300;400;500;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
 
 html,
 body {
@@ -10,6 +10,7 @@ body {
   margin: 0;
   color: white;
   background: #141414;
+  font-family: Inter, sans-serif !important;
 }
 
 a {
@@ -30,7 +31,6 @@ a {
     background: #141414;
   }
 }
-
 
 /* Position and sizing of burger button */
 .bm-burger-button {
@@ -97,4 +97,14 @@ Note: Beware of modifying this element as it can break the animations - you shou
 /* Styling of overlay */
 .bm-overlay {
   background: rgba(0, 0, 0, 0.3);
+}
+
+.select-category {
+  width: 100%;
+  color: black;
+}
+
+* {
+  margin: 0;
+  padding: 0;
 }
