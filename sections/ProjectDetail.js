@@ -102,8 +102,16 @@ const CanceledBox = styled.div`
     top: 25%;
   }
 `
+
+const Inactive = styled.div`
+  position: absolute;
+  display: flex;
+  font-size: 2em;
+  font-family: 'Neucha';
+  color: #d90000;
+`
 // @param "my" indicates whether component visualized in context of MyProjects or Landing page
-const ProjectDetail = ({ objectId, pid, title, description, category, subcategory, image, bookmarks, verified, my }) => {
+const ProjectDetail = ({ objectId, pid, title, description, category, subcategory, image, bookmarks, verified, my, state }) => {
   const [cancelTooltip, setCancelTooltip] = useState(false)
   const [verifiedTooltip, setVerifiedTooltip] = useState(false)
   const [nonVerifiedTooltip, setNonVerifiedTooltip] = useState(false)
@@ -121,18 +129,25 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
 
   const { isSuccess, isError,isLoading, write } = useContractWrite(config)
 
+  const useEv = (e) => {
+    // TBD push notifications to all bookmarked addresses
+    console.log('Push notification')
+  }
+
   useContractEvent({
     addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
     contractInterface: donation.abi,
     eventName: 'Cancelled',
-    listener: () => setSuccess(true),
+    listener: () => useEv(e),
     once: true
   })
 
   const cancel = async (oid) => {
     write?.()
-   await cancelMoralis(oid);
+    await cancelMoralis(oid);
   }
+
+
 
   const cancelMoralis = async (oid) => {
     const config = {
@@ -161,7 +176,6 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
         <div onMouseEnter={() => { setVerifiedTooltip(true) }} onMouseLeave={() => { setVerifiedTooltip(false) }}><VerifiedIcon width={70}/></div> :
         <></>
       }
-      {isSuccess && <>Success</>}
       {isError && <>Error</>}</AbsoluteBox>
       {canceled && <CanceledBox><CanceledTypo width={400} /></CanceledBox>}
       {my && <ActionPanel>
@@ -185,7 +199,7 @@ const ProjectDetail = ({ objectId, pid, title, description, category, subcategor
         </Categories>
         <Desc>{description}</Desc>
       </LeftPart>
-      <ProjectDetailRight pid={pid} objectId={objectId} bookmarks={bookmarks} />
+      {state === 1 ?   <ProjectDetailRight pid={pid} objectId={objectId} bookmarks={bookmarks} /> : <Inactive>Inactive</Inactive>}
     </DetailBox>
   </Container> 
 }

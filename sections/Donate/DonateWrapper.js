@@ -23,7 +23,7 @@ const DonateWrapper = ({amountM, amountD, pid, blockchain}) => {
     const { address } = useAccount();
     const token = process.env.NEXT_PUBLIC_AD_TOKEN
     const [explorer, setExplorer] = useState('https://mumbai.polygonscan.com/tx/')
-
+    
     const { config, error } = usePrepareContractWrite({
         addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
         contractInterface: donation.abi,

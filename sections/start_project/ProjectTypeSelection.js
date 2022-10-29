@@ -110,7 +110,7 @@ const text = {
 
 const ProjectTypeSelection = () => {
     const [standColor, setStandColor] = useState('radial-gradient(111.37% 111.37% at 50% 50%, rgba(137, 0, 171, 0.04) 0%, rgba(5, 0, 233, 0) 97.7%)')
-    const [standTitleColor, setStandTitleColor] = useState('radial-gradient(111.37% 111.37% at 50% 50%, rgba(137, 0, 171, 0.04) 0%, rgba(5, 0, 233, 0) 97.7%)')
+    const [standTitleColor, setStandTitleColor] = useState('#00ff89')
     const [streamColor, setStreamColor] = useState('none')
     const [streamTitleColor, setStreamTitleColor] = useState('none')
     const { appState, setAppState } = useApp();

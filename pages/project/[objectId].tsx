@@ -23,6 +23,7 @@ const Project: NextPage = () => {
       "subcategory",
       "bookmarks",
       "verified",
+      "state",
       "pid"
     ]), [], { autoFetch: true },
   );
@@ -35,6 +36,7 @@ const Project: NextPage = () => {
   const [subcategory, setSubcategory] = useState(null)
   const [pid, setPid] = useState(null)
   const [bookmarks, setBookmarks] = useState([])
+  const [status, setStatus] = useState(0)
 
   const getData = async () => {
     try {
@@ -45,6 +47,7 @@ const Project: NextPage = () => {
       await setPid(fetchDetail[0].pid)
       await setBookmarks(fetchDetail[0].bookmarks)
       await setVerified(fetchDetail[0].verified)
+      await setStatus(fetchDetail[0].state)
 
     } catch (error) {
       console.log(error)
@@ -67,6 +70,7 @@ const Project: NextPage = () => {
           image={image} 
           bookmarks={bookmarks}
           verified={verified}
+          state={status}
           pid={pid} />
       </Container>
     </>

@@ -62,7 +62,7 @@ const ButtonBox = styled.div`
 `
 
 const ProjectDetailRight = ({pid, objectId, bookmarks}) => {
-    const [amBackers, setAmBackers] = useState("N/A")
+
 
     // TBD pid is not known
     // TBD Days not formatted
@@ -72,6 +72,7 @@ const ProjectDetailRight = ({pid, objectId, bookmarks}) => {
     var microInvolved = '0'
     var days = '0'
     var max = '0'
+    var backing ='0'
 
     const micros = useContractRead({
         addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
@@ -102,7 +103,7 @@ const ProjectDetailRight = ({pid, objectId, bookmarks}) => {
     const deadline = useContractRead({
         addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
         contractInterface: donation.abi,
-        functionName: 'getFuddDeadline',
+        functionName: 'getFundDeadline',
         chainId: 80001,
         args: [0],
         watch: false,
@@ -125,6 +126,19 @@ const ProjectDetailRight = ({pid, objectId, bookmarks}) => {
         max = cap.data.toString()
     }
 
+    const backers = useContractRead({
+        addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
+        contractInterface: donation.abi,
+        functionName: 'getBackers',
+        chainId: 80001,
+        args: [0],
+        watch: false,
+    })
+
+    if (backers.data) {
+        backing = backers.data.toString()
+    }
+
     const Row = ({ title, desc, right, color }) => {
         return (
             <RowBox>
@@ -136,11 +150,10 @@ const ProjectDetailRight = ({pid, objectId, bookmarks}) => {
         )
     }
 
-
     return <RightPart>
         <div>
             <Row title={bal} desc={`pledged of ${max} goal`} color="#00FFA3" right={<Bookmark objectId={objectId} bookmarks={bookmarks} />} />
-            <Row title={amBackers} desc={`backers`} color="white" />
+            <Row title={backing} desc={`backers`} color="white" />
             <Row title={microInvolved} desc={`microfunds active`} color="white" />
             <FlexRow>
                 <Row title={days} desc={`days to go`} color="white" />

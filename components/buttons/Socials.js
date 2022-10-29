@@ -20,6 +20,7 @@ import {
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 0.3px;
     margin-top: 2%;
     margin-bottom: 2%;
     margin-left: 2%;
@@ -37,22 +38,22 @@ import {
     return (
         <Row>
             <FacebookShareButton url={url} quote={title} hashtag={hashtags_facebook}>
-                <FacebookIcon size={32} round />
+                <FacebookIcon size={25} round />
             </FacebookShareButton>
             <TwitterShareButton url={url} title={title} hashtags={hashtags_twitter}>
-                <TwitterIcon size={32} round />
+                <TwitterIcon size={25} round />
             </TwitterShareButton>
             <LinkedinShareButton url={url} >
-                <LinkedinIcon size={32} round />
+                <LinkedinIcon size={25} round />
             </LinkedinShareButton>
             <RedditShareButton url={url} title={title}>
-                <RedditIcon size={32} round />
+                <RedditIcon size={25} round />
             </RedditShareButton>
             <TelegramShareButton url={url} title={title}>
-                <TelegramIcon size={32} round />
+                <TelegramIcon size={25} round />
             </TelegramShareButton>
             <WhatsappShareButton url={url} title={title}>
-                <WhatsappIcon size={32} round />
+                <WhatsappIcon size={25} round />
             </WhatsappShareButton>
         </Row>
     )

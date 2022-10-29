@@ -9,6 +9,7 @@ const Container = styled.div`
   padding: 0.5%;
   border-bottom: 1px solid #3a3a3a;
   margin-right: 60%;
+  width: 100%;
 `
 
 const Inactive = styled.div`
@@ -33,7 +34,7 @@ const Divider = styled.div`
 
 /// TBD connect it with parent
 
-const Tab = ({o1, o2, o3}) => {
+const Tab = ({o1, o2, o3, onClick}) => {
     const [active, setActive] = useState(o1)
 
     const handleChange = (v) => {
@@ -43,7 +44,7 @@ const Tab = ({o1, o2, o3}) => {
     const Item = ({o, text, onClick}) => {
         return <>{active === o ? <Active>{text}</Active> : <Inactive onClick={onClick}>{text}</Inactive>}</>
     }
-    return <Container>
+    return <Container onClick={onClick}>
         <Item o={o1} text={o1} onClick={() => handleChange(o1)}/>
             <Divider/>
         <Item o={o2} text={o2} onClick={() => handleChange(o2)}/>
