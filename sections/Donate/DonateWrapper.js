@@ -23,7 +23,7 @@ const DonateWrapper = ({amountM, amountD, pid, blockchain}) => {
     const { address } = useAccount();
     const token = process.env.NEXT_PUBLIC_AD_TOKEN
     const [explorer, setExplorer] = useState('https://mumbai.polygonscan.com/tx/')
-    
+
     const { config, error } = usePrepareContractWrite({
         addressOrName: process.env.NEXT_PUBLIC_AD_DONATOR,
         contractInterface: donation.abi,
@@ -43,21 +43,27 @@ const DonateWrapper = ({amountM, amountD, pid, blockchain}) => {
     }
     const sum = parseInt(amountM) + parseInt(amountD);
 
-    return <DonateButtonWrapper>
-        {address && 
-        <div>
-            <BalanceComponent address={address} token={token} amount={amountM + amountD} />
-            <ApprovedComponent address={address} />
-        </div>}
-        <ApproveButton sum={sum} />
-        <div>
-            {error ? <Button text='Donate' width={'200px'} error /> : <Button disabled={!write} onClick={() => handleSubmit?.()} text='Send funds' width={'200px'} />}
-        </div>
-        {isSuccess && 
-        <div>
-            <SuccessIcon width={20} />{explorer}{JSON.stringify(data)}
-        </div>}
-    </DonateButtonWrapper>
+    return <div>
+        <DonateButtonWrapper>
+            {isSuccess ? <SuccessIcon /> : (
+                <>
+                    {address &&
+                    <div>
+                        <BalanceComponent address={address} token={token} amount={amountM + amountD} />
+                        <ApprovedComponent address={address} />
+                    </div>}
+                    <ApproveButton sum={sum} />
+                </>
+            )}
+            <div>
+                {!isSuccess && (
+                    <>
+                        {error ? <Button text='Donate' width={'200px'} error /> : <Button disabled={!write} onClick={() => handleSubmit?.()} text='Send funds' width={'200px'} />}
+                    </>
+                )}{(!error && isSuccess) && <a href={`${explorer}${data.hash}`} target="_blank" rel="noopener noreferrer"><Button text="Transaction detail" /></a>}
+            </div>
+        </DonateButtonWrapper>
+    </div>
 }
 
 export default DonateWrapper
