@@ -68,7 +68,7 @@ export const Err = styled.div`
 
 export const Summary = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     background: black;
     padding: 4%;
@@ -102,6 +102,19 @@ export const SumHalf = styled.div`
     margin-left: 5%;
     margin-right: 5%;
     text-align: ${(props) => props.align};
+`
+
+export const SumRow = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+`
+
+export const SumHead = styled.div`
+    text-align: center;
+    font-family: 'Neucha';
+    font-size: 1.1em;
+    margin-bottom: 2%;
 `
 
 export const Divider = styled.div`

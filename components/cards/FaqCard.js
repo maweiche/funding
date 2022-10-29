@@ -2,10 +2,10 @@ import styled from 'styled-components'
 
 const Card = styled.div`
     padding: 2%;
-    padding-left: 4%;
+    padding-left: 17px;
     background: #000000;
     border: 1px solid #4E4E4E;
-    border-radius: 15px;
+    border-radius: 25px;
     max-height: 250px;
     @media (max-width: 1168px) {
         max-height: 200px;
@@ -21,7 +21,7 @@ const An = styled.div`
 const Li = styled.li`
     font-family: 'Roboto';
     font-style: normal;
-    font-weight: 200;
+    font-weight: 300;
     font-size: 0.8em;
     line-height: 29px;
     letter-spacing: 0.01em;

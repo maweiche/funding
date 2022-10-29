@@ -42,7 +42,7 @@ const Categories = () => {
 
     return <Container>
             {cats.map((cat) =>
-             <div>{cat === filterCat ? <Cat onClick={handleCat(cat)}>{cat}</Cat> : <ACat  onClick={()=>{handleCat(cat)}}>{cat}</ACat>}</div>
+             <div key={cat}>{cat === filterCat ? <Cat onClick={handleCat(cat)}>{cat}</Cat> : <ACat  onClick={()=>{handleCat(cat)}}>{cat}</ACat>}</div>
         )}
         </Container>
 }

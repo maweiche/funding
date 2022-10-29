@@ -6,7 +6,7 @@ import Lottie from "react-lottie";
 import SectionTitle from "../../../components/typography/SectionTitle";
 import { ButtonRow } from "../SetRewards/StyleWrapper";
 import { MainContainer, NextButton } from "../Category/StyleWrapper";
-import { RulesContainer, RulesTitle, WarningBox, Li, Row, ImageBox, Ok, TxStatus, LogRow, Ref, Summary, AnimBox, Error, InfoTag, SumItem, SumTitle, SumValue, SumHalf, Divider } from "./StyleWrapper";
+import { RulesContainer, RulesTitle, WarningBox, Li, Row, ImageBox, Ok, TxStatus, LogRow, Ref, Summary, AnimBox, Err, InfoTag, SumItem, SumTitle, SumValue, SumHalf, Divider, SumRow, SumHead } from "./StyleWrapper";
 import FaqCard from "../../../components/cards/FaqCard";
 import { BookIcon } from "../../../components/icons/Common";
 import donation from '../../../abi/donation.json'
@@ -161,9 +161,10 @@ const Create = ({ setStep }) => {
                         <FaqCard answer={texts.title} point1={texts.p1} point2={texts.p2} point3={texts.p3} point4={texts.p4} />
                     </Row>
                 </WarningBox>
-                TBD Add two pictures in summary
                 {address ? 
                 <Summary>
+                    <SumHead>Summary</SumHead>
+                  <SumRow>
                     <SumHalf align={'right'}>
                         <SumItem><SumTitle>Title</SumTitle><SumValue>{pTitle}</SumValue></SumItem>
                         <SumItem><SumTitle>Category</SumTitle><SumValue>{category}-{subcategory}</SumValue></SumItem>
@@ -179,23 +180,24 @@ const Create = ({ setStep }) => {
                         <SumItem><SumTitle>Reward #4</SumTitle><SumValue>{pm1} USDC</SumValue></SumItem>
                         <SumItem><SumTitle>Reward #5</SumTitle><SumValue> {address}</SumValue></SumItem>
                     </SumHalf>   
+                    </SumRow>
                 </Summary> : <div>Please connect your wallet</div>}
                 {!success ? <ButtonRow>
                     <NextButton onClick={handleBack}>Back</NextButton>
-                    {!isDisconnected ? <NextButton onClick={handleSubmit} disabled={!write}>Create project (contract)</NextButton> : <button>Connect</button>}
+                    {!isDisconnected ? <NextButton onClick={handleSubmit} disabled={!write}>Create project</NextButton> : <button>Connect</button>}
                 </ButtonRow> :
                     <TxStatus>Transaction status
                         <LogRow><InfoTag>Info</InfoTag> Project was initiated</LogRow>
                         <LogRow><InfoTag>Info</InfoTag> ...Waiting for blockchain confirmation</LogRow>
                         <LogRow><div>Blockchain status:</div>
-                            {ev && <Ok>Success: Transaction was processed</Ok>} {evErr && <Error>Failed: Transaction failed on chain</Error>}
+                            {ev && <Ok>Success: Transaction was processed</Ok>} {evErr && <Err>Failed: Transaction failed on chain</Err>}
                         </LogRow>
                         {ev && <LogRow><InfoTag>Info</InfoTag> Your project is created on <Link href={`/project/${oid}`}><Ref> this page</Ref></Link></LogRow>}
                         {ev && <AnimBox><Lottie height={100} width={100} options={okAnim} /></AnimBox>}
                         {evErr && <AnimBox><Lottie height={100} width={100} options={errAnim} /></AnimBox>}
                         {!ev && !evErr && <AnimBox><Lottie height={100} width={100} options={loadingAnim} /></AnimBox>}
                     </TxStatus>}
-                {error || evErr && <Error>Transaction failed, please contact support team to make it work</Error>}
+                {error || evErr && <Err>Transaction failed, please contact support team to make it work</Err>}
             </RulesContainer>
         </MainContainer>
     );

@@ -217,9 +217,9 @@ const Donate: NextPage = () => {
           <DonateOptionSub>Select your source of donation</DonateOptionSub>
         </DonateOptionTitle>
         <OptionItemWrapper>
-          <OptionReward onClick={()=>{handleChain('polygon', 80001)}}><Image src={polygon} alt="polygon" width={'40%'} height={'40%'} /></OptionReward>
-          <OptionReward><Image src={icon2} alt="fantom" width={'40%'} height={'40%'} /></OptionReward>
-          <OptionReward><Image src={icon3} alt="bnb" width={'40%'} height={'40%'} /></OptionReward>
+          <OptionReward onClick={()=>{handleChain('polygon', 80001)}}><Image src={polygon} alt="polygon" width={'40'} height={'40'} /></OptionReward>
+          <OptionReward><Image src={icon2} alt="fantom" width={'40'} height={'40'} /></OptionReward>
+          <OptionReward><Image src={icon3} alt="bnb" width={'40'} height={'40'} /></OptionReward>
         </OptionItemWrapper>
       </DonateOption>
       <DonateOption>
@@ -227,9 +227,9 @@ const Donate: NextPage = () => {
           <Row>Currency</Row><DonateOptionSub>Currently only USDC supported</DonateOptionSub>
         </DonateOptionTitle>
         <OptionItemWrapper>
-          <OptionReward><Image src={icon4} alt="usdc" width={'40%'} height={'40%'} /></OptionReward>
-          <DisReward><Image src={usdt} alt="usdt" width={'40%'} height={'42%'} /></DisReward>
-          <DisReward><Image src={dai} alt="dai" width={'40%'} height={'40%'} /></DisReward>
+          <OptionReward><Image src={icon4} alt="usdc" width={'40'} height={'40'} /></OptionReward>
+          <DisReward><Image src={usdt} alt="usdt" width={'40'} height={'42'} /></DisReward>
+          <DisReward><Image src={dai} alt="dai" width={'40'} height={'40'} /></DisReward>
         </OptionItemWrapper>
       </DonateOption>
       <DonateOption>

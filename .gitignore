@@ -41,3 +41,6 @@ pnpm-lock.yaml
 yarn.lock
 .map
 sw.js.map
+
+# Local Netlify folder
+.netlify
