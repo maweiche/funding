@@ -109,12 +109,11 @@ const text = {
 }
 
 const ProjectTypeSelection = () => {
-    const [standColor, setStandColor] = useState('radial-gradient(111.37% 111.37% at 50% 50%, rgba(137, 0, 171, 0.04) 0%, rgba(5, 0, 233, 0) 97.7%)')
+    const [standColor, setStandColor] = useState('radial-gradient(111.37% 111.37% at 50% 50%, rgba(0, 119, 12, 0.06) 0%, rgba(5, 0, 233, 0) 97.7%)')
     const [standTitleColor, setStandTitleColor] = useState('#00ff89')
     const [streamColor, setStreamColor] = useState('none')
     const [streamTitleColor, setStreamTitleColor] = useState('none')
     const { appState, setAppState } = useApp();
-    const { pType } = { ...appState };
 
     const handleStandType = (type) => {
         setAppState({ ...appState, pType: type });
@@ -131,7 +130,6 @@ const ProjectTypeSelection = () => {
         setStreamColor('radial-gradient(111.37% 111.37% at 50% 50%, rgba(137, 0, 171, 0.04) 0%, rgba(5, 0, 233, 0) 97.7%)')
         setStreamTitleColor('#e700ff')
     }
-    // Set type to 0 for crowdfunding, 1 for streaming, tbd save type to the context, well POST it to Moralis
 
     return <Container>
         <Title>Select funding type</Title>

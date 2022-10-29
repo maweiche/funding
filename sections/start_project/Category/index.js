@@ -38,12 +38,20 @@ const Category = ({ setStep }) => {
       ...provided,
       background: 'rgba(107, 255, 255, 0.05)',
       border: '1px solid #FFFFFF',
-      borderRadius: '15px'
+      borderRadius: '15px',
+      '&:hover': {
+        background: 'rgba(107, 255, 255, 0.05)',
+        cursor: 'pointer'
+      }
     }),
     option: (provided) => ({
       ...provided,
       fontSize: '0.9em',
       color: '#B0F6FF',
+      '&:hover': {
+        background: 'rgba(107, 255, 255, 0.05)',
+        cursor: 'pointer'
+      }
     }),
     singleValue: (provided) => ({
       ...provided,

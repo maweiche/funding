@@ -37,7 +37,9 @@ const EyeSevenBox = styled.div`
 
 const Home: NextPage = () => {
   const [projects, setProjects] = useState([]);
+  //@ts-ignore
   const { appState } = useApp();
+  //@ts-ignore
   const { filterCat } = { ...appState };
 
   useEffect(() => {
