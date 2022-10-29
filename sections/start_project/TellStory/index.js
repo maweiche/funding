@@ -9,8 +9,8 @@ const TellStory = ({ setStep }) => {
 
 
   const story_form = [
-    { title: "Project Title", p: pTitle,description: "Project title will help to find your project easily", text_field: false, change: (e) => setAppState((prev) => ({ ...prev, pTitle: e.target.value })) },
-    { title: "Short Description",  p: pDesc,description: "Give people a reason on why they should invest in your project", text_field: true, change: (e) => setAppState((prev) => ({ ...prev, pDesc: e.target.value })) },
+    { title: "Title", p: pTitle,description: "Project title will help to find your project easily", text_field: false, change: (e) => setAppState((prev) => ({ ...prev, pTitle: e.target.value })) },
+    { title: "Description",  p: pDesc,description: "Describe your project value in few sentences", text_field: true, change: (e) => setAppState((prev) => ({ ...prev, pDesc: e.target.value })) },
     { title: "Website",  p: pWeb,description: "Provide website with your project detail", text_field: false, change: (e) => setAppState((prev) => ({ ...prev, pWeb: e.target.value })) },
     { title: "Socials", p: pSocial, description: "Link to your primary socials. (Twitter, Instagram, Facebook, etc.)", text_field: false, change: (e) => setAppState((prev) => ({ ...prev, pSocial: e.target.value })) },
   ];

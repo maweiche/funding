@@ -4,7 +4,7 @@ import Lottie from 'react-lottie';
 import { useApp } from '../utils/appContext';
 import blockchainAnimation from '../../data/blockchainAnimation.json'
 import streamAnimation from '../../data/streamAnimation.json'
-import {useState} from 'react';
+import { useState } from 'react';
 
 const animOptions = {
     loop: true,
@@ -38,6 +38,10 @@ const Row = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    @media (max-width: 768px) {
+        width: 100%;
+        flex-wrap: wrap;
+    }
 `
 
 const Title = styled.div`
@@ -53,11 +57,22 @@ const Col = styled.div`
     align-items: center;
     border-radius: 45px;
     margin: 1%;
+    @media (max-width: 768px) {
+        width: 100%;
+    }
+    animation: fadeIn 0.7s;
+    @keyframes fadeIn {
+        0% {
+        opacity: 0;
+        }
+        100% {
+        opacity: 1;
+        }
+    }
 `
 
 const TextBox = styled.div`
     display: flex;
-    padding: 5%;
     font-size: 0.9em;
 `
 const Clickable = styled.div`
@@ -77,6 +92,7 @@ const TypeTitle = styled.div`
     font-size: 1.3em;
     font-family: 'Neucha';
     margin-top: 5%;
+    color: ${props => props.color};
 `
 
 const text = {
@@ -88,46 +104,51 @@ const text = {
     a2: 'Recommended for already built projects looking to fund open-source or non-profit activities.',
     p21: 'Single-chain payment streaming',
     p22: 'Supported only on polygon',
-    p23: 'p3',
-    p24: 'p4',
+    p23: 'Payment in super token (Wrapped ERC20)',
+    p24: 'Powered by Superfluid',
 }
 
 const ProjectTypeSelection = () => {
     const [standColor, setStandColor] = useState('radial-gradient(111.37% 111.37% at 50% 50%, rgba(137, 0, 171, 0.04) 0%, rgba(5, 0, 233, 0) 97.7%)')
+    const [standTitleColor, setStandTitleColor] = useState('#00ff89')
     const [streamColor, setStreamColor] = useState('none')
+    const [streamTitleColor, setStreamTitleColor] = useState('none')
     const { appState, setAppState } = useApp();
     const { pType } = { ...appState };
 
-    const handleStandType = (type,color) => {
+    const handleStandType = (type) => {
         setAppState({ ...appState, pType: type });
-        setStandColor(color)
+        setStandColor('radial-gradient(111.37% 111.37% at 50% 50%, rgba(0, 119, 12, 0.06) 0%, rgba(5, 0, 233, 0) 97.7%)')
+        setStandTitleColor('#00ff89')
         setStreamColor('none')
+        setStreamTitleColor('none')
     }
 
-    const handleStreamType = (type,color) => {
+    const handleStreamType = (type) => {
         setAppState({ ...appState, pType: type });
         setStandColor('none')
-        setStreamColor(color)
+        setStandTitleColor('none')
+        setStreamColor('radial-gradient(111.37% 111.37% at 50% 50%, rgba(137, 0, 171, 0.04) 0%, rgba(5, 0, 233, 0) 97.7%)')
+        setStreamTitleColor('#e700ff')
     }
     // Set type to 0 for crowdfunding, 1 for streaming, tbd save type to the context, well POST it to Moralis
 
     return <Container>
-        <Title>Funding type (out of scope now)</Title>
-        <Title>TBD UI + Some animation</Title>
-       <Row> 
+        <Title>Select funding type</Title>
+        <Row>
             <Col color={standColor}>
-                <Clickable onClick={()=>{handleStandType('Standard','radial-gradient(111.37% 111.37% at 50% 50%, rgba(137, 0, 171, 0.05) 0%, rgba(5, 0, 233, 0) 97.7%)')}}>
+                <Clickable onClick={() => { handleStandType('Standard') }}>
                     <Lottie height={150} width={150} options={animOptions} />
-                    <TypeTitle>Standard</TypeTitle>
+                    <TypeTitle color={standTitleColor}>Standard</TypeTitle>
                 </Clickable>
-                <TextBox><FaqCard answer={text.a1} point1={text.p11} point2={text.p12} point3={text.p13} point4={text.p14}/></TextBox>
+                <TextBox><FaqCard answer={text.a1} point1={text.p11} point2={text.p12} point3={text.p13} point4={text.p14} /></TextBox>
             </Col>
             <Col color={streamColor}>
-                <Clickable onClick={()=>{handleStreamType('Stream','radial-gradient(111.37% 111.37% at 50% 50%, rgba(0, 119, 12, 0.06) 0%, rgba(5, 0, 233, 0) 97.7%)')}}>
+                <Clickable onClick={() => { handleStreamType('Stream') }}>
                     <Lottie height={150} width={150} options={streamOptions} />
-                    <TypeTitle>Stream</TypeTitle>
+                    <TypeTitle color={streamTitleColor}>Stream</TypeTitle>
                 </Clickable>
-                <TextBox><FaqCard answer={text.a1} point1={text.p21} point2={text.p22} point3={text.p23} point4={text.p24}/></TextBox>
+                <TextBox><FaqCard answer={text.a1} point1={text.p21} point2={text.p22} point3={text.p23} point4={text.p24} /></TextBox>
             </Col>
         </Row>
     </Container>

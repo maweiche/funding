@@ -68,12 +68,44 @@ export const Err = styled.div`
 
 export const Summary = styled.div`
     display: flex;
-    flex-direction: column;
-    text-align: left;
+    flex-direction: row;
+    justify-content: center;
     background: black;
-    font-family: 'Roboto';
-    padding: 5%;
+    padding: 4%;
+    border-radius: 45px;
+    margin: 2%;
     font-size: 1em;
+`
+
+export const SumItem = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2%;
+`
+
+export const SumTitle = styled.div`
+    font-weight: 300;
+    font-size: 0.8em;
+    font-style: italic;
+    font-family: 'Roboto';
+    opacity: 0.9;
+`
+
+export const SumValue = styled.div`
+    font-weight: 500;
+    color: #B0F6FF;
+    font-size: 0.95em;
+    font-family: 'Neucha';
+`
+
+export const SumHalf = styled.div`
+    margin-left: 5%;
+    margin-right: 5%;
+    text-align: ${(props) => props.align};
+`
+
+export const Divider = styled.div`
+    align-self: center;
 `
 
 export const TxStatus = styled.div`

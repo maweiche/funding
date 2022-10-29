@@ -18,3 +18,20 @@ export const RewardContainer = styled.div`
   padding-right: 18%;
   margin-top: 3%;
 `
+export const TabRow = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`
+
+export const TooltipBox = styled.div`
+  position: absolute;
+  right: 0;
+  width: 100%;
+  margin-top: 3%;
+`
+
+export const IconBox = styled.div`
+  margin-left: 2px;
+`

@@ -46,14 +46,10 @@ const Line = styled.div`
   margin-left: 10px;
   margin-right: 10px;
   background: #c8c8c8;
-  animation: fadeIn 0.5s;
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+  @media (max-width: 968px) {
+    width: 20px;
+    margin: 0;
+    margin-top: 20px;
   }
 `
 

@@ -1,8 +1,10 @@
 import { useApp } from "../../utils/appContext";
-import { TellContainer, InputContainer,Mandatory } from "../TellStory/StyleWrapper";
+import InputContainer from '../../../components/form/InputContainer'
+import { TellContainer,Mandatory } from "../TellStory/StyleWrapper";
 import { ImageContainer, MilestoneContainer, MilestoneTitle, MainMilestoneContainer, MilestoneHeader, CancelButton, Label, SelectionWrapper } from "./StyleWrapper";
 import { ButtonContainer, DisButton, MainContainer, NextButton } from "../Category/StyleWrapper";
 import ImageSelect from "../../../components/ImageSelect";
+import SectionTitle from "../../../components/typography/SectionTitle";
 
 const RenderBlockchain = () => {
   const { appState, setAppState } = useApp();
@@ -56,7 +58,7 @@ const RenderCurrency = () => {
 
 const RenderMilestones = () => {
   const { appState, setAppState } = useApp();
-  const { milestones, pm1 } = appState;
+  const { milestones } = appState;
 
   const handleAddMilestone = () => {
     const temp = {
@@ -67,7 +69,7 @@ const RenderMilestones = () => {
   };
 
   if (milestones.length === 0) {
-    return <NextButton onClick={handleAddMilestone}>Add a milestone</NextButton>;
+    return <NextButton onClick={handleAddMilestone}>Add funding goals</NextButton>;
   }
 
   const handleRemoveMilestone = (index) => {
@@ -79,6 +81,8 @@ const RenderMilestones = () => {
   return milestones.map((ms, index) => {
     const { amount, description } = ms;
 
+    /// TBD pass all milestones into the states -> Add milestones into the DB
+
     return (
       <MainMilestoneContainer key={index}>
         <MilestoneHeader>
@@ -87,29 +91,22 @@ const RenderMilestones = () => {
         </MilestoneHeader>
 
         <MilestoneContainer>
-          <InputContainer>
-            <label className="input_label">Amount</label>
+          <InputContainer 
+            label={'Amount'} 
+            placeholder={'Enter the amount'} 
+            description={'Set amount to reach the funding milestone'} 
+            onChange={(e) => setAppState((prev) => ({ ...prev, pm1: e.target.value }))}
+            type={'number'}
+          />
+          <InputContainer 
+            label={'Describe goal spending'} 
+            placeholder={'Material for the project construction, hire 2 workers, etc.'} 
+            description={'Describe how exactly are you going to use resources for this milestone'}
+            onChange={(e) => setAppState((prev) => ({ ...prev, pm1desc: e.target.value }))}
+            type={'textArea'}
+          />
 
-            <div className="input_container">
-              <input className="input_style" type="text" placeholder="Enter the amount" onChange={(e) => setAppState((prev) => ({ ...prev, pm1: e.target.value }))}/>
-              <p className="input_description">Set amount to reach the milestone</p>
-            </div>
-          </InputContainer>
-
-          <InputContainer>
-            <label className="input_label">Short description</label>
-
-            <div className="input_container">
-              <textarea
-                className="input_style"
-                type="text"
-                placeholder="Describe how exactly are you going to use resources for this milestone"
-              />
-              <p className="input_description">Describe how exactly are you going to use resources for this milestone</p>
-            </div>
-          </InputContainer>
-
-          {milestones.length < 5 && index + 1 == milestones.length && <NextButton onClick={handleAddMilestone}>Add a milestone</NextButton>}
+          {milestones.length < 5 && index + 1 == milestones.length && <NextButton onClick={handleAddMilestone}>More milestones (optional)</NextButton>}
         </MilestoneContainer>
       </MainMilestoneContainer>
     );
@@ -131,16 +128,17 @@ const SetGoals = ({ setStep }) => {
 
   return (
     <MainContainer>
+      <SectionTitle title={'Set funding goals'} subtitle={'Define project allocations'}/>
       <TellContainer>
         <SelectionWrapper>
           <RenderBlockchain />
           <RenderCurrency />
         </SelectionWrapper>
         <RenderMilestones />
-        <Mandatory>(dev) 1 Milestone amount is mandatory</Mandatory>
+        {pm1 < 1000 && <Mandatory>At least 1 milestone is needed, $1000 minimum</Mandatory>}
         <ButtonContainer>
           <NextButton onClick={handleBack}>Back</NextButton>
-          {pm1 >= 0 ? <NextButton onClick={handleClick}>Next</NextButton> : <DisButton>Next</DisButton>}
+          {pm1 >= 1000 ? <NextButton onClick={handleClick}>Next</NextButton> : <DisButton>Next</DisButton>}
         </ButtonContainer>
       </TellContainer>
     </MainContainer>

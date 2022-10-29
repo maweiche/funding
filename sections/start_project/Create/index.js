@@ -6,7 +6,7 @@ import Lottie from "react-lottie";
 import SectionTitle from "../../../components/typography/SectionTitle";
 import { ButtonRow } from "../SetRewards/StyleWrapper";
 import { MainContainer, NextButton } from "../Category/StyleWrapper";
-import { RulesContainer, RulesTitle, WarningBox, Li, Row, ImageBox, Ok, TxStatus, LogRow, Ref, Summary, AnimBox, Error, InfoTag } from "./StyleWrapper";
+import { RulesContainer, RulesTitle, WarningBox, Li, Row, ImageBox, Ok, TxStatus, LogRow, Ref, Summary, AnimBox, Error, InfoTag, SumItem, SumTitle, SumValue, SumHalf, Divider } from "./StyleWrapper";
 import FaqCard from "../../../components/cards/FaqCard";
 import { BookIcon } from "../../../components/icons/Common";
 import donation from '../../../abi/donation.json'
@@ -161,14 +161,24 @@ const Create = ({ setStep }) => {
                         <FaqCard answer={texts.title} point1={texts.p1} point2={texts.p2} point3={texts.p3} point4={texts.p4} />
                     </Row>
                 </WarningBox>
-                {address ? <Summary>
-                    Summary title - TBD styling
-                    <div>{pTitle}</div>
-                    <div>{pDesc}</div>
-                    <div>{category}-{subcategory}</div>
-                    <div>Destination chain: Mumbai</div>
-                    <div>Project goal: {pm1} USDC</div>
-                    <div>Funds receiver: {address}</div>
+                TBD Add two pictures in summary
+                {address ? 
+                <Summary>
+                    <SumHalf align={'right'}>
+                        <SumItem><SumTitle>Title</SumTitle><SumValue>{pTitle}</SumValue></SumItem>
+                        <SumItem><SumTitle>Category</SumTitle><SumValue>{category}-{subcategory}</SumValue></SumItem>
+                        <SumItem><SumTitle>Destimation chain</SumTitle><SumValue>Mumbai</SumValue></SumItem>
+                        <SumItem><SumTitle>Funding goal</SumTitle><SumValue>{pm1} USDC</SumValue></SumItem>
+                        <SumItem><SumTitle>Owner</SumTitle><SumValue> {address}</SumValue></SumItem>
+                    </SumHalf>
+                    <Divider/>
+                    <SumHalf>
+                        <SumItem><SumTitle>Reward #1</SumTitle><SumValue>{pTitle}</SumValue></SumItem>
+                        <SumItem><SumTitle>Reward #2</SumTitle><SumValue>{category}-{subcategory}</SumValue></SumItem>
+                        <SumItem><SumTitle>Reward #3</SumTitle><SumValue>Mumbai</SumValue></SumItem>
+                        <SumItem><SumTitle>Reward #4</SumTitle><SumValue>{pm1} USDC</SumValue></SumItem>
+                        <SumItem><SumTitle>Reward #5</SumTitle><SumValue> {address}</SumValue></SumItem>
+                    </SumHalf>   
                 </Summary> : <div>Please connect your wallet</div>}
                 {!success ? <ButtonRow>
                     <NextButton onClick={handleBack}>Back</NextButton>

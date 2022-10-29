@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router"
 import type { NextPage } from "next";
 import Image from "next/image";
@@ -14,6 +14,7 @@ import DonateWithout from '../../sections/Donate/DonateWithout'
 import { Row } from '../../components/format/Row'
 import { InfoIcon } from "../../components/icons/Common";
 import Tooltip from "../../components/Tooltip";
+import { useNetwork, useSwitchNetwork } from "wagmi";
 
 const Container = styled.div`
   margin-top: 8%;
@@ -165,8 +166,24 @@ const Donate: NextPage = () => {
   const router = useRouter()
   const { pid } = router.query
 
-  const [blockchain, setBlockchain] = useState("polygon")
+  const [blockchain, setBlockchain] = useState("")
+  const {chain} = useNetwork();
+  const {switchNetwork} = useSwitchNetwork()
   const [tooltip, setTooltip] = useState(false)
+
+  useEffect(() => {
+    if(chain){
+      setBlockchain(chain.name)
+    }
+  },[]);
+
+  /// TBD after axelar, handle mutlichain conditions
+
+  const handleChain = (chain,id) => {
+    setBlockchain(chain)
+    switchNetwork(id)
+  }
+
 
   const rewardFalse = () => {
     setRewardNo(false)
@@ -199,7 +216,7 @@ const Donate: NextPage = () => {
           <DonateOptionSub>Select your source of donation</DonateOptionSub>
         </DonateOptionTitle>
         <OptionItemWrapper>
-          <OptionReward><Image src={polygon} alt="polygon" width={'40%'} height={'40%'} /></OptionReward>
+          <OptionReward onClick={()=>{handleChain('polygon', 80001)}}><Image src={polygon} alt="polygon" width={'40%'} height={'40%'} /></OptionReward>
           <OptionReward><Image src={icon2} alt="fantom" width={'40%'} height={'40%'} /></OptionReward>
           <OptionReward><Image src={icon3} alt="bnb" width={'40%'} height={'40%'} /></OptionReward>
         </OptionItemWrapper>
