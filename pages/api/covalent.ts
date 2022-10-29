@@ -11,9 +11,7 @@ const key = 'ckey_da302f1c19694bdbbab1f7ae1ce';
 const eye_seek_contract_address = '0xFfF3B40f7905704ce5Ae876b59B6E1C30fBEa995';
 const multi_chain_swap_address = '0xaf28cb0d9E045170E1642321B964740784E7dC64'
 
-
 // Chain : ChainID
-
 const polygonChainId = 137;
 const polygonMumbaiChainId = 80001;
 const bnbChainId = 56;
@@ -38,7 +36,6 @@ console.log('this is the decodedLogString', decodedLogString);
 
 // GET LATEST BLOCK HEIGHT FOR A CHAIN
 export const getLatestBlockHeight = async () => {
-   
     try {
         const response = await axios.get(
         `https://api.covalenthq.com/v1/${polygonMumbaiChainId}/block_v2/latest/?key=${key}`
@@ -66,8 +63,9 @@ export const getLogEvents = async (startingBlock: number , endingBlock: number) 
  
     let total_log_data = [];
     let total_amount_transferred = 0;
+
     for (let i = 0; i < response.data.data.items.length; i++) {
-        if(response.data.data.items[i].raw_log_topics[0] === swapped_keccak256) {
+        if(response.data.data.items[i].raw_log_topics[0] === transfer_keccak256) {
 
             const decoded_raw_log_data = utils.defaultAbiCoder.decode(['uint256'], response.data.data.items[i].raw_log_data).toString();
             console.log('decoded_raw_log_data: ',decoded_raw_log_data);
@@ -98,7 +96,6 @@ export const getLogEvents = async (startingBlock: number , endingBlock: number) 
 
 // GET ERC20 TRANSFERS
 export const getERC20Transfers = async () => {
-    // https://api.covalenthq.com/v1/:chain_id/address/:address/transfers_v2/?&key=ckey_da302f1c19694bdbbab1f7ae1ce
     try {
         const response = await axios.get(
         //https://api.covalenthq.com/v1/80001/address/0xaf28cb0d9E045170E1642321B964740784E7dC64/transfers_v2/?&key=ckey_da302f1c19694bdbbab1f7ae1ce
