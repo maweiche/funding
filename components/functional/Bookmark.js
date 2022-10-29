@@ -24,28 +24,30 @@ const Bookmark = ({ objectId, bookmarks }) => {
           }
         }
         try {
-          await axios.put(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project/${oid}`, { 'bookmarks': `${newBookmarks}` }, config)
+          await axios.put(`${process.env.NEXT_PUBLIC_DAPP}/classes/Project/${oid}`, { 'bookmarks': newBookmarks }, config)
         } catch (error) {
           console.log(error)
         }
-      }
+    }
 
-    // TBD Tier 1 - https://app.clickup.com/t/32jy4wv
-    // On useEffect, go through bookmarks array and find if `address` is part of the array
-    // If yes, setMarked(true)
+    useEffect(() => {
+        if (bookmarks.includes(address)) {
+            setMarked(true)
+        }
+    }, [address, bookmarks])
 
     const handleBookmark = () => {
         if (!marked){
-            updateBookmark(objectId, bookmarks)
-            // TBD
             // Add address to bookmarks array
+            const newBookmarks = [...bookmarks, address];
             // Update Project with new bookmarks array
+            updateBookmark(objectId, newBookmarks)
             setMarked(true)
         } else {
-            updateBookmark(objectId, bookmarks)
-            // TBD
             // Remove address from bookmarks array
+            const newBookmarks = bookmarks.filter((item) => item !== address);
             // Update Project with new bookmarks array
+            updateBookmark(objectId, newBookmarks)
             setMarked(false)
         }
       }
